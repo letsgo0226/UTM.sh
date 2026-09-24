@@ -1,0 +1,14 @@
+start:
+LOAD
+CALL dec
+STORE
+HALT
+
+dec:
+CMP 0 base
+ADD 9
+CALL dec
+RETURN
+
+base:
+RETURN
