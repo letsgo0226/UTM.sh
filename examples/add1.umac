@@ -1,0 +1,8 @@
+start:
+LOAD
+CALL inc
+STORE
+HALT
+inc:
+ADD 1
+RETURN
