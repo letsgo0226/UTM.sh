@@ -1,24 +1,49 @@
-# UTM.sh
+# UTM Toolchain
 
-Stateful universal Turing machine one-liner: rules via `PROGRAM` or their Gödel number `GPROGRAM`, `CMD=step|run|reset|encode`, state in `TM_STATE` (default `utm.json`). See [`UTM.md`](UTM.md).
+Files:
+- `UTM.sh` — fixed single-tape deterministic TM interpreter; accepts `PROGRAM` or reversible base-257 `GPROGRAM`.
+- `TMCC.sh` — compiles direct TM DSL (`q read -> q2 write L/R/S`).
+- `UASM.sh` — tiny assembly compiler (`SET/L/R/IF/JMP/EMIT/HALT`).
+- `UMAC.sh` — macro compiler with accumulator and one-level CALL/RETURN.
+- `UMACR.sh` — recursive macro compiler with tape-resident return stack.
+- `examples/` — runnable examples.
 
-| Artifact | Role |
-|----------|------|
-| `UTM.sh` | One-liner (~1375B) |
-| `UTM_DAEMON.sh` | Resident loop (default 1s, replay-reconstruct every 3 steps) |
-| `.github/workflows/UTM.yml` | Actions `*/5` + `workflow_dispatch` + `push` |
+## Quick test: direct TM
 
 ```sh
-PROG='0,0,0,0,R;0,1,0,1,R;0,_,1,_,L;1,1,1,0,L;1,0,2,1,L;1,_,2,1,L'
-rm -f utm.json
-PROGRAM="$PROG" INPUT=1011 CMD=reset bash UTM.sh
-PROGRAM="$PROG" CMD=run bash UTM.sh          # tape 1011 -> 1100, t=8, halt=true
+cd examples
+../TMCC.sh inc.tm > inc.env
+. ./inc.env
+PROGRAM="$PROGRAM" INPUT=111 CMD=run TM_STATE=inc.json sh ../UTM.sh
+```
+Expected tape: `1111`.
 
-# resident daemon (log: UTM_daemon.log, KILL: touch run/KILL)
-nohup bash UTM_DAEMON.sh 1 >> UTM_daemon.log 2>&1 &
+## UASM
 
-# Actions
-gh workflow run UTM.yml -R letsgo0226/UTM.sh
+```sh
+../UASM.sh inc.uasm > uasm.env
+. ./uasm.env
+PROGRAM="$PROGRAM" INPUT=111 CMD=run TM_STATE=uasm.json sh ../UTM.sh
 ```
 
-Bound: formal machine credentials (`C`/`CF`/`CR`, `open=1`) only — not a TOE/RH/physical claim.
+## Macro compiler
+
+```sh
+../UMAC.sh add1.umac > add1.env
+. ./add1.env
+PROGRAM="$PROGRAM" START="$START" INPUT=3 CMD=run TM_STATE=add1.json sh ../UTM.sh
+```
+Expected tape: `4`.
+
+## Recursive compiler
+
+`UMACR.sh` uses the tape convention `stack|data`, so the input must start with `|`.
+
+```sh
+../UMACR.sh rec.umac > rec.env
+. ./rec.env
+PROGRAM="$PROGRAM" START="$START" INPUT='|3' CMD=run LIMIT=10000 TM_STATE=rec.json sh ../UTM.sh
+```
+Expected tape: `|0`.
+
+`GPROGRAM` is reversible base-257 numbering of the transition-table text, not a cryptographic hash and not compression.
