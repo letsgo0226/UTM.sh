@@ -1,0 +1,7 @@
+start:
+IF _ end
+R
+JMP start
+end:
+EMIT 1
+HALT
