@@ -1,0 +1,89 @@
+name: UTM
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  push:
+    branches: [main, master]
+    paths:
+      - "UTM.sh"
+      - "UTM.md"
+      - "UTM_DAEMON.sh"
+      - ".github/workflows/UTM.yml"
+  workflow_dispatch:
+  repository_dispatch:
+    types: [utm]
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PROG: "0,0,0,0,R;0,1,0,1,R;0,_,1,_,L;1,1,1,0,L;1,0,2,1,L;1,_,2,1,L"
+      GP: "18284878286518279513985250418655129376649753247703229330837858803422355442844616233826387890720893742448012298419318058456087779774715707084658"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify UTM.sh certificate
+        run: |
+          set -euo pipefail
+          BYTES=$(wc -c < UTM.sh | tr -d ' ')
+          echo "bytes=$BYTES"
+          test "$BYTES" -lt 4096
+          rm -f utm.json g.json x.json l.json
+          # empty program: immediate halt, blank tape, Goedel number 1
+          TM_STATE=l.json CMD=step bash UTM.sh | tee cert-empty.json
+          # binary increment 1011 -> 1100 via PROGRAM, stepwise trace
+          PROGRAM="$PROG" INPUT=1011 CMD=reset bash UTM.sh | tee cert-reset.json
+          : > cert-steps.jsonl
+          for i in $(seq 1 10); do PROGRAM="$PROG" CMD=step bash UTM.sh | tee -a cert-steps.jsonl; done
+          PROGRAM="$PROG" CMD=encode bash UTM.sh | tee cert-encode.json
+          # same machine via GPROGRAM decode path, CMD=run
+          TM_STATE=g.json GPROGRAM="$GP" INPUT=1011 CMD=reset bash UTM.sh >/dev/null
+          TM_STATE=g.json GPROGRAM="$GP" CMD=run bash UTM.sh | tee cert-run.json
+          # carry propagation past left edge: 111 -> 1000
+          TM_STATE=x.json GPROGRAM="$GP" INPUT=111 CMD=reset bash UTM.sh >/dev/null
+          TM_STATE=x.json GPROGRAM="$GP" CMD=run bash UTM.sh | tee cert-carry.json
+          # LIMIT bound
+          rm -f x.json
+          TM_STATE=x.json GPROGRAM="$GP" INPUT=1011 CMD=reset bash UTM.sh >/dev/null
+          TM_STATE=x.json GPROGRAM="$GP" LIMIT=3 CMD=run bash UTM.sh | tee cert-limit.json
+          python3 - <<'PY'
+          import json,os
+          GP=os.environ["GP"]
+          L=lambda f: json.load(open(f))
+          e=L("cert-empty.json")
+          assert e=={"q":"0","h":0,"t":0,"halt":True,"tape":"_","GPROGRAM":"1"}, e
+          r=L("cert-reset.json")
+          assert (r["q"],r["h"],r["t"],r["halt"],r["tape"],r["GPROGRAM"])==("0",0,0,False,"1011",GP), r
+          T=[("0",1,"1011"),("0",2,"1011"),("0",3,"1011"),("0",4,"1011"),("1",3,"1011"),
+             ("1",2,"1010"),("1",1,"1000"),("2",0,"1100")]
+          S=[json.loads(x) for x in open("cert-steps.jsonl") if x.strip()]
+          assert len(S)==10
+          for i,(q,h,tp) in enumerate(T):
+              s=S[i]
+              assert (s["q"],s["h"],s["t"],s["tape"])==(q,h,i+1,tp), (i,s)
+              assert s["halt"] is False and s["GPROGRAM"]==GP
+          for s in S[8:]:
+              assert (s["q"],s["h"],s["t"],s["halt"],s["tape"])==("2",0,8,True,"1100"), s
+          c=L("cert-encode.json")
+          assert c==S[-1], c
+          u=L("cert-run.json")
+          assert (u["q"],u["h"],u["t"],u["halt"],u["tape"],u["GPROGRAM"])==("2",0,8,True,"1100",GP), u
+          CF=[u[k] for k in ("q","h","t","tape")]==[S[7][k] for k in ("q","h","t","tape")]
+          assert CF
+          k=L("cert-carry.json")
+          assert (k["q"],k["h"],k["t"],k["halt"],k["tape"])==("2",-2,8,True,"1000"), k
+          m=L("cert-limit.json")
+          assert (m["q"],m["h"],m["t"],m["halt"],m["tape"])==("0",3,3,False,"1011"), m
+          print(json.dumps({"C":True,"CF":CF,"open":1,"t":u["t"],"tape":u["tape"],"halt":u["halt"]},separators=(",",":")))
+          print("PASS UTM", "t=", u["t"], "tape=", u["tape"], "CF=", CF, "open=", 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: UTM-certificate
+          path: |
+            cert-*.json
+            cert-steps.jsonl
