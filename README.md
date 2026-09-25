@@ -47,3 +47,14 @@ PROGRAM="$PROGRAM" START="$START" INPUT='|3' CMD=run LIMIT=10000 TM_STATE=rec.js
 Expected tape: `|0`.
 
 `GPROGRAM` is reversible base-257 numbering of the transition-table text, not a cryptographic hash and not compression.
+
+## Unified domain pack
+
+The complete `utm_unified_domains/` suite is deployed in this repository. It contains an isolated copy of the fixed UTM toolchain plus Cosmic, Trader_42, Music, and OCR/TTS domain runtimes, source-Gödel tooling, architecture notes, a common control-plane example, and smoke tests.
+
+```sh
+cd utm_unified_domains
+sh tests/smoke-test.sh
+```
+
+See [`utm_unified_domains/README.md`](utm_unified_domains/README.md) for usage and the boundary between compiled TM transition programs and host-side domain runtimes.
