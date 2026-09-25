@@ -1,17 +1,19 @@
 # Unified UTM Domain Pack
 
-This pack combines one fixed TM interpreter/toolchain with four existing domain runtimes:
+This pack combines one fixed TM interpreter/toolchain with four domain families plus standalone OCR/TTS split runtimes:
 
 - `cosmic-love-infinity-tm.sh` — restored legacy self-evolving prime/Gödel core.
 - `Trader_42.sh` — restored persistent prime/Gödel TM core (from the prior `42.sh`).
 - `music-generator.sh` — the unbounded-action music generator supplied in the current conversation.
-- `ocr-tts.sh` — OCR/TTS consensus program; portable version prefers `espeak-ng` and falls back to `espeak`.
+- `ocr-tts.sh` — combined OCR/TTS consensus program; portable version prefers `espeak-ng` and falls back to `espeak`.
+- `OCR_2KB.sh` — standalone PDF/Image -> TXT runtime; MuPDF-first with Poppler fallback; 1556 bytes including shebang.
+- `TTS_2KB.sh` — standalone TXT -> WAV runtime using `espeak-ng`; 1008 bytes including shebang.
 
 ## Important boundary
 
 `utm/UTM.sh` is a fixed deterministic single-tape TM interpreter. A program is *purely inside the UTM* only after its algorithm has been compiled into the transition-table format consumed by `UTM.sh`.
 
-The four scripts under `domains/` are currently domain runtimes. Music uses Python/wave; OCR uses Tesseract/eSpeak; the restored Cosmic/Trader scripts use Python. Therefore the package is presently a **UTM-controlled / UTM-toolchain architecture**, not a claim that Tesseract, eSpeak, Python, or all four full algorithms have already been compiled into one TM transition table.
+The scripts under `domains/` are currently domain runtimes. Music uses Python/wave; OCR uses Tesseract/MuPDF/Poppler; TTS uses eSpeak; the restored Cosmic/Trader scripts use Python. Therefore the package is presently a **UTM-controlled / UTM-toolchain architecture**, not a claim that these host runtimes have already been compiled into one TM transition table.
 
 `examples/domain-control.tm` demonstrates the common control plane:
 
@@ -31,13 +33,19 @@ The compiler prints both `PROGRAM=...` and reversible base-257 `GPROGRAM=...`.
 sh tests/smoke-test.sh
 ```
 
+The smoke test automatically runs `sh -n` across every script under `domains/`, so the split OCR/TTS files are included in syntax validation.
+
 ## Run domains
 
 ```sh
 sh tools/run-domain.sh trader
 printf 'cosmic love\n5\n' | sh tools/run-domain.sh music
 sh tools/run-domain.sh ocr
+sh tools/run-domain.sh ocr2
+sh tools/run-domain.sh tts2
 ```
+
+`ocr2` and `tts2` are independent: OCR can stop at `.ocr.txt`, and TTS can consume any `.txt` file without running OCR first.
 
 The restored Cosmic program recursively re-executes and self-rewrites by design; run it only in a disposable copy/directory if you want to preserve the original file.
 
@@ -46,14 +54,19 @@ The restored Cosmic program recursively re-executes and self-rewrites by design;
 To assign any source file a reversible natural-number representation without SHA/hash:
 
 ```sh
-sh tools/source-godel.sh domains/music-generator.sh
+sh tools/source-godel.sh domains/OCR_2KB.sh
+sh tools/source-godel.sh domains/TTS_2KB.sh
 ```
 
 This produces a `GDOMAIN` base-257 source encoding. `GDOMAIN` is an identity/certificate for source bytes; it does **not** magically make the source executable by `UTM.sh`. Executability requires compilation of the source semantics into TM transitions.
 
-## OCR on iSH
+## OCR/TTS dependencies
 
-The portable OCR script supports either `espeak-ng` or legacy `espeak`. PDF OCR additionally requires `pdftoppm`. Keep Alpine/iSH repositories consistent; do not mix branches merely to obtain a newer speech package.
+`OCR_2KB.sh` requires `tesseract` and `file`; for PDF rendering it prefers `mutool` and falls back to `pdftoppm`. It canonicalizes the temporary directory with `realpath` to avoid the macOS `/tmp` -> `/private/tmp` pathname issue observed with Tesseract/Leptonica.
+
+`TTS_2KB.sh` requires `espeak-ng` and writes `.tts.wav`.
+
+The combined portable OCR script supports either `espeak-ng` or legacy `espeak`. Keep Alpine/iSH repositories consistent; do not mix branches merely to obtain a newer speech package.
 
 ## Zero-entropy terminology
 
