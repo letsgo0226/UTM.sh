@@ -115,7 +115,7 @@ Recommended service settings:
 
 ```text
 Repository: letsgo0226/UTM.sh
-Branch: utm-universe-runtime
+Branch: main
 Root directory: /utm_unified_domains/utm_universe
 Config file: railway.toml
 Healthcheck: /health
@@ -137,6 +137,10 @@ When a persistent volume is mounted, change `AKASHIC_PATH`, for example:
 ```text
 AKASHIC_PATH=/data/akashic.jsonl
 ```
+
+### Current Railway status
+
+The code and Railway configuration are committed on `main`, but creation of a new Railway project/service is currently blocked by the connected account's Free-plan resource provisioning limit. `world-manifest.json` therefore keeps `runtime_endpoint` as `null` until capacity is available or an explicitly chosen existing service is repurposed.
 
 ## Formal boundary
 
