@@ -78,21 +78,35 @@ The previous direct shell implementation is archived under `domains/compact/OCR_
 
 `zero_task=true` certifies equivalence under the script's declared phoneme/whitespace normalization check. It is not a measured intelligibility or naturalness probability. An empirical TTS estimate requires a declared evaluation set and metric/listener protocol.
 
-## Music packed runtime
+## Universal Music Machine
 
-The packed music runtime always has a formal generation target and emits:
+The current packed music runtime uses a BF8-compatible universal program language instead of a finite list of timbre or singer presets. Candidate programs are enumerated length-first; an actual invocation evaluates only a finite prefix and bounds each program by `VM_STEPS`.
+
+Runtime fields include:
 
 ```text
-P_target_goal = 1
-C_target = 1
-P_empirical_hat = null
+UTM=BF8
+CANDIDATES=<finite count>
+COMPOSE_G=<selected program index>
+TIMBRE_G=<selected program index>
+VOICE_G=<selected program index>
+VOCAL in {0,1}
+BOUNDED=1
+ENUM_COMPLETE=0
+P_target_goal=1
+C_target=1
+P_empirical_hat=null
 ```
 
-`C_target=1` means the requested deterministic generation path completed and a WAV was written. When `VOCAL=1` appears in the runtime output, it additionally means non-empty lyrics were supplied, `espeak-ng` was available, and the synthetic-vocal mixing path actually ran.
+`C_target=1` means the requested bounded generation completed and wrote a WAV. `UTM=BF8` identifies the universal byte-program semantics used for the music search. `ENUM_COMPLETE=0` records that a finite run did not exhaust the universal program space.
 
-Neither `C_target=1` nor `VOCAL=1` is an empirical claim about musical quality, naturalness, intelligibility, listener preference, or singing realism. Such claims require a declared listener/evaluation protocol and dataset.
+`VOCAL=1` means the lyric-conditioned vocal-like path was used. It does not certify naturalness, intelligibility, resemblance to a human singer, aesthetic quality, originality, or listener preference. Those are empirical questions and require independent evaluation.
 
-The previous instrumental generator is archived under `domains/compact/music-generator.sh`.
+The universal-search claim is also scoped carefully: the program language is Turing-complete, but each execution is bounded. In the unbounded limit the enumerator covers every finite BF8 program; no finite run can enumerate all computable music. Fixed PCM decoding conventions remain part of the model semantics.
+
+The earlier instrumental generator is archived at `domains/compact/music-generator.sh`, and the immediately previous eSpeak-vocal generator is archived at `domains/compact/music-generator-espeak.sh`.
+
+See [`UNIVERSAL_MUSIC_MACHINE.md`](UNIVERSAL_MUSIC_MACHINE.md) for the detailed computational boundary.
 
 ## General rule
 
