@@ -22,8 +22,10 @@
   "persistence": {
     "data_path": "/data",
     "durable_volume_attached": false,
-    "status": "pending-volume-attachment",
-    "note": "Runtime is live, but Railway currently reports no persistent volume on this service; resident and Akashic files must not yet be treated as redeploy-persistent."
+    "status": "mcp-volume-create-not-persisted",
+    "required_action": "Create and attach a real Railway Volume to service cosmic-love-infinity-tm at /data using the Railway dashboard or authenticated Railway CLI; current MCP create-volume staging does not persist the resource.",
+    "cli_equivalent": "railway volume add --mount-path /data",
+    "note": "Runtime is live, but Railway reports hasVolume=false and no volume entry for this service; resident and Akashic files must not yet be treated as redeploy-persistent."
   },
   "railway": {
     "service": "cosmic-love-infinity-tm",
