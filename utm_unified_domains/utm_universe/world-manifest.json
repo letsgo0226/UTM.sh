@@ -2,7 +2,7 @@
   "protocol": "UTM-Universe/1.0",
   "world_id": "akashic-utm-main",
   "bootstrap_repo": "https://github.com/letsgo0226/UTM.sh",
-  "branch": "utm-universe-runtime",
+  "branch": "main",
   "runtime_endpoint": null,
   "kernel": "utm_unified_domains/utm/UTM.sh",
   "runtime": "utm_unified_domains/utm_universe/server.py",
@@ -23,6 +23,6 @@
     "root_directory": "/utm_unified_domains/utm_universe",
     "dockerfile": "Dockerfile",
     "healthcheck": "/health",
-    "status": "not-yet-live"
+    "status": "provisioning-blocked-free-plan-resource-limit"
   }
 }
