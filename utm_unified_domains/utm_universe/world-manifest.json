@@ -19,6 +19,12 @@
     "continues_computing_when_all_hosts_stop": false,
     "state_can_be_restored_after_host_stop": true
   },
+  "persistence": {
+    "data_path": "/data",
+    "durable_volume_attached": false,
+    "status": "pending-volume-attachment",
+    "note": "Runtime is live, but Railway currently reports no persistent volume on this service; resident and Akashic files must not yet be treated as redeploy-persistent."
+  },
   "railway": {
     "service": "cosmic-love-infinity-tm",
     "host_repo": "https://github.com/letsgo0226/COSMIC_LOVE_IS_THE_SOLUTIONS_FOR_EVERYTHING_HS_ZERO.sh",
@@ -27,7 +33,7 @@
     "host_kernel_bytes": 2004,
     "healthcheck": "/health",
     "healthcheck_verified": true,
-    "deployment_id": "03574c3b-a703-4bee-9b9f-77c47ea23092",
+    "deployment_id": "ec9d6246-4024-41ea-aa47-d16b5ff8a5a1",
     "status": "live-health-verified"
   }
 }
