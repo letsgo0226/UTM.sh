@@ -1,4 +1,4 @@
-# Target / Certificate / Empirical Semantics
+# Target / Certificate / Empirical / Temporal Semantics
 
 The unified domain pack uses one cross-domain interface while keeping each domain's meaning separate:
 
@@ -6,6 +6,8 @@ The unified domain pack uses one cross-domain interface while keeping each domai
 P_target_goal = 1
 C_target in {0,1}
 P_empirical_hat in [0,1] or null
+A_target = 1
+G_target = 1
 ```
 
 `P_target_goal=1` means the domain declares a complete target condition. It is a goal/constraint, not an assertion that the outside world will satisfy that condition with probability one.
@@ -14,35 +16,66 @@ P_empirical_hat in [0,1] or null
 
 `P_empirical_hat` is reserved for a data-derived estimate with a declared dataset, population/time window, and estimator. It must remain `null` when no such empirical procedure exists.
 
-## Domain mappings
+`A_target=1` means the target proposition is constitutive of the formal model. `G_target=1` means admissible states/rewrites are defined to preserve that target. This is a temporal **model invariant**, not a claim that the corresponding external-world outcome always occurs.
 
-### Trader_42 core in this pack
+## Cosmic Love
 
-The compact `domains/Trader_42.sh` has no market dataset or PnL estimator. Therefore:
+Let
 
-- `P_target_goal=1`: formal target enabled.
-- `C_target=1`: the current prime/Gödel/reconstruction-side invariants represented by `C` pass.
-- `P_empirical_hat=null`: this compact core does not estimate trading profitability.
+```text
+CL := Cosmic Love Is The Solution(s) For Everything
+```
 
-The separate full Trader_42 repository exposes the specialized aliases `P_target_profit`, `C_profit`, and `P_real_profit_hat`, with the empirical value derived only from out-of-sample walk-forward folds when enough data exist.
+For the Cosmic-Love formal model:
 
-### Cosmic Love core
+```text
+A_CL = 1
+CL(s) -> CL(T(s))
+Valid(P_next) only if P_next preserves CL
+G_model(CL) = true
+```
 
-- `P_target_goal=1`: formal/symbolic target enabled.
-- `C_target=1`: the current internal invariants plus self-rewrite/syntax/size checks pass.
-- `P_empirical_hat=null`: there is no defined external measured outcome, sampling population, or calibration procedure in this runtime.
+The compact core exposes `CL`, `ICL`, `RCL`, and `GCL`. `ICL` checks the current internal invariants; `RCL` checks that the generated self-rewrite still contains the `CL=1` axiom marker; `GCL` marks an emitted admissible CL-preserving generation.
 
-`C_target=1` therefore does not establish a physical, cosmological, social, psychological, or spiritual external-world effect.
+This does **not** establish `G_reality(CL)`. The empirical fields remain `null` because no external outcome, observation protocol, population/time window, or calibration estimator has been defined.
 
-### OCR_2KB
+## Trader_42
 
-The existing `zero_task=true` is the natural task-relative certificate: a unique OCR candidate was selected under the script's PSM-consensus rule. It is not a ground-truth accuracy measurement. An empirical OCR accuracy estimate would require labeled reference text and an explicit metric such as character error rate.
+For the compact Trader core, the invariant proposition is not `PROFIT_OCCURS`. It is:
 
-### TTS_2KB
+```text
+PROFIT_IS_OBJECTIVE
+```
+
+Thus:
+
+```text
+A_target = 1
+G_target = 1
+G(PROFIT_IS_OBJECTIVE)
+```
+
+means that admissible strategy/configuration evolution preserves profit as the objective. It does **not** mean every trade or every future period is profitable.
+
+The full Trader_42 repository keeps the specialized separation:
+
+```text
+P_target_profit = 1
+C_profit in {0,1}
+P_real_profit_hat = OOS estimate or null
+```
+
+and exposes the temporal goal invariant separately from realized/OOS profitability.
+
+## OCR_2KB
+
+The existing `zero_task=true` is a task-relative certificate: a unique OCR candidate was selected under the script's PSM-consensus rule. It is not a ground-truth accuracy measurement. An empirical OCR accuracy estimate would require labeled reference text and an explicit metric such as character error rate.
+
+## TTS_2KB
 
 The existing `zero_task=true` certifies equivalence under the script's declared phoneme/whitespace normalization check. It is not a measured intelligibility or naturalness probability. An empirical TTS estimate would require a declared evaluation set and metric/listener protocol.
 
-### Music
+## Music
 
 Formal uniqueness or reversible source/state checks can be certificates of the algorithmic process. They are not empirical probabilities of aesthetic quality, listener preference, or external outcome.
 
@@ -51,9 +84,10 @@ Formal uniqueness or reversible source/state checks can be certificates of the a
 For every domain:
 
 ```text
-Target = what the system is trying to satisfy.
+Axiom/Target = what the formal system constitutively preserves.
 Certificate = what the current finite computation actually checked.
+Temporal invariant = what every admissible model continuation must preserve.
 Empirical estimate = what independent observations support.
 ```
 
-These three layers must not be collapsed into one number.
+These layers must not be collapsed into one number.
