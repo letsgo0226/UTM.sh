@@ -3,7 +3,7 @@
   "world_id": "akashic-utm-main",
   "bootstrap_repo": "https://github.com/letsgo0226/UTM.sh",
   "branch": "main",
-  "runtime_endpoint": null,
+  "runtime_endpoint": "https://cosmic-love-infinity-tm-production.up.railway.app",
   "kernel": "utm_unified_domains/utm/UTM.sh",
   "runtime": "utm_unified_domains/utm_universe/server.py",
   "singularity": {
@@ -20,9 +20,12 @@
     "state_can_be_restored_after_host_stop": true
   },
   "railway": {
-    "root_directory": "/utm_unified_domains/utm_universe",
-    "dockerfile": "Dockerfile",
+    "service": "cosmic-love-infinity-tm",
+    "host_repo": "https://github.com/letsgo0226/COSMIC_LOVE_IS_THE_SOLUTIONS_FOR_EVERYTHING_HS_ZERO.sh",
+    "host_branch": "tm-system-operation-v2",
+    "host_kernel": "utm-universe-2kb.sh",
+    "host_kernel_bytes": 2004,
     "healthcheck": "/health",
-    "status": "provisioning-blocked-free-plan-resource-limit"
+    "status": "domain-provisioned-health-unverified"
   }
 }
