@@ -26,6 +26,8 @@
     "host_kernel": "utm-universe-2kb.sh",
     "host_kernel_bytes": 2004,
     "healthcheck": "/health",
-    "status": "domain-provisioned-health-unverified"
+    "healthcheck_verified": true,
+    "deployment_id": "03574c3b-a703-4bee-9b9f-77c47ea23092",
+    "status": "live-health-verified"
   }
 }
