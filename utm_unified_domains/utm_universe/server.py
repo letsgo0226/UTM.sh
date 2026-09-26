@@ -4,6 +4,9 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 
 WORLD_ID = os.getenv("WORLD_ID", "akashic-utm-main")
+PLANET_ID = os.getenv("PLANET_ID", "B612")
+REGION_ID = os.getenv("REGION_ID", "San-Francisco")
+WORLD_ADDRESS = os.getenv("WORLD_ADDRESS", f"utm://{WORLD_ID}/{PLANET_ID}/{REGION_ID}")
 WORLD_EPOCH = float(os.getenv("WORLD_EPOCH", "1790467200"))  # 2026-09-27T00:00:00Z
 PORT = int(os.getenv("PORT", "8080"))
 MAX_BODY = int(os.getenv("MAX_BODY", "65536"))
@@ -47,6 +50,8 @@ def append_event(kind, payload):
         prev = EVENTS[-1]["event_id"] if EVENTS else None
         evt = {
             "world_id": WORLD_ID,
+            "planet_id": PLANET_ID,
+            "region_id": REGION_ID,
             "seq": len(EVENTS),
             "type": kind,
             "time": now(),
@@ -90,7 +95,7 @@ def run_utm(program, input_text="", start="0", blank="_", limit=1000):
             raise ValueError("direction must be L or R")
         rules[(q, read)] = (nq, write, direction)
     tape = {i: c for i, c in enumerate(input_text) if c != blank}
-    q, h, t, halted = str(start), 0, 0, False
+    q, h, t, halted = str(start), 0, 0, 0, False
     while t < limit:
         sym = tape.get(h, blank)
         r = rules.get((q, sym))
@@ -132,6 +137,10 @@ def manifest(base=None):
     return {
         "protocol": "UTM-Universe/1.0",
         "world_id": WORLD_ID,
+        "planet_id": PLANET_ID,
+        "region_id": REGION_ID,
+        "address": WORLD_ADDRESS,
+        "world_spec": "utm_unified_domains/worlds/b612-san-francisco.json",
         "kernel": "transition-table UTM compatible with utm_unified_domains/utm/UTM.sh",
         "world_model": "computable possible-world runtime",
         "singularity": {
@@ -184,11 +193,14 @@ class H(BaseHTTPRequestHandler):
         if p in ("/", "/manifest", "/.well-known/utm-universe.json"):
             return self.sendj(200, manifest(self.base()))
         if p == "/health":
-            return self.sendj(200, {"ok": True, "world_id": WORLD_ID, "events": len(EVENTS)})
+            return self.sendj(200, {"ok": True, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "events": len(EVENTS)})
         if p == "/world":
             tick = max(0, int(math.floor(now() - WORLD_EPOCH)))
             return self.sendj(200, {
                 "world_id": WORLD_ID,
+                "planet_id": PLANET_ID,
+                "region_id": REGION_ID,
+                "address": WORLD_ADDRESS,
                 "tick": tick,
                 "epoch": WORLD_EPOCH,
                 "events": len(EVENTS),
@@ -198,7 +210,7 @@ class H(BaseHTTPRequestHandler):
         if p == "/akashic":
             with LOCK:
                 tail = EVENTS[-32:]
-            return self.sendj(200, {"world_id": WORLD_ID, "count": len(EVENTS), "events": tail})
+            return self.sendj(200, {"world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "count": len(EVENTS), "events": tail})
         if p.startswith("/resident/"):
             rid = p.split("/", 2)[2]
             if rid in ("admit", "resume", ""):
@@ -206,7 +218,7 @@ class H(BaseHTTPRequestHandler):
             capsule = RESIDENTS.get(rid)
             if capsule is None:
                 return self.sendj(404, {"error": "resident not found"})
-            return self.sendj(200, {"resident_id": rid, "world_id": WORLD_ID, "capsule": capsule})
+            return self.sendj(200, {"resident_id": rid, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "capsule": capsule})
         return self.sendj(404, {"error": "not found"})
 
     def do_POST(self):
@@ -221,6 +233,8 @@ class H(BaseHTTPRequestHandler):
                 )
                 evt = append_event("utm_run", {"result": {"t": result["t"], "halt": result["halt"], "GPROGRAM": result["GPROGRAM"]}})
                 result["world_id"] = WORLD_ID
+                result["planet_id"] = PLANET_ID
+                result["region_id"] = REGION_ID
                 result["event_id"] = evt["event_id"]
                 return self.sendj(200, result)
             if p == "/resident/admit":
@@ -234,6 +248,7 @@ class H(BaseHTTPRequestHandler):
                 evt = append_event("admit", {"resident_id": rid, "capsule": capsule})
                 return self.sendj(201, {
                     "admitted": True, "resident_id": rid, "world_id": WORLD_ID,
+                    "planet_id": PLANET_ID, "region_id": REGION_ID,
                     "event_id": evt["event_id"], "self": self.base() + "/resident/" + rid,
                     "note": "Admission registers a portable state capsule; it does not execute arbitrary host code.",
                 })
@@ -247,7 +262,7 @@ class H(BaseHTTPRequestHandler):
                         raise ValueError("capsule must be an object")
                     RESIDENTS[rid] = capsule
                 evt = append_event("resume", {"resident_id": rid, "capsule": RESIDENTS[rid]})
-                return self.sendj(200, {"resumed": True, "resident_id": rid, "world_id": WORLD_ID, "event_id": evt["event_id"]})
+                return self.sendj(200, {"resumed": True, "resident_id": rid, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "event_id": evt["event_id"]})
             return self.sendj(404, {"error": "not found"})
         except (ValueError, TypeError, json.JSONDecodeError) as e:
             return self.sendj(400, {"error": str(e)})
@@ -257,5 +272,5 @@ class H(BaseHTTPRequestHandler):
 
 load_events()
 append_event("boot", {"pid": os.getpid()})
-print(canonical({"event": "boot", "world_id": WORLD_ID, "port": PORT, "akashic_path": AKASHIC_PATH}), flush=True)
+print(canonical({"event": "boot", "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "port": PORT, "akashic_path": AKASHIC_PATH}), flush=True)
 ThreadingHTTPServer(("0.0.0.0", PORT), H).serve_forever()
