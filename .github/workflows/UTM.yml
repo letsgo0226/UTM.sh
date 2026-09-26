@@ -78,6 +78,25 @@ jobs:
           PY
       - name: Verify unified domain pack
         run: sh utm_unified_domains/tests/smoke-test.sh
+      - name: Verify UTM universe runtime
+        run: |
+          set -euo pipefail
+          python3 -m py_compile utm_unified_domains/utm_universe/server.py
+          PORT=18080 AKASHIC_PATH=/tmp/utm-universe-ci.jsonl python3 utm_unified_domains/utm_universe/server.py >/tmp/utm-universe.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18080/health >/tmp/health.json && break; sleep .25; done
+          curl -fsS http://127.0.0.1:18080/.well-known/utm-universe.json >/tmp/manifest.json
+          curl -fsS -X POST -H 'Content-Type: application/json' --data '{"program":"0,1,1,1,R","input":"1","limit":2}' http://127.0.0.1:18080/utm/run >/tmp/run.json
+          curl -fsS -X POST -H 'Content-Type: application/json' --data '{"capsule":{"agent_id":"ci-agent","state":{"turn":1},"lineage":"genesis"}}' http://127.0.0.1:18080/resident/admit >/tmp/admit.json
+          python3 - <<'PY'
+          import json
+          h=json.load(open('/tmp/health.json')); assert h['ok'] and h['world_id']=='akashic-utm-main'
+          m=json.load(open('/tmp/manifest.json')); assert m['protocol']=='UTM-Universe/1.0' and m['execution']['host_required'] is True
+          r=json.load(open('/tmp/run.json')); assert r['t']==1 and r['halt'] is True and r['bounded'] is True
+          a=json.load(open('/tmp/admit.json')); assert a['admitted'] is True and a['resident_id'].startswith('ci-agent-')
+          print('PASS UTM universe runtime')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: UTM-certificate
