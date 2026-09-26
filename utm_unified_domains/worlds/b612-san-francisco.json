@@ -1,0 +1,38 @@
+{
+  "schema": "UTM-World/1.0",
+  "world_id": "akashic-utm-main",
+  "planet_id": "B612",
+  "region_id": "San-Francisco",
+  "address": "utm://akashic-utm-main/B612/San-Francisco",
+  "kind": "computable virtual region",
+  "parent": "utm://akashic-utm-main/B612",
+  "time": {
+    "logical_clock": "tick",
+    "physical_clock": "host wall clock",
+    "rule": "downtime does not imply hidden computation; elapsed physical time may be supplied as a later input"
+  },
+  "transition": {
+    "machine": "UTM.sh compatible transition table",
+    "bounded_execution": true,
+    "canonical_program": "0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R",
+    "canonical_input": "GSRH",
+    "canonical_accept_tape": "1111"
+  },
+  "formal_laws": {
+    "G": "Godel identity/address channel",
+    "S": "Stirling asymptotic information-complexity channel",
+    "R": "Riemann analytic normalization/addressing channel",
+    "H": "Schwarzschild-horizon finality/fencing channel"
+  },
+  "boundary": {
+    "normalized_vector": [[1,1],[1,1],[1,1],[1,1]],
+    "information_function": "I_boundary=sum_i |log R_i|",
+    "fixed_point_information": 0
+  },
+  "lineage": {
+    "model": "hash-linked canonical state history",
+    "fork_policy": "only one canonical successor per committed parent/epoch",
+    "persistence_required_for_redeploy_continuity": true
+  },
+  "scope": "formal computational world model; not a claim that B612 or its San Francisco is a physical astronomical location, not a proof of the Riemann hypothesis, and not thermodynamic zero entropy"
+}
