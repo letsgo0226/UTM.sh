@@ -27,6 +27,20 @@ sh tools/build-control.sh
 
 The compiler prints both `PROGRAM=...` and reversible base-257 `GPROGRAM=...`.
 
+## Target / certificate / empirical interface
+
+The pack now uses one common three-layer vocabulary:
+
+```text
+P_target_goal = 1
+C_target in {0,1}
+P_empirical_hat in [0,1] or null
+```
+
+The target value is a declared goal, not a guaranteed outside-world probability. The certificate reports only the finite checks actually performed by that domain. The empirical estimate is populated only when a declared dataset and estimator support it; otherwise it stays `null`.
+
+The compact Cosmic and Trader cores now emit these generic fields directly. OCR/TTS keep their existing `zero_task` certificates; those are structural/task-relative checks rather than ground-truth accuracy or intelligibility probabilities. See [`docs/TARGET_SEMANTICS.md`](docs/TARGET_SEMANTICS.md) for the domain-by-domain mapping.
+
 ## Quick test
 
 ```sh
