@@ -46,16 +46,7 @@ x=json.load(open('/tmp/ocr_smoke.out'));assert x['pages']==1 and x['zero_task'] 
 PY
 rm -rf "$D" /tmp/ocr_smoke.out
 D=$(mktemp -d);(cd "$D";KEYWORD=test SEC=.5 VOCAL=0 OUT=instrumental.wav sh "$ROOT/domains/music-generator.sh">/tmp/music_i.out;test -s instrumental.wav);grep -q 'VOCAL=0' /tmp/music_i.out;rm -rf "$D" /tmp/music_i.out;echo '[6/7] Music packed instrumental runtime: OK'
-D=$(mktemp -d);B="$D/bin";mkdir "$B";cat >"$B/espeak-ng" <<'SH'
-#!/bin/sh
-o=
-while [ $# -gt 0 ];do [ "$1" = -w ]&&{ o=$2;shift 2;continue;};shift;done
-python3 - "$o" <<'PY'
-import sys,wave,struct,math
-r=22050;n=r//5;w=wave.open(sys.argv[1],'w');w.setparams((1,2,r,0,'NONE',''));w.writeframes(struct.pack('<%dh'%n,*[int(5000*math.sin(2*math.pi*220*i/r))for i in range(n)]));w.close()
-PY
-SH
-chmod +x "$B/espeak-ng";(cd "$D";PATH="$B:$PATH" KEYWORD=test SEC=1 LYRICS='cosmic love is all' VOICE=en VOCAL=1 OUT=vocal.wav sh "$ROOT/domains/music-generator.sh">/tmp/music_v.out;test -s vocal.wav);grep -q 'VOCAL=1' /tmp/music_v.out;rm -rf "$D" /tmp/music_v.out;echo '[7/7] Music packed synthetic-vocal mix runtime: OK'
+D=$(mktemp -d);(cd "$D";KEYWORD=test LYRICS='cosmic love is all' SEC=.5 VOCAL=1 CANDIDATES=64 VM_STEPS=1000 OUT=vocal.wav sh "$ROOT/domains/music-generator.sh">/tmp/music_v.out;test -s vocal.wav);grep -q 'UTM=BF8' /tmp/music_v.out;grep -q 'VOCAL=1' /tmp/music_v.out;grep -q 'BOUNDED=1' /tmp/music_v.out;grep -q 'ENUM_COMPLETE=0' /tmp/music_v.out;grep -q 'C_target=1' /tmp/music_v.out;rm -rf "$D" /tmp/music_v.out;echo '[7/7] Universal bounded music + lyric-conditioned vocal runtime: OK'
 echo 'OCR zero_task is a task-relative consensus certificate, not ground-truth accuracy.'
-echo 'Synthetic vocal output uses espeak-ng when available; VOCAL=1 is a generation-path certificate, not a naturalness/intelligibility score.'
+echo 'Music uses an open-ended BF8 universal program language, but each run searches only a finite bounded prefix and does not guarantee natural/intelligible singing.'
 echo 'Trader remains offline research/paper-only; Cosmic G(CL) remains a model-internal invariant.'
