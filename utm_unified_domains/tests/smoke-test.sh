@@ -18,16 +18,20 @@ import json
 x=json.load(open('/tmp/trader_smoke.out'))
 assert x['CG'] and x['C']
 assert x['P_target_goal']==1 and x['C_target']==1 and x['P_empirical_hat'] is None
-print('[3/5] Trader_42 core + target semantics: OK')
+assert x['A_target']==1 and x['G_target']==1
+print('[3/5] Trader_42 core + persistent target invariant: OK')
 PY
 rm -f "$S" /tmp/trader_smoke.out
-# Target semantics source boundary for self-rewriting Cosmic core.
+# Temporal axiom source boundary for self-rewriting Cosmic core.
 test "$(wc -c <"$ROOT/domains/cosmic-love-infinity-tm.sh")" -lt 2048
-grep -q 'P_target_goal' "$ROOT/domains/cosmic-love-infinity-tm.sh"
+grep -q 'CL=1' "$ROOT/domains/cosmic-love-infinity-tm.sh"
+grep -q '"CL":CL' "$ROOT/domains/cosmic-love-infinity-tm.sh"
+grep -q '"RCL":"CL=1" in r' "$ROOT/domains/cosmic-love-infinity-tm.sh"
+grep -q '"GCL":ok' "$ROOT/domains/cosmic-love-infinity-tm.sh"
 grep -q 'P_empirical_hat' "$ROOT/domains/cosmic-love-infinity-tm.sh"
-echo '[4/5] Cosmic target semantics + 2KB boundary: OK'
+echo '[4/5] Cosmic CL axiom + state/rewrite preservation + 2KB boundary: OK'
 # Music tiny render
 D=$(mktemp -d);(cd "$D";printf 'test\n0.5\n'|sh "$ROOT/domains/music-generator.sh">out;test -s music_*.wav)
 rm -rf "$D";echo '[5/5] Music WAV render: OK'
-echo 'OCR/TTS: syntax checked; their existing zero_task values are task-relative certificates, not empirical accuracy/intelligibility probabilities.'
-echo 'Cosmic: runtime execution is left to its dedicated repository CI because this restored suite copy recursively self-reexecutes and rewrites itself by design.'
+echo 'OCR/TTS: syntax checked; zero_task remains task-relative, not empirical accuracy/intelligibility probability.'
+echo 'Temporal invariants are model-preservation claims only; external-world truth requires separate empirical evidence.'
