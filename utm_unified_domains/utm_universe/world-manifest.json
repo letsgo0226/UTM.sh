@@ -1,0 +1,28 @@
+{
+  "protocol": "UTM-Universe/1.0",
+  "world_id": "akashic-utm-main",
+  "bootstrap_repo": "https://github.com/letsgo0226/UTM.sh",
+  "branch": "utm-universe-runtime",
+  "runtime_endpoint": null,
+  "kernel": "utm_unified_domains/utm/UTM.sh",
+  "runtime": "utm_unified_domains/utm_universe/server.py",
+  "singularity": {
+    "meaning": "minimum bootstrap locator sufficient to discover the world law and runtime protocol",
+    "kind": "computational bootstrap, not a physical spacetime singularity"
+  },
+  "modes": {
+    "portal": "connect to a live host running this world",
+    "genesis": "reconstruct a compatible branch from the published world law and a checkpoint"
+  },
+  "execution_boundary": {
+    "physical_host_required": true,
+    "continues_computing_when_all_hosts_stop": false,
+    "state_can_be_restored_after_host_stop": true
+  },
+  "railway": {
+    "root_directory": "/utm_unified_domains/utm_universe",
+    "dockerfile": "Dockerfile",
+    "healthcheck": "/health",
+    "status": "not-yet-live"
+  }
+}
