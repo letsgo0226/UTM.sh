@@ -35,7 +35,7 @@ Let
 CL := Cosmic Love Is The Solution(s) For Everything
 ```
 
-The full unified runtime implements:
+The packed unified runtime implements:
 
 ```text
 A_CL = 1
@@ -44,26 +44,9 @@ admissible source replacement preserves the CL axiom markers
 G_model(CL) = true
 ```
 
-Runtime fields include:
+Runtime fields include `CF`, `CG`, `CL`, `ICL`, `RCL`, `GCL`, `G_CL=1`, `temporal_formula=G(CL)`, `P_real_world=null`, and `P_empirical_hat=null`. The runtime is formal/symbolic; `G_model(CL)` does not by itself establish `G_reality(CL)`.
 
-```text
-CF   prime-state reconstruction certificate
-CG   Gödel event reconstruction certificate
-CL   formal axiom value
-ICL  state-level CL preservation
-RCL  source/axiom preservation
-GCL  current admissible CL-preserving continuation
-G_CL = 1
-temporal_formula = G(CL)
-P_real_world = null
-P_empirical_hat = null
-```
-
-The runtime is formal/symbolic. `G_model(CL)` does not by itself establish `G_reality(CL)`.
-
-The previous compact `<2KB` implementation is preserved under `domains/compact/cosmic-love-infinity-tm.sh`.
-
-## Trader_42 full unified runtime
+## Trader_42 packed unified runtime
 
 The unified Trader is deliberately offline research/paper-only. Its temporal proposition is:
 
@@ -71,41 +54,45 @@ The unified Trader is deliberately offline research/paper-only. Its temporal pro
 PROFIT_IS_OBJECTIVE
 ```
 
-Thus:
+Thus `A_target=1`, `G_target=1`, and `G(PROFIT_IS_OBJECTIVE)` mean admissible analysis/configuration changes preserve profit as the objective. They do not mean `G(PROFIT_OCCURS)`.
+
+The runtime reads local candle data, models fee/slippage, computes paper PnL and max drawdown, performs chronological walk-forward OOS folds, and reports `P_target_profit=1`, `C_profit`, and `P_real_profit_hat` when enough OOS folds exist.
+
+## OCR_2KB packed runtime
+
+The packed OCR runtime performs Tesseract PSM 3/6/11 recognition and selects a task output by pair consensus. Its fields include:
 
 ```text
-A_target = 1
-G_target = 1
-G(PROFIT_IS_OBJECTIVE)
+P_target_goal = 1
+C_target      = int(zero_task)
+P_empirical_hat = null
+zero_strict / zero_task
+H_strict / H_task
 ```
 
-means admissible analysis/configuration changes preserve profit as the objective. It does not mean:
+`zero_task=true` and `C_target=1` are task-relative consensus certificates. They do not mean the recognized text is ground-truth correct. A non-null empirical estimate would require labeled reference text and an explicit metric such as CER/WER over a declared evaluation set.
 
-```text
-G(PROFIT_OCCURS)
-```
-
-The full unified research runtime reads a local candle dataset, models fee/slippage costs, computes paper PnL and max drawdown, and performs chronological walk-forward OOS folds. It reports:
-
-```text
-P_target_profit = 1
-C_profit in {0,1}
-P_real_profit_hat = positive OOS fold frequency when enough folds exist, else null
-```
-
-The previous compact core is preserved under `domains/compact/Trader_42.sh`. The separate standalone Trader repository remains the Railway-oriented implementation; live exchange execution is intentionally absent from this unified pack.
-
-## OCR_2KB
-
-`zero_task=true` is a task-relative certificate: a unique OCR candidate was selected under the script's PSM-consensus rule. It is not ground-truth accuracy. An empirical OCR estimate requires labeled reference text and an explicit metric such as character error rate.
+The previous direct shell implementation is archived under `domains/compact/OCR_2KB.sh`.
 
 ## TTS_2KB
 
 `zero_task=true` certifies equivalence under the script's declared phoneme/whitespace normalization check. It is not a measured intelligibility or naturalness probability. An empirical TTS estimate requires a declared evaluation set and metric/listener protocol.
 
-## Music
+## Music packed runtime
 
-Formal uniqueness or reversible source/state checks certify the algorithmic process only. They are not empirical probabilities of aesthetic quality or listener preference.
+The packed music runtime always has a formal generation target and emits:
+
+```text
+P_target_goal = 1
+C_target = 1
+P_empirical_hat = null
+```
+
+`C_target=1` means the requested deterministic generation path completed and a WAV was written. When `VOCAL=1` appears in the runtime output, it additionally means non-empty lyrics were supplied, `espeak-ng` was available, and the synthetic-vocal mixing path actually ran.
+
+Neither `C_target=1` nor `VOCAL=1` is an empirical claim about musical quality, naturalness, intelligibility, listener preference, or singing realism. Such claims require a declared listener/evaluation protocol and dataset.
+
+The previous instrumental generator is archived under `domains/compact/music-generator.sh`.
 
 ## General rule
 
