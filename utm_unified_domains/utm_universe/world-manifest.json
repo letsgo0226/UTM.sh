@@ -6,6 +6,16 @@
   "runtime_endpoint": "https://cosmic-love-infinity-tm-production.up.railway.app",
   "kernel": "utm_unified_domains/utm/UTM.sh",
   "runtime": "utm_unified_domains/utm_universe/server.py",
+  "formal_boundary_model": {
+    "name": "COMPACTIFIED_SINGULAR_LIMIT_TM",
+    "path": "utm_unified_domains/ssr/COMPACTIFIED_SINGULAR_LIMIT_TM.sh",
+    "channels": ["godel", "stirling", "riemann", "schwarzschild"],
+    "utm_input": "GSRH",
+    "utm_accept_tape": "1111",
+    "normalized_boundary_vector": [[1,1],[1,1],[1,1],[1,1]],
+    "fixed_point_information": "0 under I_boundary=sum_i |log R_i| at R_i=1",
+    "scope": "formal normalization certificate; not a proof of the Riemann hypothesis, not a physical identification of the channels, and not thermodynamic zero entropy"
+  },
   "singularity": {
     "meaning": "minimum bootstrap locator sufficient to discover the world law and runtime protocol",
     "kind": "computational bootstrap, not a physical spacetime singularity"
