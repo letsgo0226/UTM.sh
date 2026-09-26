@@ -78,6 +78,22 @@ jobs:
           PY
       - name: Verify unified domain pack
         run: sh utm_unified_domains/tests/smoke-test.sh
+      - name: Verify compactified singular-limit TM
+        run: |
+          set -euo pipefail
+          sh utm_unified_domains/ssr/COMPACTIFIED_SINGULAR_LIMIT_TM.sh | tee cert-ssr.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-ssr.json'))
+          assert x['model']=='COMPACTIFIED_SINGULAR_LIMIT_TM'
+          assert x['utm_accept'] is True
+          assert x['utm']['halt'] is True and x['utm']['t']==4 and x['utm']['tape']=='1111'
+          assert x['boundary_vector']==[[1,1],[1,1],[1,1],[1,1]]
+          assert x['boundary_invariant']==[1,1]
+          assert x['zero_information_fixed_point'] is True
+          assert 'not a proof of the Riemann hypothesis' in x['scope']
+          print('PASS compactified singular-limit TM')
+          PY
       - name: Verify UTM universe runtime
         run: |
           set -euo pipefail
