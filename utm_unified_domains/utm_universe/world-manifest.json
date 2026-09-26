@@ -46,6 +46,15 @@
     "healthcheck": "/health",
     "healthcheck_verified": true,
     "deployment_id": "ec9d6246-4024-41ea-aa47-d16b5ff8a5a1",
-    "status": "live-health-verified"
+    "live_gsrh": {
+      "verified": true,
+      "verified_by": "GitHub Actions external network smoke test",
+      "workflow_run_id": 36280575095,
+      "program": "0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R",
+      "input": "GSRH",
+      "limit": 8,
+      "result": {"q":"4","h":4,"t":4,"tape":"1111"}
+    },
+    "status": "live-gsrh-verified"
   }
 }
