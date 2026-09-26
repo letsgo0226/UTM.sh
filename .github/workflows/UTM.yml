@@ -113,6 +113,25 @@ jobs:
           a=json.load(open('/tmp/admit.json')); assert a['admitted'] is True and a['resident_id'].startswith('ci-agent-')
           print('PASS UTM universe runtime')
           PY
+      - name: Verify live Railway GSRH runtime
+        if: github.event_name != 'schedule'
+        env:
+          RUNTIME: https://cosmic-love-infinity-tm-production.up.railway.app
+        run: |
+          set -euo pipefail
+          curl --retry 5 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/health" | tee cert-live-health.json
+          curl --retry 5 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/.well-known/utm-universe.json" | tee cert-live-manifest.json
+          curl --retry 5 --retry-delay 2 --retry-all-errors -fsS -X POST -H 'Content-Type: application/json' \
+            --data '{"program":"0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R","input":"GSRH","limit":8}' \
+            "$RUNTIME/utm/run" | tee cert-live-gsrh.json
+          python3 - <<'PY'
+          import json
+          h=json.load(open('cert-live-health.json')); assert h.get('ok')==1, h
+          m=json.load(open('cert-live-manifest.json')); assert m.get('protocol')=='UTM-Universe/1.0' and m.get('world_id')=='akashic-utm-main', m
+          r=json.load(open('cert-live-gsrh.json'))
+          assert (r.get('q'),r.get('h'),r.get('t'),r.get('tape'))==('4',4,4,'1111'), r
+          print('PASS live Railway GSRH runtime')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: UTM-certificate
