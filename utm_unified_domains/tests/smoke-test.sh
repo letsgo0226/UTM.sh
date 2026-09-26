@@ -2,31 +2,23 @@
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 for f in "$ROOT"/utm/*.sh "$ROOT"/domains/*.sh "$ROOT"/domains/compact/*.sh "$ROOT"/tools/*.sh;do sh -n "$f";done
-test "$(wc -c <"$ROOT/domains/Trader_42.sh")" -lt 2048
-test "$(wc -c <"$ROOT/domains/cosmic-love-infinity-tm.sh")" -lt 2048
-echo '[1/5] shell syntax + full packed <2KB boundaries: OK'
-# UTM compiler+kernel
+for f in Trader_42.sh cosmic-love-infinity-tm.sh OCR_2KB.sh music-generator.sh;do test "$(wc -c <"$ROOT/domains/$f")" -lt 2048;done
+for f in "$ROOT"/domains/compact/*.sh;do test "$(wc -c <"$f")" -lt 2048;done
+echo '[1/7] shell syntax + packed <2KB boundaries: OK'
 ENVF=$(mktemp);sh "$ROOT/utm/TMCC.sh" "$ROOT/examples/domain-control.tm">"$ENVF";. "$ENVF";rm -f "$ENVF"
 S=$(mktemp);rm -f "$S";GPROGRAM="$GPROGRAM" INPUT=EVPC CMD=run TM_STATE="$S" sh "$ROOT/utm/UTM.sh">/tmp/utm_smoke.out
 python3 - <<'PY'
 import json
-x=json.load(open('/tmp/utm_smoke.out'));assert x['halt'] and x['tape']=='EVPC';print('[2/5] UTM control program: OK')
+x=json.load(open('/tmp/utm_smoke.out'));assert x['halt'] and x['tape']=='EVPC';print('[2/7] UTM control program: OK')
 PY
 rm -f "$S" /tmp/utm_smoke.out
-# Packed Trader: local synthetic candles only, no network/live path.
 D=$(mktemp -d)
 TRADER42_TEST_PRICES='100,101,102,103,104,105,106,107,108,109,108,107,106,105,104,103,102,101,100,99,100,101,102,103,104,105' FAST_WINDOW=3 SLOW_WINDOW=5 OOS_TRAIN_CANDLES=10 OOS_TEST_CANDLES=5 OOS_MIN_FOLDS=2 CANDLE_DATASET_PATH="$D/c.csv" sh "$ROOT/domains/Trader_42.sh">/tmp/trader_smoke.out
 python3 - <<'PY'
 import json
-x=json.load(open('/tmp/trader_smoke.out'))
-assert x['model']=='TRADER_42_UNIFIED_RESEARCH_V1' and x['mode']=='research-paper-only'
-assert x['CG'] and x['A_target']==1 and x['G_target']==1
-assert x['temporal_formula']=='G(PROFIT_IS_OBJECTIVE)'
-assert x['observations']>0 and 'metrics' in x and 'oos' in x
-print('[3/5] Trader_42 packed research/OOS/accounting runtime: OK')
+x=json.load(open('/tmp/trader_smoke.out'));assert x['model']=='TRADER_42_UNIFIED_RESEARCH_V1' and x['mode']=='research-paper-only';assert x['CG'] and x['A_target']==1 and x['G_target']==1;assert x['temporal_formula']=='G(PROFIT_IS_OBJECTIVE)' and x['observations']>0 and 'metrics' in x and 'oos' in x;print('[3/7] Trader packed research/OOS/accounting runtime: OK')
 PY
 rm -rf "$D" /tmp/trader_smoke.out
-# Packed Cosmic: step + rewind preserve CL temporal invariant.
 D=$(mktemp -d)
 S="$D/state.json" CMD=step N=3 sh "$ROOT/domains/cosmic-love-infinity-tm.sh">/tmp/cosmic_step.out
 S="$D/state.json" CMD=rewind N=2 sh "$ROOT/domains/cosmic-love-infinity-tm.sh">/tmp/cosmic_rewind.out
@@ -34,15 +26,36 @@ python3 - <<'PY'
 import json
 for p in ('/tmp/cosmic_step.out','/tmp/cosmic_rewind.out'):
  x=json.load(open(p));assert x['CF'] and x['CG'] and x['CL']==1 and x['ICL'] and x['RCL'] and x['GCL'];assert x['A_CL']==1 and x['G_CL']==1 and x['P_empirical_hat'] is None
-print('[4/5] Cosmic packed reversible + G(CL) runtime: OK')
+print('[4/7] Cosmic packed reversible + G(CL) runtime: OK')
 PY
 rm -rf "$D" /tmp/cosmic_step.out /tmp/cosmic_rewind.out
-# Preserve archived compact cores under 2KB too.
-test "$(wc -c <"$ROOT/domains/compact/Trader_42.sh")" -lt 2048
-test "$(wc -c <"$ROOT/domains/compact/cosmic-love-infinity-tm.sh")" -lt 2048
-# Music tiny render
-D=$(mktemp -d);(cd "$D";printf 'test\n0.5\n'|sh "$ROOT/domains/music-generator.sh">out;test -s music_*.wav)
-rm -rf "$D";echo '[5/5] compact archives + Music WAV render: OK'
-echo 'OCR/TTS: syntax checked; zero_task remains task-relative, not empirical accuracy/intelligibility probability.'
-echo 'Trader is offline research/paper-only in this unified pack; live exchange execution is intentionally absent.'
-echo 'Cosmic G(CL) is a formal model invariant; external-world truth still requires separate empirical/interpretive support.'
+D=$(mktemp -d);B="$D/bin";mkdir "$B";cat >"$B/file" <<'SH'
+#!/bin/sh
+echo image/png
+SH
+cat >"$B/tesseract" <<'SH'
+#!/bin/sh
+if [ "$1" = --list-langs ];then printf 'List of available languages (1):\neng\n';exit 0;fi
+printf 'hello world\n' > "$2.txt"
+SH
+chmod +x "$B/file" "$B/tesseract";touch "$D/img.png"
+(cd "$D";PATH="$B:$PATH" INPUT=img.png OCR_LANG=eng sh "$ROOT/domains/OCR_2KB.sh">/tmp/ocr_smoke.out)
+python3 - <<'PY'
+import json
+x=json.load(open('/tmp/ocr_smoke.out'));assert x['pages']==1 and x['zero_task'] and x['C_target']==1 and x['P_empirical_hat'] is None;print('[5/7] OCR packed consensus/certificate runtime: OK')
+PY
+rm -rf "$D" /tmp/ocr_smoke.out
+D=$(mktemp -d);(cd "$D";KEYWORD=test SEC=.5 VOCAL=0 OUT=instrumental.wav sh "$ROOT/domains/music-generator.sh">/tmp/music_i.out;test -s instrumental.wav);grep -q 'VOCAL=0' /tmp/music_i.out;rm -rf "$D" /tmp/music_i.out;echo '[6/7] Music packed instrumental runtime: OK'
+D=$(mktemp -d);B="$D/bin";mkdir "$B";cat >"$B/espeak-ng" <<'SH'
+#!/bin/sh
+o=
+while [ $# -gt 0 ];do [ "$1" = -w ]&&{ o=$2;shift 2;continue;};shift;done
+python3 - "$o" <<'PY'
+import sys,wave,struct,math
+r=22050;n=r//5;w=wave.open(sys.argv[1],'w');w.setparams((1,2,r,0,'NONE',''));w.writeframes(struct.pack('<%dh'%n,*[int(5000*math.sin(2*math.pi*220*i/r))for i in range(n)]));w.close()
+PY
+SH
+chmod +x "$B/espeak-ng";(cd "$D";PATH="$B:$PATH" KEYWORD=test SEC=1 LYRICS='cosmic love is all' VOICE=en VOCAL=1 OUT=vocal.wav sh "$ROOT/domains/music-generator.sh">/tmp/music_v.out;test -s vocal.wav);grep -q 'VOCAL=1' /tmp/music_v.out;rm -rf "$D" /tmp/music_v.out;echo '[7/7] Music packed synthetic-vocal mix runtime: OK'
+echo 'OCR zero_task is a task-relative consensus certificate, not ground-truth accuracy.'
+echo 'Synthetic vocal output uses espeak-ng when available; VOCAL=1 is a generation-path certificate, not a naturalness/intelligibility score.'
+echo 'Trader remains offline research/paper-only; Cosmic G(CL) remains a model-internal invariant.'
