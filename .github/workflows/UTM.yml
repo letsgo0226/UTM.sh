@@ -9,6 +9,7 @@ on:
       - "UTM.sh"
       - "UTM.md"
       - "UTM_DAEMON.sh"
+      - "utm_unified_domains/**"
       - ".github/workflows/UTM.yml"
   workflow_dispatch:
   repository_dispatch:
@@ -33,20 +34,15 @@ jobs:
           echo "bytes=$BYTES"
           test "$BYTES" -lt 4096
           rm -f utm.json g.json x.json l.json
-          # empty program: immediate halt, blank tape, Goedel number 1
           TM_STATE=l.json CMD=step bash UTM.sh | tee cert-empty.json
-          # binary increment 1011 -> 1100 via PROGRAM, stepwise trace
           PROGRAM="$PROG" INPUT=1011 CMD=reset bash UTM.sh | tee cert-reset.json
           : > cert-steps.jsonl
           for i in $(seq 1 10); do PROGRAM="$PROG" CMD=step bash UTM.sh | tee -a cert-steps.jsonl; done
           PROGRAM="$PROG" CMD=encode bash UTM.sh | tee cert-encode.json
-          # same machine via GPROGRAM decode path, CMD=run
           TM_STATE=g.json GPROGRAM="$GP" INPUT=1011 CMD=reset bash UTM.sh >/dev/null
           TM_STATE=g.json GPROGRAM="$GP" CMD=run bash UTM.sh | tee cert-run.json
-          # carry propagation past left edge: 111 -> 1000
           TM_STATE=x.json GPROGRAM="$GP" INPUT=111 CMD=reset bash UTM.sh >/dev/null
           TM_STATE=x.json GPROGRAM="$GP" CMD=run bash UTM.sh | tee cert-carry.json
-          # LIMIT bound
           rm -f x.json
           TM_STATE=x.json GPROGRAM="$GP" INPUT=1011 CMD=reset bash UTM.sh >/dev/null
           TM_STATE=x.json GPROGRAM="$GP" LIMIT=3 CMD=run bash UTM.sh | tee cert-limit.json
@@ -58,8 +54,7 @@ jobs:
           assert e=={"q":"0","h":0,"t":0,"halt":True,"tape":"_","GPROGRAM":"1"}, e
           r=L("cert-reset.json")
           assert (r["q"],r["h"],r["t"],r["halt"],r["tape"],r["GPROGRAM"])==("0",0,0,False,"1011",GP), r
-          T=[("0",1,"1011"),("0",2,"1011"),("0",3,"1011"),("0",4,"1011"),("1",3,"1011"),
-             ("1",2,"1010"),("1",1,"1000"),("2",0,"1100")]
+          T=[("0",1,"1011"),("0",2,"1011"),("0",3,"1011"),("0",4,"1011"),("1",3,"1011"),("1",2,"1010"),("1",1,"1000"),("2",0,"1100")]
           S=[json.loads(x) for x in open("cert-steps.jsonl") if x.strip()]
           assert len(S)==10
           for i,(q,h,tp) in enumerate(T):
@@ -81,6 +76,8 @@ jobs:
           print(json.dumps({"C":True,"CF":CF,"open":1,"t":u["t"],"tape":u["tape"],"halt":u["halt"]},separators=(",",":")))
           print("PASS UTM", "t=", u["t"], "tape=", u["tape"], "CF=", CF, "open=", 1)
           PY
+      - name: Verify unified domain pack
+        run: sh utm_unified_domains/tests/smoke-test.sh
       - uses: actions/upload-artifact@v4
         with:
           name: UTM-certificate
