@@ -57,4 +57,14 @@ cd utm_unified_domains
 sh tests/smoke-test.sh
 ```
 
+The suite also defines a common target/certificate/empirical vocabulary:
+
+```text
+P_target_goal=1
+C_target in {0,1}
+P_empirical_hat in [0,1] or null
+```
+
+These fields deliberately separate a declared objective from a finite certificate and from any data-derived empirical estimate. See [`utm_unified_domains/docs/TARGET_SEMANTICS.md`](utm_unified_domains/docs/TARGET_SEMANTICS.md).
+
 See [`utm_unified_domains/README.md`](utm_unified_domains/README.md) for usage and the boundary between compiled TM transition programs and host-side domain runtimes.
