@@ -5,16 +5,16 @@ This pack combines one fixed TM interpreter/toolchain with several host-side dom
 - `domains/Trader_42.sh` — self-contained **offline research / paper-only** Trader runtime, packed into one shell line under 2048 bytes.
 - `domains/cosmic-love-infinity-tm.sh` — self-contained formal Cosmic-Love runtime, packed into one shell line under 2048 bytes.
 - `domains/OCR_2KB.sh` — self-contained PDF/Image OCR consensus runtime, packed into one shell line under 2048 bytes.
-- `domains/music-generator.sh` — self-contained instrumental + optional synthetic-vocal WAV generator, packed into one shell line under 2048 bytes.
+- `domains/music-generator.sh` — self-contained bounded universal-program music + lyric-conditioned vocal-like WAV generator, packed into one shell line under 2048 bytes.
 - `domains/TTS_2KB.sh` — standalone TXT -> WAV runtime using `espeak-ng`.
 - `domains/ocr-tts.sh` — combined OCR/TTS consensus program.
-- `domains/compact/` — archived earlier compact implementations, including the previous OCR and music generators.
+- `domains/compact/` — archived earlier compact implementations, including the previous instrumental and eSpeak-vocal music generators.
 
 ## Important boundary
 
 `utm/UTM.sh` is a fixed deterministic single-tape TM interpreter. A program is *purely inside the UTM* only after its algorithm has been compiled into the transition-table format consumed by `UTM.sh`.
 
-The scripts under `domains/` are host-side runtimes. Trader, Cosmic, OCR, and Music now embed their Python payloads directly in their `.sh` carriers using reversible `zlib + Base64` packing. This is an implementation/storage transform, not a hash and not a proof of semantics.
+The scripts under `domains/` are host-side runtimes. Trader, Cosmic, OCR, and Music embed their Python payloads directly in their `.sh` carriers using reversible compression/encoding. This is an implementation/storage transform, not a hash and not a proof of semantics.
 
 `examples/domain-control.tm` demonstrates the common control plane:
 
@@ -58,25 +58,38 @@ INPUT=book.pdf OCR_LANG=chi_tra sh tools/run-domain.sh ocr2
 
 It reports JSON containing `TXT`, `OCR`, `pages`, `ambiguous`, `H_strict`, `H_task`, `zero_strict`, `zero_task`, `P_target_goal`, `C_target`, and `P_empirical_hat`. `zero_task=true` means consensus under the declared rule, not ground-truth OCR accuracy.
 
-## Music packed runtime with optional voice
+## Universal-program music runtime
 
-The music runtime always synthesizes an instrumental WAV using Python standard-library `wave`. When `VOCAL=1`, non-empty `LYRICS` are supplied, and `espeak-ng` is available, it generates phrase fragments with changing pitch and mixes them into the instrumental track. This is **synthetic/chant-like singing**, not a neural singing-voice model.
+The current music runtime no longer chooses from a finite instrument or singer preset table. It embeds a bounded BF8-compatible universal byte-program machine using the instruction alphabet:
+
+```text
+> < + - . , [ ]
+```
+
+Valid Brainfuck programs are included in the language, so the search language is Turing-complete. Candidate programs are enumerated length-first. In the unbounded limit every finite BF8 program appears; an actual run searches only a finite prefix controlled by `CANDIDATES` and bounds each execution by `VM_STEPS`.
+
+Three selected programs play different roles:
+
+```text
+COMPOSE_G -> event byte stream
+TIMBRE_G  -> generated waveform/timbre byte stream
+VOICE_G   -> lyric-conditioned vocal-color byte stream
+```
+
+There is therefore no finite `TIMBRES=...` list and no finite `VOICE=en/cmn/...` inventory in the current main runtime. Lyrics are data supplied to the voice program rather than a selector for a preset singer.
 
 ```sh
-KEYWORD='cosmic love' SEC=20 VOCAL=0 sh tools/run-domain.sh music
-
-LYRICS='Cosmic love is the solution for everything' \
-VOICE=en VOCAL=1 KEYWORD='cosmic love' SEC=20 \
+KEYWORD='cosmic love' \
+LYRICS='宇宙之愛是所有問題的解答' \
+VOCAL=1 SEC=8 CANDIDATES=160 VM_STEPS=4000 \
 sh tools/run-domain.sh music
 ```
 
-For Mandarin-capable eSpeak-ng installations, for example:
+The output includes `UTM=BF8`, `COMPOSE_G`, `TIMBRE_G`, `VOICE_G`, `VOCAL`, `BOUNDED=1`, `ENUM_COMPLETE=0`, `P_target_goal=1`, `C_target=1`, and `P_empirical_hat=null`.
 
-```sh
-LYRICS='宇宙之愛是所有問題的解答' VOICE=cmn VOCAL=1 KEYWORD='cosmic love' SEC=20 sh tools/run-domain.sh music
-```
+`ENUM_COMPLETE=0` is deliberate: universality of the program language does **not** mean a finite invocation exhausts all programs. Likewise, `VOCAL=1` means the lyric-conditioned vocal-like synthesis path was used; it is not a guarantee of natural or intelligible human singing. See [`docs/UNIVERSAL_MUSIC_MACHINE.md`](docs/UNIVERSAL_MUSIC_MACHINE.md).
 
-If `espeak-ng` is unavailable, the same script safely falls back to instrumental output. `VOCAL=1` in the output certifies that the vocal generation/mix path was actually used; it is not an empirical intelligibility or naturalness score.
+The immediately previous eSpeak-vocal version is archived under `domains/compact/music-generator-espeak.sh`, while the older instrumental-only generator remains `domains/compact/music-generator.sh`.
 
 ## One-line / <2KB invariant
 
@@ -109,14 +122,15 @@ See [`docs/TARGET_SEMANTICS.md`](docs/TARGET_SEMANTICS.md).
 sh tests/smoke-test.sh
 ```
 
-The smoke test checks shell syntax, all four packed `<2KB` boundaries, UTM control, Trader research/OOS/accounting, Cosmic step/rewind invariants, OCR consensus output, instrumental generation, and the synthetic-vocal mix path through a deterministic test stub.
+The smoke test checks shell syntax, all four packed `<2KB` boundaries, UTM control, Trader research/OOS/accounting, Cosmic step/rewind invariants, OCR consensus output, and both instrumental and lyric-conditioned universal-program music paths.
 
 ## Run domains
 
 ```sh
 sh tools/run-domain.sh trader
 CMD=step sh tools/run-domain.sh cosmic
-KEYWORD='cosmic love' SEC=10 VOCAL=0 sh tools/run-domain.sh music
+KEYWORD='cosmic love' SEC=2 VOCAL=0 sh tools/run-domain.sh music
+LYRICS='cosmic love' VOCAL=1 SEC=2 sh tools/run-domain.sh music
 sh tools/run-domain.sh ocr2
 sh tools/run-domain.sh tts2
 ```
@@ -136,7 +150,7 @@ sh tools/source-godel.sh domains/music-generator.sh
 ## Dependencies
 
 - `OCR_2KB.sh`: `python3`, `file`, `tesseract`, plus `mutool` or `pdftoppm` for PDFs.
-- `music-generator.sh`: `python3`; `espeak-ng` is optional and enables synthetic vocals.
+- `music-generator.sh`: `python3` only; no external singer/voice engine is required by the current main runtime.
 - `TTS_2KB.sh`: `espeak-ng`.
 
 ## Zero-entropy terminology
