@@ -46,6 +46,8 @@
     "recursive_dimension_symbol": "delta",
     "canonical_input": "RDIT",
     "canonical_accept_tape": "1111",
+    "workflow_run_id": 36282739166,
+    "ci_verified": true,
     "known_layers": {
       "delta_0": "observed-world substrate boundary; simulation status unknown",
       "delta_1": "Akashic UTM Universe",
