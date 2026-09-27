@@ -6,6 +6,7 @@ on:
     paths:
       - "utm_unified_domains/search_api.py"
       - "utm_unified_domains/domains/ADDRESS_2KB.sh"
+      - "utm_unified_domains/tests/test_address_snapshot.py"
       - "utm_unified_domains/docs/PERSISTENT_SNAPSHOTS.md"
       - ".github/workflows/address-snapshot.yml"
   workflow_dispatch:
@@ -19,9 +20,11 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Compile API
-        run: python3 -m py_compile utm_unified_domains/search_api.py
-      - name: Verify address and immutable snapshot round-trip
+      - name: Compile API and run unit test
+        run: |
+          python3 -m py_compile utm_unified_domains/search_api.py
+          python3 utm_unified_domains/tests/test_address_snapshot.py
+      - name: Verify HTTP address and immutable snapshot round-trip
         run: |
           set -euo pipefail
           D=$(mktemp -d)
