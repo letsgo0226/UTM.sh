@@ -40,6 +40,23 @@
       "scope": "certificate is fault-model-relative and does not assert physical zero entropy or absolute no-loss"
     }
   },
+  "recursive_dimensions": {
+    "spec": "utm_unified_domains/worlds/recursive-dimension-universe.json",
+    "guard": "utm_unified_domains/recursion/RECURSIVE_DIMENSION_GUARD_TM.sh",
+    "recursive_dimension_symbol": "delta",
+    "canonical_input": "RDIT",
+    "canonical_accept_tape": "1111",
+    "known_layers": {
+      "delta_0": "observed-world substrate boundary; simulation status unknown",
+      "delta_1": "Akashic UTM Universe",
+      "delta_2": "B612",
+      "delta_3": "San-Francisco",
+      "delta_4_plus": "optional resident-created nested computable worlds"
+    },
+    "observed_world_simulation_claim": false,
+    "infinite_tower_claim": false,
+    "scope": "bounded computational recursion certificate; recursive depth is not a spacetime dimension"
+  },
   "singularity": {
     "meaning": "minimum bootstrap locator sufficient to discover the world law and runtime protocol",
     "kind": "computational bootstrap, not a physical spacetime singularity"
