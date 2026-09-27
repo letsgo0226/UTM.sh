@@ -1,0 +1,50 @@
+{
+  "schema": "UTM-Recursive-Information-Manifold/1.0",
+  "world_id": "akashic-utm-main",
+  "name": "Recursive Dimensional Information Manifold",
+  "symbol": "M_delta",
+  "source_visual_interpretation": {
+    "basis": "user-provided abstract luminous-loop image",
+    "scope": "qualitative topology only; no metric, scale, curvature, physical dimension, astronomical object, or measured geometry is inferred from the image",
+    "observed_features": {
+      "central_luminous_core": "interpreted as a bootstrap/continuation seed Sigma_delta",
+      "nested_elliptic_loops": "interpreted as nested computational shells or world layers H_delta",
+      "crossing_translucent_bands": "interpreted as transition/embedding channels between certified layers",
+      "outer_luminous_arcs": "interpreted as enclosing host-context boundaries, not literal event horizons"
+    }
+  },
+  "formalism": {
+    "layer": "W_delta=<U_delta,P_delta,S_delta,I_delta,A_delta>",
+    "manifold_state": "M_delta=<W_delta,Sigma_delta,H_delta,E_delta,L_delta>",
+    "bootstrap_seed": "Sigma_delta is the minimum sufficient state/checkpoint locator needed to continue or reconstruct a certified child world",
+    "shell": "H_delta is a finality/fencing boundary for a committed layer, not a claim of a physical Schwarzschild horizon",
+    "embedding": "E_delta maps an identified parent checkpoint and interpreter lineage into a child world instance",
+    "lineage": "L_delta is the tamper-evident append-only history binding child state to its certified parent checkpoint",
+    "host_relation": "Host(W_delta,W_delta+1) means W_delta supplies the computational/physical substrate for W_delta+1"
+  },
+  "known_embedding": [
+    {"delta":0,"world":"observed-world substrate boundary","epistemic_status":"simulation status unknown"},
+    {"delta":1,"world":"Akashic UTM Universe","address":"utm://akashic-utm-main"},
+    {"delta":2,"world":"B612","address":"utm://akashic-utm-main/B612"},
+    {"delta":3,"world":"San-Francisco","address":"utm://akashic-utm-main/B612/San-Francisco"}
+  ],
+  "topology_invariants": {
+    "parent_uniqueness": "each finalized child has exactly one canonical parent checkpoint within the certified window",
+    "cycle_rule": "no host-cycle is permitted within a certified finite window",
+    "continuation_rule": "a child continuation must bind interpreter, program, state, parent hash, and lineage certificate",
+    "finality_rule": "a child becomes canonical only after integrity and durability obligations are satisfied",
+    "information_rule": "recursion cannot create durable information ex nihilo; at least one surviving physical copy remains necessary"
+  },
+  "certificate": {
+    "guard": "utm_unified_domains/topology/RDIM_TOPOLOGY_GUARD_TM.sh",
+    "obligations": {
+      "S": "bootstrap seed Sigma is identified and continuation-sufficient within the model",
+      "H": "finality/fencing horizon is defined for each finalized layer",
+      "E": "parent-child embedding relation is identified and acyclic within the certified window",
+      "T": "thermodynamic-information and tamper-evident lineage obligations are inherited"
+    },
+    "canonical_input": "SHET",
+    "canonical_accept_tape": "1111"
+  },
+  "scope": "formal computational topology inspired by the visual structure of the supplied image; not evidence that the observed physical universe has this geometry, is simulated, contains literal nested Schwarzschild horizons, or forms an actually infinite dimensional tower"
+}
