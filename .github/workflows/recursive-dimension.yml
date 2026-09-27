@@ -1,0 +1,56 @@
+name: UTM Recursive Dimension Guard
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "utm_unified_domains/worlds/recursive-dimension-universe.json"
+      - "utm_unified_domains/recursion/RECURSIVE_DIMENSION_GUARD_TM.sh"
+      - ".github/workflows/recursive-dimension.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify recursive dimension specification
+        run: |
+          python3 - <<'PY'
+          import json
+          w=json.load(open('utm_unified_domains/worlds/recursive-dimension-universe.json'))
+          assert w['schema']=='UTM-Recursive-Dimension/1.0'
+          assert w['known_window']['delta_0']['claim_that_it_is_simulated'] is False
+          assert w['formalism']['global_infinite_recursion_claim'] is False
+          assert w['certificate']['canonical_input']=='RDIT'
+          assert w['certificate']['canonical_accept_tape']=='1111'
+          print('PASS recursive dimension specification')
+          PY
+      - name: Verify positive bounded recursion certificate
+        run: |
+          set -euo pipefail
+          sh utm_unified_domains/recursion/RECURSIVE_DIMENSION_GUARD_TM.sh | tee cert-recursion.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-recursion.json'))
+          assert x['model']=='RECURSIVE_DIMENSION_GUARD_TM'
+          assert x['input']=='RDIT'
+          assert x['accept'] is True
+          assert x['utm']['halt'] is True and x['utm']['t']==4 and x['utm']['tape']=='1111'
+          print('PASS RDIT -> 1111')
+          PY
+      - name: Verify missing obligation fails closed
+        run: |
+          set -euo pipefail
+          RECURSIVE_CERT_INPUT=RDIx sh utm_unified_domains/recursion/RECURSIVE_DIMENSION_GUARD_TM.sh | tee cert-recursion-negative.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-recursion-negative.json'))
+          assert x['accept'] is False
+          assert x['utm']['t'] < 4 or x['utm']['tape'] != '1111'
+          print('PASS missing T obligation rejected')
+          PY
