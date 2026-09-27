@@ -11,5 +11,6 @@ case "$D" in
  tts2) exec sh "$ROOT/domains/TTS_2KB.sh" "$@";;
  search2) exec sh "$ROOT/domains/SEARCH_2KB.sh" "$@";;
  logos2) exec sh "$ROOT/domains/LOGOS_2KB.sh" "$@";;
- *) echo 'usage: run-domain.sh {cosmic|trader|music|ocr|ocr2|tts2|search2|logos2}' >&2;exit 2;;
+ address2) exec sh "$ROOT/domains/ADDRESS_2KB.sh" "$@";;
+ *) echo 'usage: run-domain.sh {cosmic|trader|music|ocr|ocr2|tts2|search2|logos2|address2}' >&2;exit 2;;
 esac
