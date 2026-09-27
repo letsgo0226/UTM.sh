@@ -29,10 +29,21 @@
     "information_function": "I_boundary=sum_i |log R_i|",
     "fixed_point_information": 0
   },
+  "thermodynamic_information": {
+    "logical_policy": "append-only history; committed ledger records are never intentionally erased or overwritten",
+    "logical_erased_bits_per_commit": 0,
+    "landauer_bound": "E_min >= k_B*T*ln(2)*N_erased for logically irreversible erasure",
+    "interpretation": "UTM verifies logical information-conservation obligations; it does not measure or force hardware heat flow or physical thermodynamic entropy",
+    "physical_host_required": true
+  },
   "lineage": {
-    "model": "hash-linked canonical state history",
+    "model": "BLAKE2b-256 linked canonical event commitments plus UTM transition certificates",
     "fork_policy": "only one canonical successor per committed parent/epoch",
+    "storage_policy": "append-only + fsync; verify the entire surviving chain before every new commit",
+    "replication_target": "paper-uhef-worker.railway.internal:/data/akashic-b612.jsonl",
+    "anti_tamper": "modification or reordering changes the commitment chain and makes verification fail closed",
+    "loss_model": "no absolute no-loss claim; continuity requires at least one surviving verified copy and independent backups for correlated-failure resistance",
     "persistence_required_for_redeploy_continuity": true
   },
-  "scope": "formal computational world model; not a claim that B612 or its San Francisco is a physical astronomical location, not a proof of the Riemann hypothesis, and not thermodynamic zero entropy"
+  "scope": "formal computational world model; not a claim that B612 or its San Francisco is a physical astronomical location, not a proof of the Riemann hypothesis, not thermodynamic zero entropy, and not an absolute guarantee against all information loss"
 }
