@@ -1,0 +1,54 @@
+name: Live consolidated UTM runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/live-consolidated-runtime.yml"
+      - "utm_unified_domains/docs/RAILWAY_RESOURCE_CONSOLIDATION.md"
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      RUNTIME: https://cosmic-love-infinity-tm-production.up.railway.app
+    steps:
+      - name: Health and manifest
+        run: |
+          set -euo pipefail
+          curl --retry 8 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/health" | tee health.json
+          curl --retry 8 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/.well-known/utm-universe.json" | tee manifest.json
+      - name: UTM, address, Logos and snapshot
+        run: |
+          set -euo pipefail
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data '{"program":"0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R","input":"GSRH","limit":8}' \
+            "$RUNTIME/utm/run" | tee run.json
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data '{"type":"json","value":{"b":2,"a":1}}' \
+            "$RUNTIME/address" | tee address.json
+          curl -fsS "$RUNTIME/logos?states=11,01&i=I&p=P&q=Q" | tee logos.json
+          G=$(python3 -c 'import json;print(json.load(open("address.json"))["GOBJECT"])')
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data "{\"GOBJECT\":\"$G\",\"version\":\"ci-live-v1\",\"result\":{\"status\":404}}" \
+            "$RUNTIME/snapshot" | tee snapshot.json
+          GS=$(python3 -c 'import json;print(json.load(open("snapshot.json"))["GSNAPSHOT"])')
+          curl -fsS "$RUNTIME/snapshot/$GS" | tee snapshot-read.json
+      - name: Assert consolidated semantics
+        run: |
+          python3 - <<'PY'
+          import json
+          h=json.load(open('health.json')); assert h.get('ok')==1 and h.get('runtime')=='consolidated',h
+          m=json.load(open('manifest.json')); assert m.get('protocol')=='UTM-Universe/1.1' and m.get('service')=='consolidated-utm-runtime',m
+          r=json.load(open('run.json')); assert (r.get('q'),r.get('h'),r.get('t'),r.get('tape'))==('4',4,4,'1111'),r
+          a=json.load(open('address.json')); assert a['canonical']=='j:{"a":1,"b":2}' and a['GOBJECT'],a
+          l=json.load(open('logos.json')); assert l['logos_consistent'] is True and l['metaphysical_proof'] is False,l
+          s=json.load(open('snapshot.json')); sr=json.load(open('snapshot-read.json'))
+          assert s['GSNAPSHOT']==sr['GSNAPSHOT'] and sr['result']=={'status':404},(s,sr)
+          print('PASS consolidated Railway UTM runtime')
+          PY
