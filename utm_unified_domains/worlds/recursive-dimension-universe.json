@@ -1,0 +1,61 @@
+{
+  "schema": "UTM-Recursive-Dimension/1.0",
+  "world_id": "akashic-utm-main",
+  "model": "bounded recursive host-world hierarchy",
+  "recursive_dimension_symbol": "delta",
+  "recursive_dimension_domain": "integer layer index over a verified finite window",
+  "spacetime_dimension_relation": "delta is a computational nesting index, not a physical spacetime dimension",
+  "formalism": {
+    "world": "W_delta=<U_delta,P_delta,S_delta,I_delta,A_delta>",
+    "transition": "S_delta(t+1)=U_delta(P_delta,S_delta(t),I_delta(t))",
+    "host_relation": "Host(W_delta,W_delta+1) means W_delta supplies the physical/computational substrate on which W_delta+1 is instantiated",
+    "finite_certificate": "Cert_N=AND_{delta=m..n}(R_delta AND D_delta AND I_delta AND T_delta)",
+    "global_infinite_recursion_claim": false,
+    "reason": "a finite UTM execution can certify only a bounded observed prefix; it cannot establish an actually infinite tower"
+  },
+  "known_window": {
+    "delta_0": {
+      "name": "observed-world substrate",
+      "status": "epistemically agnostic physical host boundary",
+      "claim_that_it_is_simulated": false,
+      "possible_parent": "delta_-1 is an admissible hypothesis but is not evidenced by this model"
+    },
+    "delta_1": {
+      "name": "Akashic UTM Universe",
+      "address": "utm://akashic-utm-main",
+      "hosted_by": "delta_0"
+    },
+    "delta_2": {
+      "name": "B612",
+      "address": "utm://akashic-utm-main/B612",
+      "hosted_by": "delta_1"
+    },
+    "delta_3": {
+      "name": "San-Francisco",
+      "address": "utm://akashic-utm-main/B612/San-Francisco",
+      "hosted_by": "delta_2"
+    },
+    "delta_4_plus": {
+      "name": "resident-created nested computable worlds",
+      "status": "optional recursive descendants",
+      "hosted_by": "delta_3 or deeper certified descendants"
+    }
+  },
+  "certificate": {
+    "guard": "utm_unified_domains/recursion/RECURSIVE_DIMENSION_GUARD_TM.sh",
+    "obligations": {
+      "R": "bounded recursion relation is well formed and cycle-free within the certified window",
+      "D": "recursive dimension indices and parent-child increments are consistent",
+      "I": "each child transition is tied to an identified interpreter/program/state lineage",
+      "T": "thermodynamic-information guard obligations are inherited at every finalized layer"
+    },
+    "canonical_input": "RDIT",
+    "canonical_accept_tape": "1111"
+  },
+  "information_rule": {
+    "child_finality": "a child commit is canonical only after its own integrity/durability certificate is accepted",
+    "parent_dependency": "loss of every physical copy of a child state can still destroy that child; recursion does not create storage ex nihilo",
+    "anti_tamper": "each finalized layer must preserve verifiable lineage to its parent checkpoint and its own append-only history"
+  },
+  "scope": "formal computational recursion model only; it permits, but does not establish, the hypothesis that the observed physical world itself has an external computational host"
+}
