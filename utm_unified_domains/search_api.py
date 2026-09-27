@@ -3,7 +3,6 @@ import json,os,re,html
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from urllib.parse import urlparse,parse_qs,quote,quote_plus,parse_qs as PQ
 from urllib.request import Request,urlopen
-
 MAXQ=512
 def enc(s):
  n=1
@@ -27,6 +26,11 @@ def search(q,site="",limit=8):
   out.append(u)
   if len(out)>=limit:break
  return out
+def logos(states,i="I",p="P",q="Q"):
+ S=[x.strip() for x in states.split(",") if x.strip()]
+ if not S or any(not re.fullmatch(r"[01]{2}",x) for x in S):raise ValueError("states must be comma-separated PQ bits, e.g. 11,01")
+ poss="11" in S;ctr="10" in S;valid=not ctr
+ return {"model":"UTM_LOGOS_V1","I":i,"P":p,"Q":q,"states":S,"possible_I":poss,"counterpossible_P_and_not_Q":ctr,"valid_P_implies_Q":valid,"logos_consistent":poss and valid,"formula":"◇(P∧Q) ∧ ¬◇(P∧¬Q)","scope":"finite-declared-model","metaphysical_proof":False}
 class H(BaseHTTPRequestHandler):
  def j(self,x,c=200):
   b=json.dumps(x,ensure_ascii=False,separators=(",",":")).encode();self.send_response(c);self.send_header("Content-Type","application/json; charset=utf-8");self.send_header("Access-Control-Allow-Origin","*");self.send_header("Content-Length",str(len(b)));self.end_headers();self.wfile.write(b)
@@ -34,7 +38,8 @@ class H(BaseHTTPRequestHandler):
   u=urlparse(self.path);p=parse_qs(u.query)
   try:
    if u.path=="/health":return self.j({"ok":True})
-   if u.path=="/":return self.j({"service":"UTM Addressable Search","usage":"/search?q=<query> or /search/<GQUERY>"})
+   if u.path=="/":return self.j({"service":"UTM Addressable Search + Logos","usage":["/search?q=<query>","/search/<GQUERY>","/logos?states=11,01&i=I&p=P&q=Q"]})
+   if u.path=="/logos":return self.j(logos(p.get("states",["11"])[0],p.get("i",["I"])[0],p.get("p",["P"])[0],p.get("q",["Q"])[0]))
    if u.path=="/search":q=p.get("q",[""])[0]
    elif u.path.startswith("/search/"):q=dec(u.path.split("/",2)[2])
    else:return self.j({"error":"not found"},404)
