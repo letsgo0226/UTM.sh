@@ -1,0 +1,55 @@
+name: UTM Address Function
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "utm_unified_domains/domains/ADDRESS_2KB.sh"
+      - "utm_unified_domains/search_api.py"
+      - ".github/workflows/address.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify one-line address domain
+        run: |
+          set -euo pipefail
+          test "$(wc -l < utm_unified_domains/domains/ADDRESS_2KB.sh)" -eq 0 || test "$(wc -l < utm_unified_domains/domains/ADDRESS_2KB.sh)" -eq 1
+          test "$(wc -c < utm_unified_domains/domains/ADDRESS_2KB.sh)" -lt 2048
+          sh -n utm_unified_domains/domains/ADDRESS_2KB.sh
+          TYPE=json VALUE='{"b":2,"a":1}' sh utm_unified_domains/domains/ADDRESS_2KB.sh > /tmp/address.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/address.json'))
+          assert x['canonical']=='j:{"a":1,"b":2}'
+          assert x['GOBJECT'].isdigit()
+          assert x['utm_address'].endswith('/object/'+x['GOBJECT'])
+          print('PASS ADDRESS_2KB')
+          PY
+      - name: Verify HTTP address round trip
+        run: |
+          set -euo pipefail
+          python3 -m py_compile utm_unified_domains/search_api.py
+          PORT=18081 python3 utm_unified_domains/search_api.py >/tmp/address-api.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18081/health >/dev/null && break; sleep .25; done
+          curl -fsS 'http://127.0.0.1:18081/address?type=text&value=hello' > /tmp/a.json
+          G=$(python3 -c "import json;print(json.load(open('/tmp/a.json'))['GOBJECT'])")
+          curl -fsS "http://127.0.0.1:18081/object/$G" > /tmp/o.json
+          curl -fsS "http://127.0.0.1:18081/snapshot/$G/v1" > /tmp/s.json
+          python3 - <<'PY'
+          import json
+          a=json.load(open('/tmp/a.json'));o=json.load(open('/tmp/o.json'));s=json.load(open('/tmp/s.json'))
+          assert a['canonical']=='t:hello'
+          assert o['type']=='text' and o['value']=='hello' and o['GOBJECT']==a['GOBJECT']
+          assert s['immutable_identity'] is True and s['result_persistence'] is False and s['version']=='v1'
+          print('PASS UTM universal address round trip')
+          PY
