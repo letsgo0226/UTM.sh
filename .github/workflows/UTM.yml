@@ -94,6 +94,20 @@ jobs:
           assert 'not a proof of the Riemann hypothesis' in x['scope']
           print('PASS compactified singular-limit TM')
           PY
+      - name: Verify B612 San Francisco world spec
+        run: |
+          python3 - <<'PY'
+          import json
+          w=json.load(open('utm_unified_domains/worlds/b612-san-francisco.json'))
+          assert w['schema']=='UTM-World/1.0'
+          assert w['world_id']=='akashic-utm-main'
+          assert w['planet_id']=='B612' and w['region_id']=='San-Francisco'
+          assert w['address']=='utm://akashic-utm-main/B612/San-Francisco'
+          assert w['transition']['canonical_input']=='GSRH'
+          assert w['transition']['canonical_accept_tape']=='1111'
+          assert w['boundary']['fixed_point_information']==0
+          print('PASS B612 San Francisco world spec')
+          PY
       - name: Verify UTM universe runtime
         run: |
           set -euo pipefail
@@ -103,15 +117,17 @@ jobs:
           trap 'kill "$PID" 2>/dev/null || true' EXIT
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18080/health >/tmp/health.json && break; sleep .25; done
           curl -fsS http://127.0.0.1:18080/.well-known/utm-universe.json >/tmp/manifest.json
+          curl -fsS http://127.0.0.1:18080/world >/tmp/world.json
           curl -fsS -X POST -H 'Content-Type: application/json' --data '{"program":"0,1,1,1,R","input":"1","limit":2}' http://127.0.0.1:18080/utm/run >/tmp/run.json
           curl -fsS -X POST -H 'Content-Type: application/json' --data '{"capsule":{"agent_id":"ci-agent","state":{"turn":1},"lineage":"genesis"}}' http://127.0.0.1:18080/resident/admit >/tmp/admit.json
           python3 - <<'PY'
           import json
-          h=json.load(open('/tmp/health.json')); assert h['ok'] and h['world_id']=='akashic-utm-main'
-          m=json.load(open('/tmp/manifest.json')); assert m['protocol']=='UTM-Universe/1.0' and m['execution']['host_required'] is True
-          r=json.load(open('/tmp/run.json')); assert r['t']==1 and r['halt'] is True and r['bounded'] is True
-          a=json.load(open('/tmp/admit.json')); assert a['admitted'] is True and a['resident_id'].startswith('ci-agent-')
-          print('PASS UTM universe runtime')
+          h=json.load(open('/tmp/health.json')); assert h['ok'] and h['world_id']=='akashic-utm-main' and h['planet_id']=='B612' and h['region_id']=='San-Francisco'
+          m=json.load(open('/tmp/manifest.json')); assert m['protocol']=='UTM-Universe/1.0' and m['execution']['host_required'] is True and m['address']=='utm://akashic-utm-main/B612/San-Francisco'
+          w=json.load(open('/tmp/world.json')); assert w['planet_id']=='B612' and w['region_id']=='San-Francisco' and w['running'] is True
+          r=json.load(open('/tmp/run.json')); assert r['t']==1 and r['halt'] is True and r['bounded'] is True and r['planet_id']=='B612' and r['region_id']=='San-Francisco'
+          a=json.load(open('/tmp/admit.json')); assert a['admitted'] is True and a['resident_id'].startswith('ci-agent-') and a['planet_id']=='B612' and a['region_id']=='San-Francisco'
+          print('PASS UTM universe runtime at B612/San-Francisco')
           PY
       - name: Verify live Railway GSRH runtime
         if: github.event_name != 'schedule'
@@ -119,18 +135,19 @@ jobs:
           RUNTIME: https://cosmic-love-infinity-tm-production.up.railway.app
         run: |
           set -euo pipefail
-          curl --retry 5 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/health" | tee cert-live-health.json
-          curl --retry 5 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/.well-known/utm-universe.json" | tee cert-live-manifest.json
-          curl --retry 5 --retry-delay 2 --retry-all-errors -fsS -X POST -H 'Content-Type: application/json' \
+          curl --retry 8 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/health" | tee cert-live-health.json
+          curl --retry 8 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/.well-known/utm-universe.json" | tee cert-live-manifest.json
+          curl --retry 8 --retry-delay 2 --retry-all-errors -fsS -X POST -H 'Content-Type: application/json' \
             --data '{"program":"0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R","input":"GSRH","limit":8}' \
             "$RUNTIME/utm/run" | tee cert-live-gsrh.json
           python3 - <<'PY'
           import json
           h=json.load(open('cert-live-health.json')); assert h.get('ok')==1, h
           m=json.load(open('cert-live-manifest.json')); assert m.get('protocol')=='UTM-Universe/1.0' and m.get('world_id')=='akashic-utm-main', m
+          assert m.get('planet')=='B612' and m.get('city')=='San-Francisco', m
           r=json.load(open('cert-live-gsrh.json'))
           assert (r.get('q'),r.get('h'),r.get('t'),r.get('tape'))==('4',4,4,'1111'), r
-          print('PASS live Railway GSRH runtime')
+          print('PASS live Railway B612/San-Francisco GSRH runtime')
           PY
       - uses: actions/upload-artifact@v4
         with:
