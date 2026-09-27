@@ -9,5 +9,6 @@ case "$D" in
  ocr) exec sh "$ROOT/domains/ocr-tts.sh" "$@";;
  ocr2) exec sh "$ROOT/domains/OCR_2KB.sh" "$@";;
  tts2) exec sh "$ROOT/domains/TTS_2KB.sh" "$@";;
- *) echo 'usage: run-domain.sh {cosmic|trader|music|ocr|ocr2|tts2}' >&2;exit 2;;
+ search2) exec sh "$ROOT/domains/SEARCH_2KB.sh" "$@";;
+ *) echo 'usage: run-domain.sh {cosmic|trader|music|ocr|ocr2|tts2|search2}' >&2;exit 2;;
 esac
