@@ -25,6 +25,12 @@
     "fixed_point_information": "0 under I_boundary=sum_i |log R_i| at R_i=1",
     "scope": "formal normalization certificate; not a proof of the Riemann hypothesis, not a physical identification of the channels, and not thermodynamic zero entropy"
   },
+  "thermodynamic_information": {
+    "law": "Landauer lower bound E_min >= k_B*T*ln(2)*N_erased for logically irreversible erasure",
+    "ledger_policy": "append-only",
+    "logical_erased_bits_per_commit": 0,
+    "physical_scope": "software bookkeeping only; actual hardware heat and thermodynamic entropy require physical measurement"
+  },
   "singularity": {
     "meaning": "minimum bootstrap locator sufficient to discover the world law and runtime protocol",
     "kind": "computational bootstrap, not a physical spacetime singularity"
@@ -39,12 +45,25 @@
     "state_can_be_restored_after_host_stop": true
   },
   "persistence": {
-    "data_path": "/data",
-    "durable_volume_attached": false,
-    "status": "mcp-volume-create-not-persisted",
-    "required_action": "Create and attach a real Railway Volume to service cosmic-love-infinity-tm at /data using the Railway dashboard or authenticated Railway CLI; current MCP create-volume staging does not persist the resource.",
-    "cli_equivalent": "railway volume add --mount-path /data",
-    "note": "Runtime is live, but Railway reports no verified persistent volume on this service; resident and Akashic files must not yet be treated as redeploy-persistent."
+    "compute_service_local_data_path": "/data",
+    "compute_service_durable_volume_attached": false,
+    "durable_ledger_design": {
+      "storage_service": "paper-uhef-worker",
+      "private_endpoint": "http://paper-uhef-worker.railway.internal:8080/akashic/b612",
+      "volume_path": "/data/akashic-b612.jsonl",
+      "volume_known_attached": true,
+      "authenticator": "BLAKE2b-256 linked commitments",
+      "write_semantics": "append-only + fsync + full-chain verification before commit",
+      "storage_ci_workflow_run_id": 36282232510,
+      "storage_ci_verified": true,
+      "replicator_repo_commit": "8ae58f80c2504ef5c4113d90998b3dfad5a350f7",
+      "replicator_ci_workflow_run_id": 36282169052,
+      "replicator_ci_verified": true,
+      "live_cross-service_replication_verified": false,
+      "status": "code-and-ci-certified; Railway live deployment/readback pending"
+    },
+    "absolute_no_loss_claim": false,
+    "note": "Tamper evidence is not the same as absolute durability. Correlated storage loss still requires an independent replica or backup."
   },
   "railway": {
     "service": "cosmic-love-infinity-tm",
