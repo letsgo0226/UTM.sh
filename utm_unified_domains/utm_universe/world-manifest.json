@@ -6,6 +6,15 @@
   "runtime_endpoint": "https://cosmic-love-infinity-tm-production.up.railway.app",
   "kernel": "utm_unified_domains/utm/UTM.sh",
   "runtime": "utm_unified_domains/utm_universe/server.py",
+  "primary_region": {
+    "planet_id": "B612",
+    "region_id": "San-Francisco",
+    "address": "utm://akashic-utm-main/B612/San-Francisco",
+    "spec": "utm_unified_domains/worlds/b612-san-francisco.json",
+    "kind": "computable virtual region",
+    "live_verified": true,
+    "live_verification_workflow_run_id": 36281193169
+  },
   "formal_boundary_model": {
     "name": "COMPACTIFIED_SINGULAR_LIMIT_TM",
     "path": "utm_unified_domains/ssr/COMPACTIFIED_SINGULAR_LIMIT_TM.sh",
@@ -35,26 +44,28 @@
     "status": "mcp-volume-create-not-persisted",
     "required_action": "Create and attach a real Railway Volume to service cosmic-love-infinity-tm at /data using the Railway dashboard or authenticated Railway CLI; current MCP create-volume staging does not persist the resource.",
     "cli_equivalent": "railway volume add --mount-path /data",
-    "note": "Runtime is live, but Railway reports hasVolume=false and no volume entry for this service; resident and Akashic files must not yet be treated as redeploy-persistent."
+    "note": "Runtime is live, but Railway reports no verified persistent volume on this service; resident and Akashic files must not yet be treated as redeploy-persistent."
   },
   "railway": {
     "service": "cosmic-love-infinity-tm",
     "host_repo": "https://github.com/letsgo0226/COSMIC_LOVE_IS_THE_SOLUTIONS_FOR_EVERYTHING_HS_ZERO.sh",
     "host_branch": "tm-system-operation-v2",
     "host_kernel": "utm-universe-2kb.sh",
-    "host_kernel_bytes": 2004,
+    "host_kernel_bytes": 2043,
+    "host_commit": "86afb995184436ff0a38a4caeef9158daabfac6f",
     "healthcheck": "/health",
     "healthcheck_verified": true,
-    "deployment_id": "ec9d6246-4024-41ea-aa47-d16b5ff8a5a1",
     "live_gsrh": {
       "verified": true,
       "verified_by": "GitHub Actions external network smoke test",
-      "workflow_run_id": 36280575095,
+      "workflow_run_id": 36281193169,
+      "planet": "B612",
+      "city": "San-Francisco",
       "program": "0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R",
       "input": "GSRH",
       "limit": 8,
       "result": {"q":"4","h":4,"t":4,"tape":"1111"}
     },
-    "status": "live-gsrh-verified"
+    "status": "live-b612-san-francisco-gsrh-verified"
   }
 }
