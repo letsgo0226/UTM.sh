@@ -66,6 +66,8 @@
     "manifold_symbol": "M_delta",
     "canonical_input": "SHET",
     "canonical_accept_tape": "1111",
+    "workflow_run_id": 36283070326,
+    "ci_verified": true,
     "visual_basis": "qualitative interpretation of the user-provided luminous nested-loop image",
     "feature_mapping": {
       "central_luminous_core": "Sigma_delta bootstrap/continuation seed",
