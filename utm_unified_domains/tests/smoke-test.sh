@@ -2,7 +2,7 @@
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 for f in "$ROOT"/utm/*.sh "$ROOT"/domains/*.sh "$ROOT"/domains/compact/*.sh "$ROOT"/tools/*.sh;do sh -n "$f";done
-for f in Trader_42.sh cosmic-love-infinity-tm.sh OCR_2KB.sh music-generator.sh;do test "$(wc -c <"$ROOT/domains/$f")" -lt 2048;done
+for f in Trader_42.sh cosmic-love-infinity-tm.sh OCR_2KB.sh music-generator.sh SEARCH_2KB.sh;do test "$(wc -c <"$ROOT/domains/$f")" -lt 2048;done
 for f in "$ROOT"/domains/compact/*.sh;do test "$(wc -c <"$f")" -lt 2048;done
 echo '[1/7] shell syntax + packed <2KB boundaries: OK'
 ENVF=$(mktemp);sh "$ROOT/utm/TMCC.sh" "$ROOT/examples/domain-control.tm">"$ENVF";. "$ENVF";rm -f "$ENVF"
