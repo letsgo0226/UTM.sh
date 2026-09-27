@@ -95,7 +95,7 @@ def run_utm(program, input_text="", start="0", blank="_", limit=1000):
             raise ValueError("direction must be L or R")
         rules[(q, read)] = (nq, write, direction)
     tape = {i: c for i, c in enumerate(input_text) if c != blank}
-    q, h, t, halted = str(start), 0, 0, 0, False
+    q, h, t, halted = str(start), 0, 0, False
     while t < limit:
         sym = tape.get(h, blank)
         r = rules.get((q, sym))
