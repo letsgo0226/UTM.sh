@@ -29,7 +29,16 @@
     "law": "Landauer lower bound E_min >= k_B*T*ln(2)*N_erased for logically irreversible erasure",
     "ledger_policy": "append-only",
     "logical_erased_bits_per_commit": 0,
-    "physical_scope": "software bookkeeping only; actual hardware heat and thermodynamic entropy require physical measurement"
+    "physical_scope": "software bookkeeping only; actual hardware heat and thermodynamic entropy require physical measurement",
+    "utm_guard": {
+      "path": "utm_unified_domains/integrity/THERMO_INFO_GUARD_TM.sh",
+      "obligations": ["append-only", "integrity-verified", "durable-copy-verified", "landauer-accounted"],
+      "canonical_input": "AIDL",
+      "canonical_accept_tape": "1111",
+      "workflow_run_id": 36282390506,
+      "ci_verified": true,
+      "scope": "certificate is fault-model-relative and does not assert physical zero entropy or absolute no-loss"
+    }
   },
   "singularity": {
     "meaning": "minimum bootstrap locator sufficient to discover the world law and runtime protocol",
@@ -59,7 +68,7 @@
       "replicator_repo_commit": "8ae58f80c2504ef5c4113d90998b3dfad5a350f7",
       "replicator_ci_workflow_run_id": 36282169052,
       "replicator_ci_verified": true,
-      "live_cross-service_replication_verified": false,
+      "live_cross_service_replication_verified": false,
       "status": "code-and-ci-certified; Railway live deployment/readback pending"
     },
     "absolute_no_loss_claim": false,
