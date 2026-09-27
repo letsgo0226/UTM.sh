@@ -1,0 +1,53 @@
+name: UTM Recursive Dimensional Information Manifold
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "utm_unified_domains/topology/**"
+      - "utm_unified_domains/worlds/recursive-dimensional-information-manifold.json"
+      - ".github/workflows/rdim-topology.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify manifold topology specification
+        run: |
+          python3 - <<'PY'
+          import json
+          x=json.load(open('utm_unified_domains/worlds/recursive-dimensional-information-manifold.json'))
+          assert x['schema']=='UTM-Recursive-Information-Manifold/1.0'
+          assert x['certificate']['canonical_input']=='SHET'
+          assert x['certificate']['canonical_accept_tape']=='1111'
+          assert x['known_embedding'][0]['epistemic_status']=='simulation status unknown'
+          assert 'qualitative topology only' in x['source_visual_interpretation']['scope']
+          assert 'not evidence' in x['scope']
+          print('PASS recursive dimensional information manifold spec')
+          PY
+      - name: Verify SHET topology guard and fail-closed negative case
+        run: |
+          set -euo pipefail
+          sh utm_unified_domains/topology/RDIM_TOPOLOGY_GUARD_TM.sh | tee cert-rdim.json
+          RDIM_CERT_INPUT=SHEx sh utm_unified_domains/topology/RDIM_TOPOLOGY_GUARD_TM.sh | tee cert-rdim-negative.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('cert-rdim.json'))
+          n=json.load(open('cert-rdim-negative.json'))
+          assert p['model']=='RDIM_TOPOLOGY_GUARD_TM'
+          assert p['accept'] is True
+          assert p['utm']['halt'] is True and p['utm']['t']==4 and p['utm']['tape']=='1111'
+          assert n['accept'] is False
+          assert 'does not establish physical nested dimensions' in p['scope']
+          print('PASS SHET topology guard + negative case')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rdim-topology-certificate
+          path: cert-rdim*.json
