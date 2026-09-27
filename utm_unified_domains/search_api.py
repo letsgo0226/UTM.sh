@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-import base64,html,json,os,re
+import base64,hashlib,html,json,os,re,time
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from urllib.parse import parse_qs,quote,quote_plus,urlparse
 from urllib.request import Request,urlopen
 
 MAXQ=512
 MAX_BODY=65536
+SNAPSHOT_DIR=os.getenv("SNAPSHOT_DIR","/tmp/utm-address-snapshots")
 
 def enc(s):
     n=1
@@ -48,6 +49,30 @@ def obj(g):
     c=dec(g);kind,value=uncanon(c)
     return {"GOBJECT":str(g),"type":kind,"value":value,"canonical":c}
 
+def snapshot_path(gs):
+    return os.path.join(SNAPSHOT_DIR,gs+".json")
+
+def write_snapshot(g,version,result=None):
+    x=obj(g);identity="snapshot:"+version+":"+g;gs=enc(identity)
+    rec={**x,"version":version,"GSNAPSHOT":gs,"created_at":int(time.time()),"result":result,"immutable_identity":True,"result_persistence":True}
+    os.makedirs(SNAPSHOT_DIR,exist_ok=True)
+    p=snapshot_path(gs)
+    body=json.dumps(rec,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False).encode()
+    digest=hashlib.sha256(body).hexdigest();rec["sha256"]=digest
+    final=json.dumps(rec,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False)
+    try:
+        fd=os.open(p,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o644)
+        with os.fdopen(fd,"w",encoding="utf-8") as f:f.write(final)
+    except FileExistsError:
+        old=json.load(open(p,encoding="utf-8"))
+        if old.get("GOBJECT")!=str(g) or old.get("version")!=version:raise ValueError("snapshot identity collision")
+        rec=old
+    return rec
+
+def read_snapshot(gs):
+    p=snapshot_path(gs)
+    with open(p,encoding="utf-8") as f:return json.load(f)
+
 def search(q,site="",limit=8):
     z=("site:"+site+" " if site else "")+q
     t=urlopen(Request("https://html.duckduckgo.com/html/?q="+quote_plus(z),headers={"User-Agent":"Mozilla/5.0"}),timeout=12).read().decode("utf8","ignore")
@@ -77,18 +102,23 @@ class H(BaseHTTPRequestHandler):
         return {"type":kind,"value":value,"canonical":c,"GOBJECT":g,"utm_address":f"{self.base()}/object/{g}"}
     def do_POST(self):
         try:
-            if urlparse(self.path).path!="/address":return self.j({"error":"not found"},404)
+            path=urlparse(self.path).path
             n=int(self.headers.get("Content-Length","0"))
             if n<1 or n>MAX_BODY:raise ValueError("invalid body length")
             p=json.loads(self.rfile.read(n))
             if not isinstance(p,dict):raise ValueError("body must be JSON object")
-            return self.j(self.addressed(p.get("type","json"),p.get("value")))
+            if path=="/address":return self.j(self.addressed(p.get("type","json"),p.get("value")))
+            if path=="/snapshot":
+                g=str(p.get("GOBJECT",""));ver=str(p.get("version",""))
+                if not g or not ver or len(ver)>128:raise ValueError("GOBJECT and version required")
+                rec=write_snapshot(g,ver,p.get("result"));rec=dict(rec);rec["snapshot_address"]=f"{self.base()}/snapshot/{rec['GSNAPSHOT']}";return self.j(rec,201)
+            return self.j({"error":"not found"},404)
         except Exception as e:self.j({"error":str(e)},400)
     def do_GET(self):
         u=urlparse(self.path);p=parse_qs(u.query)
         try:
-            if u.path=="/health":return self.j({"ok":True})
-            if u.path=="/":return self.j({"service":"UTM Universe Address + Search + Logos","usage":["/address?type=text&value=<value>","POST /address","/object/<GOBJECT>","/decode/<GOBJECT>","/snapshot/<GOBJECT>/<version>","/search?q=<query>","/search/<GQUERY>","/logos?states=11,01&i=I&p=P&q=Q"]})
+            if u.path=="/health":return self.j({"ok":True,"snapshot_dir":SNAPSHOT_DIR})
+            if u.path=="/":return self.j({"service":"UTM Universe Address + Search + Logos","usage":["/address?type=text&value=<value>","POST /address","/object/<GOBJECT>","/decode/<GOBJECT>","POST /snapshot","/snapshot/<GSNAPSHOT>","/search?q=<query>","/search/<GQUERY>","/logos?states=11,01&i=I&p=P&q=Q"]})
             if u.path=="/address":
                 kind=p.get("type",["text"])[0];raw=p.get("value",[""])[0]
                 value=json.loads(raw) if kind=="json" else raw
@@ -96,12 +126,7 @@ class H(BaseHTTPRequestHandler):
             if u.path.startswith("/object/") or u.path.startswith("/decode/"):
                 g=u.path.split("/",2)[2];x=obj(g);x["utm_address"]=f"{self.base()}/object/{g}";return self.j(x)
             if u.path.startswith("/snapshot/"):
-                a=u.path.split("/",3)
-                if len(a)!=4:raise ValueError("snapshot requires /snapshot/<GOBJECT>/<version>")
-                g,ver=a[2],a[3]
-                if not ver or len(ver)>128:raise ValueError("invalid version")
-                x=obj(g);sg=enc("snapshot:"+ver+":"+g)
-                x.update({"version":ver,"GSNAPSHOT":sg,"snapshot_address":f"{self.base()}/snapshot/{g}/{quote(ver)}","immutable_identity":True,"result_persistence":False});return self.j(x)
+                gs=u.path.split("/",2)[2];x=read_snapshot(gs);x["snapshot_address"]=f"{self.base()}/snapshot/{gs}";return self.j(x)
             if u.path=="/logos":return self.j(logos(p.get("states",["11"])[0],p.get("i",["I"])[0],p.get("p",["P"])[0],p.get("q",["Q"])[0]))
             if u.path=="/search":q=p.get("q",[""])[0]
             elif u.path.startswith("/search/"):q=dec(u.path.split("/",2)[2])
@@ -109,6 +134,7 @@ class H(BaseHTTPRequestHandler):
             if not q or len(q)>MAXQ:raise ValueError("invalid query")
             site=p.get("site",[""])[0];limit=max(1,min(int(p.get("limit",["8"])[0]),10));g=enc(q);c=canon("text",q);go=enc(c)
             self.j({"query":q,"GQUERY":g,"GOBJECT":go,"utm_address":f"{self.base()}/search/{g}","object_address":f"{self.base()}/object/{go}","live":True,"results":search(q,site,limit)})
+        except FileNotFoundError:self.j({"error":"snapshot not found"},404)
         except Exception as e:self.j({"error":str(e)},400)
 
 if __name__=="__main__":ThreadingHTTPServer(("0.0.0.0",int(os.getenv("PORT","8080"))),H).serve_forever()
