@@ -1,0 +1,61 @@
+name: UTM address snapshots
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "utm_unified_domains/search_api.py"
+      - "utm_unified_domains/domains/ADDRESS_2KB.sh"
+      - "utm_unified_domains/docs/PERSISTENT_SNAPSHOTS.md"
+      - ".github/workflows/address-snapshot.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot-roundtrip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile API
+        run: python3 -m py_compile utm_unified_domains/search_api.py
+      - name: Verify address and immutable snapshot round-trip
+        run: |
+          set -euo pipefail
+          D=$(mktemp -d)
+          SNAPSHOT_DIR="$D/snapshots" PORT=18081 python3 utm_unified_domains/search_api.py >/tmp/address-snapshot.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true; rm -rf "$D"' EXIT
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18081/health >/tmp/as-health.json && break; sleep .25; done
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data '{"type":"json","value":{"b":2,"a":1}}' \
+            http://127.0.0.1:18081/address >/tmp/as-address.json
+          G=$(python3 -c 'import json;print(json.load(open("/tmp/as-address.json"))["GOBJECT"])')
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data "{\"GOBJECT\":\"$G\",\"version\":\"ci-v1\",\"result\":{\"status\":404}}" \
+            http://127.0.0.1:18081/snapshot >/tmp/as-snapshot1.json
+          GS=$(python3 -c 'import json;print(json.load(open("/tmp/as-snapshot1.json"))["GSNAPSHOT"])')
+          curl -fsS -X POST -H 'Content-Type: application/json' \
+            --data "{\"GOBJECT\":\"$G\",\"version\":\"ci-v1\",\"result\":{\"status\":200}}" \
+            http://127.0.0.1:18081/snapshot >/tmp/as-snapshot2.json
+          curl -fsS "http://127.0.0.1:18081/snapshot/$GS" >/tmp/as-read.json
+          curl -fsS "http://127.0.0.1:18081/object/$G" >/tmp/as-object.json
+          python3 - <<'PY'
+          import hashlib,json
+          a=json.load(open('/tmp/as-address.json'))
+          s1=json.load(open('/tmp/as-snapshot1.json'))
+          s2=json.load(open('/tmp/as-snapshot2.json'))
+          r=json.load(open('/tmp/as-read.json'))
+          o=json.load(open('/tmp/as-object.json'))
+          assert a['canonical']=='j:{"a":1,"b":2}'
+          assert o['value']=={'a':1,'b':2} and o['GOBJECT']==a['GOBJECT']
+          assert s1['GSNAPSHOT']==s2['GSNAPSHOT']==r['GSNAPSHOT']
+          assert s1['result']==s2['result']==r['result']=={'status':404}
+          assert r['immutable_identity'] is True and r['result_persistence'] is True
+          v=dict(r);v.pop('snapshot_address',None);digest=v.pop('sha256')
+          raw=json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False).encode()
+          assert hashlib.sha256(raw).hexdigest()==digest
+          print('PASS universal address + immutable snapshot persistence')
+          PY
