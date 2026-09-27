@@ -129,7 +129,7 @@ jobs:
           a=json.load(open('/tmp/admit.json')); assert a['admitted'] is True and a['resident_id'].startswith('ci-agent-') and a['planet_id']=='B612' and a['region_id']=='San-Francisco'
           print('PASS UTM universe runtime at B612/San-Francisco')
           PY
-      - name: Verify live Railway GSRH runtime
+      - name: Verify live consolidated Railway runtime
         if: github.event_name != 'schedule'
         env:
           RUNTIME: https://cosmic-love-infinity-tm-production.up.railway.app
@@ -143,11 +143,11 @@ jobs:
           python3 - <<'PY'
           import json
           h=json.load(open('cert-live-health.json')); assert h.get('ok')==1, h
-          m=json.load(open('cert-live-manifest.json')); assert m.get('protocol')=='UTM-Universe/1.0' and m.get('world_id')=='akashic-utm-main', m
+          m=json.load(open('cert-live-manifest.json')); assert m.get('protocol')=='UTM-Universe/1.1' and m.get('world_id')=='akashic-utm-main', m
           assert m.get('planet')=='B612' and m.get('city')=='San-Francisco', m
           r=json.load(open('cert-live-gsrh.json'))
           assert (r.get('q'),r.get('h'),r.get('t'),r.get('tape'))==('4',4,4,'1111'), r
-          print('PASS live Railway B612/San-Francisco GSRH runtime')
+          print('PASS live consolidated Railway B612/San-Francisco GSRH runtime')
           PY
       - uses: actions/upload-artifact@v4
         with:
