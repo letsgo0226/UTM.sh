@@ -1,0 +1,40 @@
+name: Omega Compactification
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "utm_unified_domains/ssr/BIDIRECTIONAL_OMEGA_COMPACTIFICATION_TM.sh"
+      - ".github/workflows/omega-compactification.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify bidirectional UTM Omega compactification
+        run: |
+          set -euo pipefail
+          chmod +x utm_unified_domains/ssr/BIDIRECTIONAL_OMEGA_COMPACTIFICATION_TM.sh
+          OMEGA_DEPTH=8 sh utm_unified_domains/ssr/BIDIRECTIONAL_OMEGA_COMPACTIFICATION_TM.sh | tee omega.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('omega.json'))
+          assert x['model']=='BIDIRECTIONAL_OMEGA_COMPACTIFICATION_TM'
+          assert x['utm_accept'] is True
+          assert x['compactification']['plus_limit']=='0+'
+          assert x['compactification']['minus_limit']=='0-'
+          assert x['compactification']['identification']=='0+ ~ 0- ~ Omega'
+          assert x['substrate']['projection']=='pi(P_k)=P_-1'
+          assert x['substrate']['resource_invariant']=='C_hat(P_k)=C0'
+          assert x['potentially_unbounded_hierarchy'] is True
+          assert x['actual_infinite_physical_compute'] is False
+          assert len(x['branches']['plus'])==8 and len(x['branches']['minus'])==8
+          assert all(r['normalized_resource']==[1,1] for r in x['branches']['plus']+x['branches']['minus'])
+          print('PASS bidirectional Omega compactification')
+          PY
