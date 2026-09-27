@@ -1,0 +1,46 @@
+name: UTM Thermodynamic Information Guard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "utm_unified_domains/integrity/THERMO_INFO_GUARD_TM.sh"
+      - "utm_unified_domains/worlds/b612-san-francisco.json"
+      - "utm_unified_domains/utm/UTM.sh"
+      - ".github/workflows/thermo-info-guard.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Positive and negative UTM information-conservation certificates
+        run: |
+          set -euo pipefail
+          APPEND_ONLY=1 INTEGRITY_VERIFIED=1 DURABLE_COPY_VERIFIED=1 LANDAUER_ACCOUNTED=1 \
+            sh utm_unified_domains/integrity/THERMO_INFO_GUARD_TM.sh | tee cert-thermo-info-positive.json
+          APPEND_ONLY=1 INTEGRITY_VERIFIED=1 DURABLE_COPY_VERIFIED=0 LANDAUER_ACCOUNTED=1 \
+            sh utm_unified_domains/integrity/THERMO_INFO_GUARD_TM.sh | tee cert-thermo-info-negative.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('cert-thermo-info-positive.json'))
+          n=json.load(open('cert-thermo-info-negative.json'))
+          assert p['model']=='THERMO_INFO_GUARD_TM'
+          assert p['input']=='AIDL'
+          assert p['utm_accept'] is True
+          assert p['utm']['halt'] is True and p['utm']['t']==4 and p['utm']['tape']=='1111'
+          assert p['thermodynamics']['landauer_j_per_irreversibly_erased_bit'] > 0
+          assert n['input']=='AIxL'
+          assert n['utm_accept'] is False
+          assert n['utm']['t'] < 4 or n['utm']['tape'] != '1111'
+          print('PASS UTM thermodynamic information guard')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: thermo-info-guard-certificate
+          path: cert-thermo-info-*.json
