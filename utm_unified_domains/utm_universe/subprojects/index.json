@@ -1,0 +1,13 @@
+{
+  "protocol": "UTM-Universe-Subprojects/1.0",
+  "parent_world_id": "akashic-utm-main",
+  "execution_endpoint": "/utm/run",
+  "subprojects": [
+    {
+      "id": "44TH_SUNSET",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/44TH_SUNSET/manifest.json",
+      "program": "utm_unified_domains/utm_universe/subprojects/44TH_SUNSET/44TH_SUNSET.tm",
+      "additional_deployment_required": false
+    }
+  ]
+}
