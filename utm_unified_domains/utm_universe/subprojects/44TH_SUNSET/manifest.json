@@ -1,0 +1,35 @@
+{
+  "protocol": "UTM-Universe-Subproject/1.0",
+  "subproject_id": "44TH_SUNSET",
+  "parent_world_id": "akashic-utm-main",
+  "parent_runtime": "utm_unified_domains/utm_universe/server.py",
+  "kernel": "utm_unified_domains/utm/UTM.sh",
+  "program": "utm_unified_domains/utm_universe/subprojects/44TH_SUNSET/44TH_SUNSET.tm",
+  "canonical_input": "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+  "canonical_input_length": 44,
+  "start_state": "0",
+  "blank": "_",
+  "step_limit": 64,
+  "expected_result": {
+    "q": "DAWN",
+    "h": 45,
+    "t": 45,
+    "halt": true,
+    "semantic_transition": "SUNSET_44 -> DAWN_01"
+  },
+  "interpretation": {
+    "map": "R(n)=45-n",
+    "light": 1,
+    "love": 1,
+    "halt": "PROGRAM_ONLY",
+    "physical_time_effect": false,
+    "scope": "formal computational/poetic model only"
+  },
+  "deployment": {
+    "mode": "child-of-existing-UTM-Universe-runtime",
+    "requires_additional_service": false,
+    "requires_additional_Railway_project": false,
+    "execution_endpoint": "/utm/run"
+  },
+  "source_project": "https://github.com/letsgo0226/44TH_SUNSET"
+}
