@@ -5,6 +5,7 @@ on:
     branches: [main, master]
     paths:
       - "utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh"
+      - "utm_unified_domains/integrity/CCZIS_CLOSED_LOOP_TM.sh"
       - "utm_unified_domains/integrity/THERMO_INFO_GUARD_TM.sh"
       - "utm_unified_domains/utm/UTM.sh"
       - ".github/workflows/ZERO_INFO_ENTROPY.yml"
@@ -109,6 +110,44 @@ jobs:
           assert x['certificate']['zero_unresolved_information_entropy'] is False
           assert x['certificate']['utm_accept'] is False
           print('PASS inconsistency/incompleteness rejection')
+          PY
+
+      - name: Verify Best Verified CCZIS closed loop
+        run: |
+          set -euo pipefail
+          CANDIDATES_JSON='[{"id":"bad-cheap","vector":[9,0,0,0,0,0],"cost":0,"consistent":1,"closure":1,"complete":1,"integrity":1,"open_branches":2,"equiv_classes":2},{"id":"best-valid","vector":[1,0,0,0,0,0],"cost":2,"consistent":1,"closure":1,"complete":1,"integrity":1,"open_branches":3,"equiv_classes":1},{"id":"valid-expensive","vector":[2,0,0,0,0,0],"cost":5,"consistent":1,"closure":1,"complete":1,"integrity":1,"open_branches":1,"equiv_classes":1}]' \
+          CURRENT_VECTOR=0,0,0,0,0,0 LOOP_STEPS=2 \
+          sh utm_unified_domains/integrity/CCZIS_CLOSED_LOOP_TM.sh | tee cert-closed-loop.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-closed-loop.json'))
+          assert x['model']=='UTM_CCZIS_CLOSED_LOOP/1.0'
+          assert x['utm_cycle_accept'] is True
+          assert x['utm_control']['t']==7 and x['utm_control']['tape']=='1111111'
+          assert x['closed_loop_zero_entropy'] is True
+          assert x['state']['current_vector']==[1,0,0,0,0,0]
+          assert len(x['state']['iterations'])==2
+          assert all(i['status']=='CCZIS_CLOSED_LOOP' for i in x['state']['iterations'])
+          assert all(i['best_verified']['id']=='best-valid' for i in x['state']['iterations'])
+          bad=x['state']['iterations'][0]['checked'][0]
+          assert bad['id']=='bad-cheap' and bad['cczis'] is False
+          print('PASS UTM Best Verified CCZIS closed loop')
+          PY
+
+      - name: Enter repair state when no CCZIS candidate exists
+        run: |
+          set -euo pipefail
+          CANDIDATES_JSON='[{"id":"fork","vector":[1,0,0,0,0,0],"cost":0,"consistent":1,"closure":1,"complete":1,"integrity":1,"open_branches":2,"equiv_classes":2}]' \
+          CURRENT_VECTOR=0,0,0,0,0,0 LOOP_STEPS=1 \
+          sh utm_unified_domains/integrity/CCZIS_CLOSED_LOOP_TM.sh | tee cert-repair.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-repair.json'))
+          assert x['utm_cycle_accept'] is True
+          assert x['closed_loop_zero_entropy'] is False
+          assert x['state']['iterations'][-1]['status']=='REPAIR_REQUIRED'
+          assert x['state']['current_vector']==[0,0,0,0,0,0]
+          print('PASS fail-closed CCZIS repair state')
           PY
 
       - name: Preserve thermodynamic boundary separation
