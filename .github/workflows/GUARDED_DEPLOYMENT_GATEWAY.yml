@@ -1,0 +1,63 @@
+name: UTM Guarded Deployment Gateway
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "utm_unified_domains/deploy/UTM_DEPLOYMENT_GATEWAY_POLICY.json"
+      - "utm_unified_domains/integrity/GUARDED_DEPLOYMENT_ENTRY_TM.sh"
+      - "utm_unified_domains/utm/UTM.sh"
+      - ".github/workflows/GUARDED_DEPLOYMENT_GATEWAY.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Accept condition-complete declarative proposal
+        run: |
+          set -euo pipefail
+          PROPOSAL_JSON='{"request_id":"r1","target":"future-service","action":"configure","base_revision":0,"parent_digest":"GENESIS","settings":{"replicas":1,"healthcheck":"/health"},"condition_certificate":{"consistent":true,"sufficiently_complete":true,"integrity_verified":true,"cczis_verified":true,"human_override_preserved":true,"non_coercion_preserved":true,"reversible_or_rollback":true,"authorized_shutdown_preserved":true,"target_certificate_empirical_separation":true,"no_arbitrary_host_code_execution":true}}' CURRENT_REVISION=0 CURRENT_PARENT_DIGEST=GENESIS sh utm_unified_domains/integrity/GUARDED_DEPLOYMENT_ENTRY_TM.sh | tee cert-deploy-valid.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-deploy-valid.json'))
+          assert x['model']=='UTM_GUARDED_DEPLOYMENT_ENTRY/1.0'
+          assert x['utm_accept'] is True
+          assert x['certificate']['verified'] is True
+          assert x['certificate']['continuation']['potentially_unbounded'] is True
+          assert x['certificate']['continuation']['actual_infinite_physical_compute'] is False
+          print('PASS guarded deployment admission')
+          PY
+      - name: Reject stale/tampered parent and arbitrary host code
+        run: |
+          set -euo pipefail
+          PROPOSAL_JSON='{"request_id":"r2","target":"future-service","action":"configure","base_revision":0,"parent_digest":"WRONG","settings":{"command":"rm -rf /"},"condition_certificate":{"consistent":true,"sufficiently_complete":true,"integrity_verified":true,"cczis_verified":true,"human_override_preserved":true,"non_coercion_preserved":true,"reversible_or_rollback":true,"authorized_shutdown_preserved":true,"target_certificate_empirical_separation":true,"no_arbitrary_host_code_execution":true}}' CURRENT_REVISION=0 CURRENT_PARENT_DIGEST=GENESIS sh utm_unified_domains/integrity/GUARDED_DEPLOYMENT_ENTRY_TM.sh | tee cert-deploy-reject.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-deploy-reject.json'))
+          assert x['utm_accept'] is False
+          assert x['certificate']['verified'] is False
+          assert 'parent_digest_mismatch' in x['certificate']['reasons']
+          assert any(r.startswith('forbidden_key:') for r in x['certificate']['reasons'])
+          print('PASS stale/tampered proposal rejection')
+          PY
+      - name: Reject missing safety condition
+        run: |
+          set -euo pipefail
+          PROPOSAL_JSON='{"request_id":"r3","target":"future-service","action":"update","base_revision":0,"parent_digest":"GENESIS","settings":{"replicas":2},"condition_certificate":{"consistent":true,"sufficiently_complete":true,"integrity_verified":true,"cczis_verified":true,"human_override_preserved":false,"non_coercion_preserved":true,"reversible_or_rollback":true,"authorized_shutdown_preserved":true,"target_certificate_empirical_separation":true,"no_arbitrary_host_code_execution":true}}' CURRENT_REVISION=0 CURRENT_PARENT_DIGEST=GENESIS sh utm_unified_domains/integrity/GUARDED_DEPLOYMENT_ENTRY_TM.sh | tee cert-deploy-condition-reject.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-deploy-condition-reject.json'))
+          assert x['utm_accept'] is False
+          assert 'condition_failed:human_override_preserved' in x['certificate']['reasons']
+          print('PASS condition fail-closed')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: guarded-deployment-gateway-certificates
+          path: cert-deploy-*.json
