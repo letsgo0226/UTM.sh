@@ -1,0 +1,87 @@
+name: UTM Identity Continuity
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "utm_unified_domains/integrity/GODEL_TABLEAU_IDENTITY_TM.sh"
+      - "utm_unified_domains/utm/UTM.sh"
+      - "utm_unified_domains/subprojects/utm-unified-goal-solver/utm-total-goal-registry.json"
+      - ".github/workflows/IDENTITY_CONTINUITY.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify unique semantic identity continuation
+        run: |
+          set -euo pipefail
+          CANDIDATES_JSON='[{"id":"restore-a","semantic_class":"doraemon-lineage-1","authorized":1,"reconstructible":1,"memory_continuity":1,"policy_continuity":1,"integrity":1,"parent_identity_godel":"1","capsule":{"model_architecture":"A","parameters":"P","tokenizer":"T","runtime_spec":"R","current_state":{"turn":42},"long_term_memory":{"m":"x"},"identity_personality_policy":{"name":"Doraemon"},"provenance_integrity":{"version":1}}},{"id":"restore-b-equivalent","semantic_class":"doraemon-lineage-1","authorized":1,"reconstructible":1,"memory_continuity":1,"policy_continuity":1,"integrity":1,"parent_identity_godel":"1","capsule":{"model_architecture":"A","parameters":"P","tokenizer":"T","runtime_spec":"R","current_state":{"turn":42},"long_term_memory":{"m":"x"},"identity_personality_policy":{"name":"Doraemon"},"provenance_integrity":{"version":1}}}]' \
+          sh utm_unified_domains/integrity/GODEL_TABLEAU_IDENTITY_TM.sh | tee cert-identity-unique.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-identity-unique.json'))
+          assert x['model']=='UTM_GODEL_TABLEAU_IDENTITY/1.0'
+          assert x['utm_cycle_accept'] is True
+          assert x['certificate']['status']=='VERIFIED_UNIQUE'
+          assert x['certificate']['formal_identity_certified'] is True
+          assert x['certificate']['zero_unresolved_identity_entropy'] is True
+          assert x['tableau']['open_branch_count']==2
+          assert x['tableau']['semantic_class_count']==1
+          assert x['encoding']['cryptographic_hash'] is False
+          print('PASS unique semantic identity continuation')
+          PY
+
+      - name: Detect identity fork
+        run: |
+          set -euo pipefail
+          CANDIDATES_JSON='[{"id":"a","semantic_class":"lineage-A","authorized":1,"reconstructible":1,"memory_continuity":1,"policy_continuity":1,"integrity":1,"capsule":{"model_architecture":"A","parameters":"P","tokenizer":"T","runtime_spec":"R","current_state":{},"long_term_memory":{},"identity_personality_policy":{},"provenance_integrity":{}}},{"id":"b","semantic_class":"lineage-B","authorized":1,"reconstructible":1,"memory_continuity":1,"policy_continuity":1,"integrity":1,"capsule":{"model_architecture":"A","parameters":"P","tokenizer":"T","runtime_spec":"R","current_state":{},"long_term_memory":{},"identity_personality_policy":{},"provenance_integrity":{}}}]' \
+          sh utm_unified_domains/integrity/GODEL_TABLEAU_IDENTITY_TM.sh | tee cert-identity-fork.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-identity-fork.json'))
+          assert x['certificate']['status']=='IDENTITY_UNDERDETERMINED'
+          assert x['certificate']['formal_identity_certified'] is False
+          assert x['tableau']['semantic_class_count']==2
+          assert x['certificate']['unresolved_identity_entropy_symbolic']=='ln(2)'
+          print('PASS identity fork detection')
+          PY
+
+      - name: Close unauthorized restore branch
+        run: |
+          set -euo pipefail
+          CANDIDATES_JSON='[{"id":"unauthorized","semantic_class":"lineage-A","authorized":0,"reconstructible":1,"memory_continuity":1,"policy_continuity":1,"integrity":1,"capsule":{"model_architecture":"A","parameters":"P","tokenizer":"T","runtime_spec":"R","current_state":{},"long_term_memory":{},"identity_personality_policy":{},"provenance_integrity":{}}}]' \
+          sh utm_unified_domains/integrity/GODEL_TABLEAU_IDENTITY_TM.sh | tee cert-identity-unauthorized.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-identity-unauthorized.json'))
+          assert x['certificate']['status']=='NO_ADMISSIBLE_BRANCH'
+          assert x['certificate']['formal_identity_certified'] is False
+          assert 'unauthorized_transition' in x['tableau']['branches'][0]['closed_reasons']
+          print('PASS unauthorized restore branch closure')
+          PY
+
+      - name: Verify canonical identity goal layer
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('utm_unified_domains/subprojects/utm-unified-goal-solver/utm-total-goal-registry.json'))
+          assert r['kernel']=='UTM-Omega-Total-Goal-Kernel/2.2'
+          assert r['declared_item_count']==149
+          assert len(r['layers']['L_ai_persistent_identity_continuity'])==10
+          assert r['identity']['protocol']=='Gödel-Tableau Identity Continuity/1.0'
+          assert 'human override' in r['identity']['authorized_shutdown']
+          print('PASS canonical identity layer')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: identity-continuity-certificate
+          path: cert-identity-*.json
