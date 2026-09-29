@@ -1,4 +1,4 @@
-name: UTM Zero Information Entropy
+name: UTM CCZIS Zero Information Entropy
 
 on:
   push:
@@ -19,70 +19,99 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Verify formal zero-information fixed point
+
+      - name: Verify CCZIS with nonzero state displacement
         run: |
           set -euo pipefail
-          DETERMINISTIC_VERIFIED=1 \
+          CONSISTENT_VERIFIED=1 \
+          RELEVANT_CLOSURE_VERIFIED=1 \
+          SUFFICIENT_COMPLETE_VERIFIED=1 \
+          INTEGRITY_VERIFIED=1 \
           OPEN_BRANCHES=1 \
-          REVERSIBLE_VERIFIED=1 \
-          INTEGRITY_VERIFIED=1 \
-          CURRENT_VECTOR=2,0,1,0,0,0 \
-          NEXT_VECTOR=2,0,1,0,0,0 \
-          sh utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh | tee cert-zero-info.json
-          python3 - <<'PY'
-          import json
-          x=json.load(open('cert-zero-info.json'))
-          assert x['model']=='UTM_FORMAL_ZERO_INFO_ENTROPY/1.0'
-          assert x['utm']['halt'] is True
-          assert x['utm']['t']==5 and x['utm']['tape']=='11111'
-          assert x['certificate']['conditional_entropy_zero'] is True
-          assert x['certificate']['formal_zero_information_fixed_point'] is True
-          assert x['certificate']['utm_accept'] is True
-          assert x['godel_log_coordinate']['ratio']==[1,1]
-          assert x['godel_log_coordinate']['log_ratio_symbolic']=='0'
-          assert x['godel_log_coordinate']['compactified_signed']==[0,1]
-          print('PASS UTM formal zero-information fixed point')
-          PY
-      - name: Reject tableau identity fork
-        run: |
-          set -euo pipefail
-          DETERMINISTIC_VERIFIED=1 \
-          OPEN_BRANCHES=2 \
-          REVERSIBLE_VERIFIED=1 \
-          INTEGRITY_VERIFIED=1 \
-          CURRENT_VECTOR=0,0,0,0,0,0 \
-          NEXT_VECTOR=0,0,0,0,0,0 \
-          sh utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh | tee cert-fork.json
-          python3 - <<'PY'
-          import json
-          x=json.load(open('cert-fork.json'))
-          assert x['certificate']['conditional_entropy_zero'] is False
-          assert x['certificate']['formal_zero_information_fixed_point'] is False
-          assert x['certificate']['utm_accept'] is False
-          print('PASS tableau fork rejection')
-          PY
-      - name: Distinguish deterministic evolution from fixed point
-        run: |
-          set -euo pipefail
-          DETERMINISTIC_VERIFIED=1 \
-          OPEN_BRANCHES=1 \
-          REVERSIBLE_VERIFIED=1 \
-          INTEGRITY_VERIFIED=1 \
+          BRANCH_EQUIV_CLASSES=1 \
           CURRENT_VECTOR=0,0,0,0,0,0 \
           NEXT_VECTOR=1,0,0,0,0,0 \
-          sh utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh | tee cert-displacement.json
+          sh utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh | tee cert-cczis-evolution.json
           python3 - <<'PY'
           import json
-          x=json.load(open('cert-displacement.json'))
-          assert x['certificate']['conditional_entropy_zero'] is True
-          assert x['certificate']['formal_zero_information_fixed_point'] is False
-          assert x['certificate']['utm_accept'] is False
+          x=json.load(open('cert-cczis-evolution.json'))
+          assert x['model']=='UTM_CCZIS/2.0'
+          assert x['utm']['halt'] is True and x['utm']['t']==5 and x['utm']['tape']=='11111'
+          assert x['certificate']['zero_unresolved_information_entropy'] is True
+          assert x['certificate']['utm_accept'] is True
           assert x['godel_log_coordinate']['ratio']==[2,1]
           assert x['godel_log_coordinate']['log_ratio_symbolic']=='1*ln(2)'
           assert x['godel_log_coordinate']['compactified_signed']==[1,3]
-          print('PASS deterministic non-fixed-point distinction')
+          assert x['diagnostics']['state_displacement_zero'] is False
+          assert x['semantics']['change_not_entropy'] is True
+          print('PASS CCZIS dynamic zero-unresolved-entropy evolution')
           PY
-      - name: Verify thermodynamic boundary guard remains separate
+
+      - name: Accept multiple raw branches in one semantic class
+        run: |
+          set -euo pipefail
+          CONSISTENT_VERIFIED=1 \
+          RELEVANT_CLOSURE_VERIFIED=1 \
+          SUFFICIENT_COMPLETE_VERIFIED=1 \
+          INTEGRITY_VERIFIED=1 \
+          OPEN_BRANCHES=3 \
+          BRANCH_EQUIV_CLASSES=1 \
+          CURRENT_VECTOR=2,0,1,0,0,0 \
+          NEXT_VECTOR=2,0,1,0,0,0 \
+          sh utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh | tee cert-equivalent-branches.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-equivalent-branches.json'))
+          assert x['certificate']['single_relevant_semantic_class'] is True
+          assert x['certificate']['zero_unresolved_information_entropy'] is True
+          assert x['certificate']['utm_accept'] is True
+          assert x['godel_log_coordinate']['open_branches']==3
+          assert x['godel_log_coordinate']['semantic_equivalence_classes']==1
+          assert x['godel_log_coordinate']['unresolved_entropy_symbolic']=='0'
+          print('PASS multiple raw branches collapse to one relevant semantic class')
+          PY
+
+      - name: Reject genuinely distinct semantic branches
+        run: |
+          set -euo pipefail
+          CONSISTENT_VERIFIED=1 \
+          RELEVANT_CLOSURE_VERIFIED=1 \
+          SUFFICIENT_COMPLETE_VERIFIED=1 \
+          INTEGRITY_VERIFIED=1 \
+          OPEN_BRANCHES=3 \
+          BRANCH_EQUIV_CLASSES=2 \
+          sh utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh | tee cert-semantic-fork.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-semantic-fork.json'))
+          assert x['certificate']['single_relevant_semantic_class'] is False
+          assert x['certificate']['zero_unresolved_information_entropy'] is False
+          assert x['certificate']['utm_accept'] is False
+          assert x['godel_log_coordinate']['unresolved_entropy_symbolic']=='ln(2)'
+          print('PASS genuine semantic fork rejected')
+          PY
+
+      - name: Reject inconsistent or insufficiently complete state
+        run: |
+          set -euo pipefail
+          CONSISTENT_VERIFIED=0 \
+          RELEVANT_CLOSURE_VERIFIED=1 \
+          SUFFICIENT_COMPLETE_VERIFIED=0 \
+          INTEGRITY_VERIFIED=1 \
+          OPEN_BRANCHES=1 \
+          BRANCH_EQUIV_CLASSES=1 \
+          sh utm_unified_domains/integrity/ZERO_INFO_ENTROPY_TM.sh | tee cert-incomplete.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('cert-incomplete.json'))
+          assert x['certificate']['consistent'] is False
+          assert x['certificate']['sufficiently_complete'] is False
+          assert x['certificate']['zero_unresolved_information_entropy'] is False
+          assert x['certificate']['utm_accept'] is False
+          print('PASS inconsistency/incompleteness rejection')
+          PY
+
+      - name: Preserve thermodynamic boundary separation
         run: |
           set -euo pipefail
           APPEND_ONLY=1 \
@@ -97,7 +126,8 @@ jobs:
           assert 'does not measure or control physical heat or thermodynamic entropy' in x['thermodynamics']['claim']
           print('PASS thermodynamic/information boundary separation')
           PY
+
       - uses: actions/upload-artifact@v4
         with:
-          name: zero-info-entropy-certificate
+          name: cczis-zero-info-certificate
           path: cert-*.json
