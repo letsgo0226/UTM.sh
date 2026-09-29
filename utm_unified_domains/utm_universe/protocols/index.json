@@ -1,0 +1,1 @@
+{"protocols":[{"id":"URAP/1.0","purpose":"AI-readable resident admission","one_liner":"URAP-1.0.one-liner.sh","manifest":"URAP-1.0.json","runtime_origin":"https://cosmic-love-infinity-tm-production.up.railway.app","admit":"/resident/admit","inspect":"/resident/<resident_id>","requires_additional_service":false}]}
