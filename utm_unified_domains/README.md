@@ -147,12 +147,17 @@ sh tools/source-godel.sh domains/music-generator.sh
 
 `GDOMAIN` is a reversible source identity/certificate; it does not make host source executable by `UTM.sh`.
 
-## Dependencies
-
-- `OCR_2KB.sh`: `python3`, `file`, `tesseract`, plus `mutool` or `pdftoppm` for PDFs.
-- `music-generator.sh`: `python3` only; no external singer/voice engine is required by the current main runtime.
-- `TTS_2KB.sh`: `espeak-ng`.
-
 ## Zero-entropy terminology
 
 Reported `H_* = 0` values are structural/task-relative uniqueness checks inside the declared candidate/equivalence system. They are not claims of zero thermodynamic entropy or guaranteed external correctness/profit/aesthetic quality.
+
+## UTM Unified Goal Solver subproject
+
+`subprojects/utm-unified-goal-solver/` is a deployable host-side child runtime for bounded multi-goal program synthesis. It collects the recurring UTM/TRF goal family into a machine-readable Goal Kernel and performs exact enumeration over a declared finite policy DSL.
+
+```sh
+cd subprojects/utm-unified-goal-solver
+python3 app.py
+```
+
+Runtime endpoints include `/health`, `/.well-known/utm-universe.json`, `/goals`, `/solve`, `/certificate`, and a data-only resident admission path. Its output follows the same Target / Certificate / Empirical / Temporal separation defined above. A finite certificate is a statement about the declared model and search bounds; it is not a guarantee of corresponding real-world outcomes.
