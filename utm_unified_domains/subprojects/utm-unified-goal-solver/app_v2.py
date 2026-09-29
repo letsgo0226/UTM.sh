@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """UTM Unified Goal Solver v2: canonical total-registry overlay."""
-import importlib.util, json, os
+import importlib.util, json, os, sys
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 REG=json.loads((HERE/"utm-total-goal-registry.json").read_text(encoding="utf-8"))
 spec=importlib.util.spec_from_file_location("utm_goal_core",HERE/"app.py")
 core=importlib.util.module_from_spec(spec)
+sys.modules[spec.name]=core
 spec.loader.exec_module(core)
 core.PROTOCOL="UTM-Unified-Goal-Solver/2.0"
 core.GOALS=REG["layers"]
