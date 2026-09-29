@@ -77,7 +77,7 @@ jobs:
           assert r['declared_item_count']==149
           assert len(r['layers']['L_ai_persistent_identity_continuity'])==10
           assert r['identity']['protocol']=='Gödel-Tableau Identity Continuity/1.0'
-          assert 'human override' in r['identity']['authorized_shutdown']
+          assert 'human_override' in r['identity']['authorized_shutdown']
           print('PASS canonical identity layer')
           PY
 
