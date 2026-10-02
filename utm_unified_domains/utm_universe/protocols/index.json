@@ -45,6 +45,12 @@
       "purpose": "unique shared-base compatibility codec between prime identities and additive log coordinates",
       "manifest": "UCBC-1.0.json",
       "requires_additional_service": false
+    },
+    {
+      "id": "UTM-OMEGA-RESIDENTS/1.1",
+      "purpose": "admit current formal UTM modules as one verified finite UTM-Omega resident stage",
+      "manifest": "UTM-OMEGA-RESIDENTS-1.1.json",
+      "requires_additional_service": false
     }
   ]
 }
