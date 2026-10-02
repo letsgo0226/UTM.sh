@@ -20,6 +20,6 @@ jobs:
         with:
           python-version: '3.12'
       - name: Unit tests
-        run: python -m unittest -v log_abelian_utm/test_app.py
+        run: python -m unittest discover -v -s log_abelian_utm -p 'test_*.py'
       - name: Syntax check
-        run: python -m py_compile log_abelian_utm/app.py
+        run: python -m py_compile log_abelian_utm/app.py log_abelian_utm/axiom_verifier.py
