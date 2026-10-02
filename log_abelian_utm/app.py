@@ -118,6 +118,18 @@ def compose(left, right):
         },
     }
 
+def deployment_preverify(payload):
+    base = verify_deployment_gate(payload)
+    omega_input = payload.get("utm_omega_state")
+    if omega_input is None:
+        base["utm_omega_certificate"] = {"valid_finite_stage":False,"error":"utm_omega_state_required"}
+        base["admissible_for_gateway_verification"] = False
+    else:
+        omega = verify_finite_stage(omega_input)
+        base["utm_omega_certificate"] = omega
+        base["admissible_for_gateway_verification"] = base["admissible_for_gateway_verification"] and omega["valid_finite_stage"]
+    return base
+
 class H(BaseHTTPRequestHandler):
     def send_json(self, code, obj):
         data = json.dumps(obj, ensure_ascii=False, separators=(",",":")).encode()
@@ -175,16 +187,7 @@ class H(BaseHTTPRequestHandler):
             if self.path == "/omega/extend":
                 return self.send_json(200, verify_stage_extension(b["previous"], b["current"]))
             if self.path == "/deploy/preverify":
-                base = verify_deployment_gate(b)
-                omega_input = b.get("utm_omega_state")
-                if omega_input is None:
-                    base["utm_omega_certificate"] = {"valid_finite_stage":False,"error":"utm_omega_state_required"}
-                    base["admissible_for_gateway_verification"] = False
-                else:
-                    omega = verify_finite_stage(omega_input)
-                    base["utm_omega_certificate"] = omega
-                    base["admissible_for_gateway_verification"] = base["admissible_for_gateway_verification"] and omega["valid_finite_stage"]
-                return self.send_json(200, base)
+                return self.send_json(200, deployment_preverify(b))
             return self.send_json(404, {"error":"not_found"})
         except (ValueError, KeyError, TypeError, json.JSONDecodeError) as e:
             return self.send_json(400, {"error":"bad_request","detail":str(e)})
