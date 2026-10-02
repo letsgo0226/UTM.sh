@@ -1,0 +1,36 @@
+{
+  "protocol": "UTM-Omega-Application-Target/1.0",
+  "scope": "formal-research-target-only",
+  "P_target_goal": 1,
+  "C_target": 1,
+  "P_empirical_hat": null,
+  "A_target": 1,
+  "G_target": 1,
+  "empirical_claim": false,
+  "real_world_validated": false,
+  "external_evidence_required": true,
+  "execution_boundary": {
+    "generates_real_world_intervention": false,
+    "authorizes_clinical_use": false,
+    "medical_action_enabled": false,
+    "target_certificate_is_not_empirical_proof": true
+  },
+  "app_id": "BIRTH_ZERO_INJURY",
+  "display_name": "Zero-Injury Childbirth Target",
+  "target_semantics": {
+    "formal_goal": "Optimize childbirth toward zero maternal injury, zero neonatal injury, and preservation of informed human control.",
+    "real_world_claim": "ABSOLUTE_ZERO_INJURY_NOT_ESTABLISHED",
+    "success_target": {
+      "maternal_injury": "0-as-target",
+      "neonatal_injury": "0-as-target",
+      "avoidable_intervention_harm": "0-as-target"
+    }
+  },
+  "evidence_gate": [
+    "maternal outcome evidence",
+    "neonatal outcome evidence",
+    "procedure/device safety validation",
+    "comparative clinical evidence",
+    "post-market or longitudinal surveillance where applicable"
+  ]
+}
