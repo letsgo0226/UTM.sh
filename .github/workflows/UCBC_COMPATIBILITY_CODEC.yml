@@ -1,1 +1,45 @@
-name: UCBC Compatibility Codec\n\non:\n  push:\n    branches: [ucbc-compatibility-codec-base]\n    paths:\n      - 'utm_unified_domains/utm_universe/**'\n      - '.github/workflows/UCBC_COMPATIBILITY_CODEC.yml'\n  pull_request:\n    paths:\n      - 'utm_unified_domains/utm_universe/**'\n      - '.github/workflows/UCBC_COMPATIBILITY_CODEC.yml'\n\njobs:\n  verify:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.12'\n      - name: UCBC compatibility tests\n        working-directory: utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE\n        run: python3 test_ucbc.py\n      - name: Python syntax check\n        run: python3 -m py_compile utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE/ucbc.py\n      - name: Protocol and manifest JSON checks\n        run: |\n          python3 - <<'PY'\n          import json\n          from pathlib import Path\n          files=[\n            'utm_unified_domains/utm_universe/world-manifest.json',\n            'utm_unified_domains/utm_universe/protocols/index.json',\n            'utm_unified_domains/utm_universe/protocols/UCBC-1.0.json',\n            'utm_unified_domains/utm_universe/protocols/UFAL-1.0.json',\n            'utm_unified_domains/utm_universe/protocols/LOG-ABELIAN-NATIVE-1.0.json',\n            'utm_unified_domains/utm_universe/protocols/UTM-THREE-SYSTEM-NATIVE-1.0.json',\n            'utm_unified_domains/utm_universe/subprojects/index.json',\n            'utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE/manifest.json',\n          ]\n          for f in files:\n              json.loads(Path(f).read_text())\n              print('OK',f)\n          PY\n
+name: UCBC Compatibility Codec
+
+on:
+  push:
+    branches: [ucbc-compatibility-codec-base]
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UCBC_COMPATIBILITY_CODEC.yml'
+  pull_request:
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UCBC_COMPATIBILITY_CODEC.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: UCBC compatibility tests
+        working-directory: utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE
+        run: python3 test_ucbc.py
+      - name: Python syntax check
+        run: python3 -m py_compile utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE/ucbc.py
+      - name: Protocol and manifest JSON checks
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          files=[
+            'utm_unified_domains/utm_universe/world-manifest.json',
+            'utm_unified_domains/utm_universe/protocols/index.json',
+            'utm_unified_domains/utm_universe/protocols/UCBC-1.0.json',
+            'utm_unified_domains/utm_universe/protocols/UFAL-1.0.json',
+            'utm_unified_domains/utm_universe/protocols/LOG-ABELIAN-NATIVE-1.0.json',
+            'utm_unified_domains/utm_universe/protocols/UTM-THREE-SYSTEM-NATIVE-1.0.json',
+            'utm_unified_domains/utm_universe/subprojects/index.json',
+            'utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE/manifest.json',
+          ]
+          for f in files:
+              json.loads(Path(f).read_text())
+              print('OK',f)
+          PY
