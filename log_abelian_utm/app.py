@@ -1,5 +1,6 @@
 import json, math, os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from axiom_verifier import load_spec, verify_spec, verify_state, verify_deployment_gate
 
 MAX_EVENTS = 64
 MAX_COORD = 200
@@ -133,16 +134,20 @@ class H(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/health":
             return self.send_json(200, {"ok":True,"service":"log-abelian-utm"})
+        if self.path == "/axioms":
+            spec = load_spec()
+            return self.send_json(200, {"spec":spec,"verification":verify_spec(spec)})
         if self.path in ("/", "/spec"):
             return self.send_json(200, {
                 "service":"Logarithmic Abelian UTM",
-                "version":"1.0",
+                "version":"1.1",
                 "kernel":"x+y=log(a)+log(b)=log(ab)",
                 "representation":"finite events (step,op) -> Cantor index -> nth prime",
                 "composition":"integer multiplication / log-space addition",
                 "semantics":"representation is Abelian; decoded UTM causality remains ordered",
                 "limits":{"max_events":MAX_EVENTS,"max_coordinate":MAX_COORD},
-                "endpoints":["GET /health","GET /spec","POST /encode","POST /compose","POST /decode"],
+                "axiom_layer":"UTM-Three-Universe-Axiom-Layer/1.0",
+                "endpoints":["GET /health","GET /spec","GET /axioms","POST /encode","POST /compose","POST /decode","POST /axioms/verify","POST /deploy/preverify"],
             })
         return self.send_json(404, {"error":"not_found"})
 
@@ -155,6 +160,10 @@ class H(BaseHTTPRequestHandler):
                 return self.send_json(200, compose(b.get("left",[]), b.get("right",[])))
             if self.path == "/decode":
                 return self.send_json(200, {"events":decode_godel(b["godel"])})
+            if self.path == "/axioms/verify":
+                return self.send_json(200, verify_state(b))
+            if self.path == "/deploy/preverify":
+                return self.send_json(200, verify_deployment_gate(b))
             return self.send_json(404, {"error":"not_found"})
         except (ValueError, KeyError, TypeError, json.JSONDecodeError) as e:
             return self.send_json(400, {"error":"bad_request","detail":str(e)})
