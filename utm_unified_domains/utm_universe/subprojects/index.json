@@ -62,6 +62,14 @@
       "registry": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/resident_registry.json",
       "additional_deployment_required": false,
       "role": "UTM-Omega internal formal resident bundle"
+    },
+    {
+      "id": "UTM_OMEGA_LIFE_APPLICATIONS",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/manifest.json",
+      "verifier": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/verify_applications.py",
+      "additional_deployment_required": false,
+      "role": "formal research-target application bundle",
+      "scope": "not-real-world-validated"
     }
   ]
 }
