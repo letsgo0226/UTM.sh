@@ -1,0 +1,47 @@
+{
+  "protocol": "Trader-42-Native/1.0",
+  "id": "TRADER_42_NATIVE",
+  "parent_world_id": "akashic-utm-main",
+  "role": "UTM-Universe-native paper-trading policy semantics",
+  "pure_utm_core": {
+    "program": "TRADER_POLICY.tm",
+    "interpreter": "utm_unified_domains/utm/UTM.sh",
+    "input_alphabet": {
+      "U": "bullish/entry-admissible certified class",
+      "D": "bearish/exit-admissible certified class",
+      "F": "neutral or ambiguous certified class",
+      "R": "risk-blocked certified class",
+      "C": "cost-blocked certified class"
+    },
+    "output_alphabet": {
+      "L": "PAPER_LONG",
+      "X": "PAPER_EXIT",
+      "H": "PAPER_HOLD"
+    }
+  },
+  "target_semantics": {
+    "axiom": "PROFIT_IS_OBJECTIVE",
+    "P_target_profit": 1,
+    "G_target": 1,
+    "meaning": "admissible continuations preserve profit as the objective; this does not assert that profit occurs"
+  },
+  "empirical_boundary": {
+    "host_runtime": "utm_unified_domains/domains/Trader_42.sh",
+    "market_data_external": true,
+    "feature_quantization_host_side": true,
+    "fee_slippage_and_oos_evaluation_host_side": true
+  },
+  "execution_boundary": {
+    "TRADING_MODE": "paper",
+    "exchange_order_path": false,
+    "live_trading_authority": false,
+    "credential_access": false,
+    "utm_output_is_exchange_authorization": false
+  },
+  "omega_semantics": {
+    "potentially_unbounded_strategy_horizon": true,
+    "each_executed_search_stage_finite": true,
+    "actual_infinite_physical_compute": false
+  },
+  "additional_deployment_required": false
+}
