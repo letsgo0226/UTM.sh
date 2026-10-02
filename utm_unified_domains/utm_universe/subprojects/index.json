@@ -54,6 +54,14 @@
       "verifier": "utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE/ucbc.py",
       "additional_deployment_required": false,
       "role": "shared-base compatibility verifier"
+    },
+    {
+      "id": "UTM_OMEGA_RESIDENTS",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/manifest.json",
+      "verifier": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/verify_residents.py",
+      "registry": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/resident_registry.json",
+      "additional_deployment_required": false,
+      "role": "UTM-Omega internal formal resident bundle"
     }
   ]
 }
