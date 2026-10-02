@@ -1,0 +1,38 @@
+{
+  "protocol": "UTM-Universe-Native-Subproject/1.0",
+  "id": "LOG_ABELIAN_OMEGA_NATIVE",
+  "parent_world_id": "akashic-utm-main",
+  "purpose": "Native finite-stage realization of Log-Abelian valuation composition inside the fixed UTM interpreter",
+  "formal_layers": [
+    "UTM-Three-Universe-Axiom-Layer/1.0",
+    "UTM-Omega-Unbounded-Compute/1.0",
+    "Logarithmic-Abelian-Representation/1.0"
+  ],
+  "pure_utm_core": {
+    "program": "VALUATION_ADD.tm",
+    "interpreter": "utm_unified_domains/utm/UTM.sh",
+    "input_encoding": "1^m#1^n",
+    "output_encoding": "1^(m+n)",
+    "operation": "(v+w)_i=v_i+w_i",
+    "execution_unit": "one finite valuation coordinate"
+  },
+  "finite_stage_bundle": {
+    "compiler": "compile_native_stage.py",
+    "runner": "run_native_stage.py",
+    "semantics": "A finite-support valuation vector is compiled into finitely many pure-UTM scalar coordinate jobs."
+  },
+  "omega_semantics": {
+    "potentially_unbounded": true,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "omega_is_symbolic_limit_object": true,
+    "hypercomputation_enabled": false
+  },
+  "host_boundary": {
+    "compiler_is_host_side_packaging": true,
+    "runner_is_host_side_scheduling": true,
+    "valuation_addition_semantics_execute_in_UTM": true,
+    "physical_host_required": true
+  },
+  "additional_deployment_required": false
+}
