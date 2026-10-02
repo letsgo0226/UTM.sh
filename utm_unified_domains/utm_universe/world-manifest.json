@@ -173,6 +173,7 @@
       "utm_unified_domains/utm_universe/protocols/THREE-UNIVERSE-AXIOMS-1.0.json",
       "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-1.0.json",
       "utm_unified_domains/utm_universe/protocols/UFAL-1.0.json",
+      "utm_unified_domains/utm_universe/protocols/UCBC-1.0.json",
       "utm_unified_domains/utm_universe/protocols/LOG-ABELIAN-NATIVE-1.0.json"
     ],
     "subproject": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE",
@@ -220,6 +221,7 @@
       "THREE-UNIVERSE-AXIOMS/1.0",
       "UTM-OMEGA/1.0",
       "UFAL/1.0",
+      "UCBC/1.0",
       "LOG-ABELIAN-NATIVE/1.0",
       "UTM-Guarded-Deployment-Gateway/1.0"
     ],
@@ -248,7 +250,13 @@
       "exact_global_encoding": "G_total = G_U * G_T * G_C under canonical disjoint prime identities",
       "additive_coordinate": "X_total = X_U + X_T + X_C = log_c(G_total)",
       "unique_decode": true,
-      "causal_order_requires_step_metadata": true
+      "causal_order_requires_step_metadata": true,
+      "compatibility_codec": {
+        "protocol": "UCBC/1.0",
+        "relation": "G_total=c^X_total with X_total=log_c(G_total)",
+        "common_base_must_be_consistent_across_certified_pairs": true,
+        "c_alone_is_not_state_identity": true
+      }
     }
   },
   "ufal": {
@@ -262,5 +270,16 @@
     "floating_point_log_authoritative": false,
     "zero_ambiguity_scope": "structural canonical decoding only; not thermodynamic entropy",
     "ordered_replay_requirement": "encode subsystem/role/step metadata into canonical prime identity"
+  },
+  "ucbc": {
+    "protocol": "UCBC/1.0",
+    "status": "registered-in-world-law",
+    "role": "unique shared-base compatibility codec between canonical multiplicative identities and additive log coordinates",
+    "relation": "x=log_c(a), y=log_c(b), x+y=log_c(ab)",
+    "candidate_base": "c=a^(1/x)=b^(1/y)",
+    "existence_condition": "candidate bases agree and c>0, c!=1",
+    "uniqueness": "compatible fixed (a,x) determines one positive c; all certified pairs must yield that same c",
+    "c_alone_is_full_payload": false,
+    "exactness_boundary": "integer/symbolic relations authoritative; numeric real-log recovery diagnostic only"
   }
 }
