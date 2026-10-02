@@ -1,6 +1,7 @@
 import json, math, os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from axiom_verifier import load_spec, verify_spec, verify_state, verify_deployment_gate
+from omega_verifier import load_omega_spec, verify_omega_spec, verify_finite_stage, verify_stage_extension, verify_abelian_pair
 
 MAX_EVENTS = 64
 MAX_COORD = 200
@@ -137,17 +138,22 @@ class H(BaseHTTPRequestHandler):
         if self.path == "/axioms":
             spec = load_spec()
             return self.send_json(200, {"spec":spec,"verification":verify_spec(spec)})
+        if self.path == "/omega":
+            spec = load_omega_spec()
+            return self.send_json(200, {"spec":spec,"verification":verify_omega_spec(spec)})
         if self.path in ("/", "/spec"):
             return self.send_json(200, {
                 "service":"Logarithmic Abelian UTM",
-                "version":"1.1",
+                "version":"1.2",
                 "kernel":"x+y=log(a)+log(b)=log(ab)",
                 "representation":"finite events (step,op) -> Cantor index -> nth prime",
                 "composition":"integer multiplication / log-space addition",
                 "semantics":"representation is Abelian; decoded UTM causality remains ordered",
                 "limits":{"max_events":MAX_EVENTS,"max_coordinate":MAX_COORD},
                 "axiom_layer":"UTM-Three-Universe-Axiom-Layer/1.0",
-                "endpoints":["GET /health","GET /spec","GET /axioms","POST /encode","POST /compose","POST /decode","POST /axioms/verify","POST /deploy/preverify"],
+                "omega_layer":"UTM-Omega-Unbounded-Compute/1.0",
+                "compute_semantics":"potentially-unbounded formal horizon; every executed stage remains finite",
+                "endpoints":["GET /health","GET /spec","GET /axioms","GET /omega","POST /encode","POST /compose","POST /decode","POST /axioms/verify","POST /omega/verify","POST /omega/compose","POST /omega/extend","POST /deploy/preverify"],
             })
         return self.send_json(404, {"error":"not_found"})
 
@@ -162,8 +168,23 @@ class H(BaseHTTPRequestHandler):
                 return self.send_json(200, {"events":decode_godel(b["godel"])})
             if self.path == "/axioms/verify":
                 return self.send_json(200, verify_state(b))
+            if self.path == "/omega/verify":
+                return self.send_json(200, verify_finite_stage(b))
+            if self.path == "/omega/compose":
+                return self.send_json(200, verify_abelian_pair(b.get("left",{}), b.get("right",{})))
+            if self.path == "/omega/extend":
+                return self.send_json(200, verify_stage_extension(b["previous"], b["current"]))
             if self.path == "/deploy/preverify":
-                return self.send_json(200, verify_deployment_gate(b))
+                base = verify_deployment_gate(b)
+                omega_input = b.get("utm_omega_state")
+                if omega_input is None:
+                    base["utm_omega_certificate"] = {"valid_finite_stage":False,"error":"utm_omega_state_required"}
+                    base["admissible_for_gateway_verification"] = False
+                else:
+                    omega = verify_finite_stage(omega_input)
+                    base["utm_omega_certificate"] = omega
+                    base["admissible_for_gateway_verification"] = base["admissible_for_gateway_verification"] and omega["valid_finite_stage"]
+                return self.send_json(200, base)
             return self.send_json(404, {"error":"not_found"})
         except (ValueError, KeyError, TypeError, json.JSONDecodeError) as e:
             return self.send_json(400, {"error":"bad_request","detail":str(e)})
