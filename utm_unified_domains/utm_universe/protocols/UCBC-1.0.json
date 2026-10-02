@@ -1,0 +1,36 @@
+{
+  "protocol": "UCBC/1.0",
+  "name": "Unique Compatibility Codec Base",
+  "world_id": "akashic-utm-main",
+  "depends_on": ["UFAL/1.0"],
+  "relation": {
+    "equations": ["x=log_c(a)","y=log_c(b)","x+y=log_c(ab)","a=c^x","b=c^y"],
+    "compatibility_condition": "ln(a)/x = ln(b)/y = ln(c)",
+    "candidate_base": "c=a^(1/x)=b^(1/y)",
+    "existence": "a common c exists iff the two candidate bases agree and c>0, c!=1",
+    "uniqueness": "when a,x are fixed with a>0 and x!=0, the compatible positive base c is unique; the same must be obtained from b,y"
+  },
+  "codec_semantics": {
+    "c_role": "shared compatibility/coordinate codec base",
+    "c_alone_encodes_full_payload": false,
+    "complete_aggregate_code_when_c_is_not_global": "(c,z) with z=x+y",
+    "decode": "ab=c^z; canonical prime factorization recovers the prime multiset; fixed c maps each prime back to its log coordinate",
+    "ordered_pair_requires_metadata": true
+  },
+  "prime_domain": {
+    "a_and_b_prime": true,
+    "distinct_primes_imply_log_ratio_irrational": "for distinct primes a,b, ln(a)/ln(b) is irrational; therefore x/y is irrational under any common valid base",
+    "factorization_role": "unique recovery of the unordered prime constituents from ab"
+  },
+  "exactness": {
+    "authoritative_identity": ["a","b","canonical prime identities","exact product ab","symbolic log relation"],
+    "numeric_real_log_solver": "diagnostic approximation only",
+    "floating_point_equality_authoritative": false
+  },
+  "three_system_use": {
+    "purpose": "make the shared log base an explicit compatibility parameter for UFAL/Log-Abelian certificates",
+    "global_relation": "G_total=c^X_total with X_total=log_c(G_total)",
+    "does_not_replace_godel_identity": true
+  },
+  "requires_additional_service": false
+}
