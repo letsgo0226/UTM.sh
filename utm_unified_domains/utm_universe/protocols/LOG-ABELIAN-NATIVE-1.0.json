@@ -22,5 +22,13 @@
     "derived_coordinate": "Lambda_c(v)=sum_i v_i log_c(p_i)",
     "injective_on_canonical_domain": true,
     "floating_point_log_authoritative": false
+  },
+  "ucbc_dependency": "UCBC/1.0",
+  "coordinate_codec": {
+    "base": "c",
+    "role": "shared compatibility/coordinate codec base",
+    "relation": "G=c^X with X=log_c(G)",
+    "base_is_payload_identity": false,
+    "exact_state_remains": "prime-exponent vector / exact Godel integer"
   }
 }
