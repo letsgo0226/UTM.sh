@@ -1,0 +1,17 @@
+{
+  "protocol": "UTM-OMEGA-RESIDENTS/1.1",
+  "world_id": "akashic-utm-main",
+  "status": "formal_internal_deployment",
+  "resident_registry": "../subprojects/UTM_OMEGA_RESIDENTS/resident_registry.json",
+  "verifier": "../subprojects/UTM_OMEGA_RESIDENTS/verify_residents.py",
+  "semantics": {
+    "admitted_state": "OMEGA_ADMITTED",
+    "continuation": "C_0 -> C_1 -> C_2 -> ... -> symbolic C_omega",
+    "potentially_unbounded": true,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "oracle": null,
+    "hypercomputation_enabled": false,
+    "external_authority_created": false
+  }
+}
