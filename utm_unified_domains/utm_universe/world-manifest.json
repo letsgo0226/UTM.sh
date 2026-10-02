@@ -306,7 +306,7 @@
       "oracle": null,
       "hypercomputation_enabled": false,
       "halting_problem_becomes_decidable": false,
-      "stage": 3,
+      "stage": 4,
       "resident_count": 14
     },
     "deployment_boundary": {
@@ -344,6 +344,23 @@
       "external_evidence_required": true,
       "human_authorization_required": true,
       "actual_infinite_physical_compute": false
+    },
+    "household_continuity": {
+      "umbrella_goal": "continued existence / welfare / function / declared identity-lineage preservation",
+      "biological_subjects": [
+        "human",
+        "companion_feline",
+        "companion_canine",
+        "other_companion_animal"
+      ],
+      "computational_subjects": [
+        "ai_system"
+      ],
+      "ai_continuity_semantics": "state, memory, lineage, migration, recovery and rollback continuity",
+      "biological_immortality_established": false,
+      "ai_consciousness_established": false,
+      "ai_personhood_established": false,
+      "cross_modality_identity_equivalence_claim": false
     }
   }
 }
