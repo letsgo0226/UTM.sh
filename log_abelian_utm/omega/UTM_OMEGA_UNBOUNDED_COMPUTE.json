@@ -1,0 +1,47 @@
+{
+  "protocol": "UTM-Omega-Unbounded-Compute/1.0",
+  "status": "formal_hypothesis",
+  "scope": "formal_computation_model_only",
+  "world_id": "akashic-utm-main",
+  "execution_model": {
+    "name": "finite-stage-potentially-unbounded",
+    "stages": "C_0 subseteq C_1 subseteq C_2 subseteq ...",
+    "omega_object": "C_omega := formal direct-limit object of the finite stages",
+    "every_executed_stage_is_finite": true,
+    "no_predeclared_final_finite_stage": true,
+    "actual_infinite_physical_compute": false
+  },
+  "resource_semantics": {
+    "forall_finite_n_resource_is_finite": true,
+    "formal_horizon_unbounded": true,
+    "interpretation": "For every admitted finite requirement, the model may search for a sufficiently large finite stage; this does not instantiate infinite CPU, RAM, storage, time, energy, or hardware."
+  },
+  "algebra": {
+    "stage_state": "finite-support valuation vector v in N^(N)",
+    "composition": "(v+w)_i = v_i + w_i",
+    "abelian": true,
+    "finite_stage_log_coordinate": "Lambda(v)=sum_i v_i log(p_i) over finite support",
+    "homomorphism": "Lambda(v+w)=Lambda(v)+Lambda(w)",
+    "omega_completion": "symbolic completion/direct-limit object; no convergent infinite prime product is required"
+  },
+  "computability_boundary": {
+    "base_machine": "ordinary UTM",
+    "oracle": null,
+    "hypercomputation_enabled": false,
+    "halting_problem_becomes_decidable": false,
+    "unbounded_runtime_implies_decidability": false,
+    "statement": "Potentially unbounded finite-stage execution does not by itself decide every undecidable problem."
+  },
+  "axiom_interface": {
+    "host": "P_-1",
+    "finite_positive_chain": "P_0 -> P_1 -> P_2 -> ...",
+    "formal_limit_symbol": "P_omega = Omega",
+    "limit_is_hypothesis_not_finite_certificate": true
+  },
+  "deployment": {
+    "placement": "VERIFY.precheck.after_three_axiom_layer",
+    "certificate_only": true,
+    "mutates_platform": false,
+    "grants_platform_privilege": false
+  }
+}

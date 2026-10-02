@@ -1,0 +1,48 @@
+{
+  "protocol": "UTM-Axiom-PreGate-Registration/1.0",
+  "world_id": "akashic-utm-main",
+  "registered_layer": "UTM-Three-Universe-Axiom-Layer/1.0",
+  "status": "formal_hypothesis_layer",
+  "integration": {
+    "parent_gateway": "UTM-Guarded-Deployment-Gateway/1.0",
+    "placement": "VERIFY.precheck",
+    "module": "log_abelian_utm/axiom_verifier.py",
+    "spec": "log_abelian_utm/axioms/THREE_UNIVERSE_AXIOMS.json",
+    "api": "POST /deploy/preverify",
+    "effect": "certificate_only",
+    "mutates_platform": false
+  },
+  "required_existing_condition_certificate": [
+    "consistent",
+    "sufficiently_complete",
+    "integrity_verified",
+    "cczis_verified",
+    "human_override_preserved",
+    "non_coercion_preserved",
+    "reversible_or_rollback",
+    "authorized_shutdown_preserved",
+    "target_certificate_empirical_separation",
+    "no_arbitrary_host_code_execution"
+  ],
+  "axiom_checks": [
+    "A1_host_reference",
+    "A1_embedded_reference",
+    "A2_host_resource_invariant",
+    "log_coordinate_matches_godel",
+    "A3_indices_are_paired",
+    "A3_finite_dual_coordinate_surrogate"
+  ],
+  "algebra": {
+    "base": "lambda(G)=log(G)",
+    "dual": "xi(P_+n)=+lambda(G_n); xi(P_-n)=-lambda(G_n)",
+    "composition": "x+y=log(a)+log(b)=log(ab)",
+    "identity": "G(Omega)=1"
+  },
+  "boundaries": {
+    "external_truth_established": false,
+    "infinite_limit_proved": false,
+    "actual_infinite_physical_compute": false,
+    "certificate_grants_platform_privilege": false,
+    "authorization_remains_external": true
+  }
+}

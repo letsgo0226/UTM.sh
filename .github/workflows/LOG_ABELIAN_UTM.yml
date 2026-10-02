@@ -1,0 +1,25 @@
+name: Log Abelian UTM
+
+on:
+  push:
+    branches: [log-abelian-utm]
+    paths:
+      - 'log_abelian_utm/**'
+      - '.github/workflows/LOG_ABELIAN_UTM.yml'
+  pull_request:
+    paths:
+      - 'log_abelian_utm/**'
+      - '.github/workflows/LOG_ABELIAN_UTM.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests
+        run: python -m unittest discover -v -s log_abelian_utm -p 'test_*.py'
+      - name: Syntax check
+        run: python -m py_compile log_abelian_utm/app.py log_abelian_utm/axiom_verifier.py log_abelian_utm/omega_verifier.py

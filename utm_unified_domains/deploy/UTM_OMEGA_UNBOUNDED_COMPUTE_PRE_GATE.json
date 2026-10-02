@@ -1,0 +1,22 @@
+{
+  "protocol": "UTM-Omega-PreGate-Registration/1.0",
+  "world_id": "akashic-utm-main",
+  "registered_layer": "UTM-Omega-Unbounded-Compute/1.0",
+  "integration": {
+    "parent": "UTM-Three-Universe-Axiom-Layer/1.0",
+    "gateway": "UTM-Guarded-Deployment-Gateway/1.0",
+    "placement": "VERIFY.precheck.after_three_axiom_layer",
+    "module": "log_abelian_utm/omega_verifier.py",
+    "spec": "log_abelian_utm/omega/UTM_OMEGA_UNBOUNDED_COMPUTE.json",
+    "effect": "certificate_only",
+    "mutates_platform": false
+  },
+  "required_boundaries": {
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "oracle": null,
+    "hypercomputation_enabled": false,
+    "halting_problem_becomes_decidable": false
+  },
+  "interpretation": "UTM_omega is an unbounded formal horizon implemented as successively larger finite executable stages. Omega is a symbolic limit/direct-limit object, not an executed infinite hardware state."
+}
