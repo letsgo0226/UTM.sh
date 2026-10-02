@@ -40,6 +40,21 @@ def verify_application(a):
       "target_semantics_present":isinstance(a.get("target_semantics"),dict),
       "real_world_claim_not_established":a.get("target_semantics",{}).get("real_world_claim") not in ("ESTABLISHED","PROVEN","GUARANTEED")
     }
+    if a.get("app_id")=="IMMORTALITY_RESEARCH":
+        ss=a.get("subject_scope",{})
+        classes={x.get("id") for x in ss.get("classes",[])}
+        checks.update({
+          "household_scope_inclusive":ss.get("inclusive") is True,
+          "human_scope_present":"human" in classes,
+          "feline_scope_present":"companion_feline" in classes,
+          "canine_scope_present":"companion_canine" in classes,
+          "other_companion_scope_present":"other_companion_animal" in classes,
+          "ai_scope_present":"ai_system" in classes,
+          "ai_consciousness_claim_disabled":ex.get("ai_consciousness_claim_enabled") is False,
+          "ai_personhood_claim_disabled":ex.get("ai_personhood_claim_enabled") is False,
+          "biological_immortality_claim_disabled":ex.get("biological_immortality_claim_enabled") is False,
+          "subject_evidence_gates_present":isinstance(a.get("evidence_gate_by_subject"),dict) and len(a["evidence_gate_by_subject"])==5,
+        })
     return {"app_id":a.get("app_id"),"verified":all(checks.values()),"checks":checks}
 
 def verify_bundle():
