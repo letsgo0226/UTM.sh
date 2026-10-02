@@ -1,0 +1,41 @@
+name: UTM Universe Native Log Omega
+
+on:
+  push:
+    branches: [utm-universe-native-log-omega]
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UTM_UNIVERSE_NATIVE_LOG_OMEGA.yml'
+  pull_request:
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UTM_UNIVERSE_NATIVE_LOG_OMEGA.yml'
+
+jobs:
+  native-utm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Native pure-UTM integration tests
+        run: python3 utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/test_native.py
+      - name: Python syntax checks
+        run: |
+          python3 -m py_compile             utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/compile_native_stage.py             utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/run_native_stage.py
+      - name: Manifest and protocol JSON checks
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          files=[
+            'utm_unified_domains/utm_universe/world-manifest.json',
+            'utm_unified_domains/utm_universe/protocols/index.json',
+            'utm_unified_domains/utm_universe/subprojects/index.json',
+            'utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/manifest.json',
+          ]
+          for f in files:
+              json.loads(Path(f).read_text())
+              print('OK',f)
+          PY
