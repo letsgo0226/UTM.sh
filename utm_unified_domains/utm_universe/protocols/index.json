@@ -39,6 +39,12 @@
       "purpose": "unique prime-factor identity plus injective additive-log coordinate",
       "manifest": "UFAL-1.0.json",
       "requires_additional_service": false
+    },
+    {
+      "id": "UCBC/1.0",
+      "purpose": "unique shared-base compatibility codec between prime identities and additive log coordinates",
+      "manifest": "UCBC-1.0.json",
+      "requires_additional_service": false
     }
   ]
 }
