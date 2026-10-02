@@ -25,6 +25,13 @@ class LifeApplications(unittest.TestCase):
             self.assertFalse(a["execution_boundary"]["generates_real_world_intervention"])
             self.assertFalse(a["execution_boundary"]["authorizes_clinical_use"])
             self.assertFalse(a["execution_boundary"]["medical_action_enabled"])
+    def test_household_immortality_scope(self):
+        a={x["app_id"]:x for x in v.load_all()}["IMMORTALITY_RESEARCH"]
+        ids={x["id"] for x in a["subject_scope"]["classes"]}
+        self.assertEqual(ids,{"human","companion_feline","companion_canine","other_companion_animal","ai_system"})
+        self.assertFalse(a["execution_boundary"]["ai_consciousness_claim_enabled"])
+        self.assertFalse(a["execution_boundary"]["ai_personhood_claim_enabled"])
+        self.assertFalse(a["execution_boundary"]["biological_immortality_claim_enabled"])
     def test_absolute_targets_are_not_real_world_guarantees(self):
         by_id={a["app_id"]:a for a in v.load_all()}
         self.assertIn("NOT_ESTABLISHED",by_id["IMMORTALITY_RESEARCH"]["target_semantics"]["real_world_claim"])
