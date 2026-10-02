@@ -1,0 +1,22 @@
+{
+  "protocol": "UTM-Universe-Native-Subproject/1.0",
+  "id": "UTM_OMEGA_RESIDENTS",
+  "parent_world_id": "akashic-utm-main",
+  "purpose": "Admit the current Log-Abelian, Three-Universe, Principle-Vector, Infinite Deployment, Omega, deployment-gate, UFAL, UCBC, and three-system formal layers into one verified finite UTM-Omega resident stage.",
+  "registry": "resident_registry.json",
+  "verifier": "verify_residents.py",
+  "local_modules": [
+    "principle_vector.py",
+    "infinite_deployment.py"
+  ],
+  "omega_semantics": {
+    "potentially_unbounded": true,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "omega_is_symbolic_direct_limit": true,
+    "oracle": null,
+    "hypercomputation_enabled": false
+  },
+  "additional_deployment_required": false,
+  "physical_host_required_for_execution": true
+}
