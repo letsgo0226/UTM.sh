@@ -28,7 +28,7 @@ def parse_valuation(text):
 def program_text():
     rules = []
     for line in TM.read_text(encoding="utf-8").splitlines():
-        line = line.split("# ",1)[0].strip()
+        line = line.strip()
         if not line or line.startswith("#"):
             continue
         left, right = line.split("->",1)
