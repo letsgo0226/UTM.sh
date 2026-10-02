@@ -1,0 +1,25 @@
+{
+  "protocol": "UTM-Universe-Native-Subproject/1.0",
+  "id": "UTM_OMEGA_LIFE_APPLICATIONS",
+  "parent_world_id": "akashic-utm-main",
+  "purpose": "Formal UTM-Omega research-target applications for healthy-lifespan/immortality, cultured meat, vegetarian nutrition completion, contraception zero-harm target, and childbirth zero-injury target.",
+  "application_protocol": "UTM-Omega-Application-Target/1.0",
+  "applications": [
+    "IMMORTALITY_RESEARCH.json",
+    "CULTURED_MEAT.json",
+    "VEGETARIAN_NUTRITION.json",
+    "CONTRACEPTION_ZERO_HARM.json",
+    "BIRTH_ZERO_INJURY.json"
+  ],
+  "verifier": "verify_applications.py",
+  "target_semantics": "P_target_goal=1; C_target=1 certifies the finite formal specification only; P_empirical_hat=null until independent data exist.",
+  "status": "OMEGA_ADMITTED",
+  "omega_semantics": {
+    "potentially_unbounded": true,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "empirical_truth_not_inferred": true
+  },
+  "external_validation_required": true,
+  "additional_deployment_required": false
+}
