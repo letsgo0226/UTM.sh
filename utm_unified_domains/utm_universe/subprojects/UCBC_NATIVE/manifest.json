@@ -1,0 +1,17 @@
+{
+  "protocol": "UCBC-Native/1.0",
+  "id": "UCBC_NATIVE",
+  "parent_world_id": "akashic-utm-main",
+  "canonical_protocol": "utm_unified_domains/utm_universe/protocols/UCBC-1.0.json",
+  "verifier": "ucbc.py",
+  "depends_on": ["UFAL_NATIVE"],
+  "role": "shared-base compatibility certificate between unique multiplicative identities and additive log coordinates",
+  "shared_with": ["LOG_ABELIAN_OMEGA_NATIVE","THREE_SYSTEM_NATIVE","TRADER_42_NATIVE","COSMIC_LOVE_NATIVE"],
+  "boundaries": {
+    "c_alone_is_not_full_state_identity": true,
+    "exact_integer_and_symbolic_relations_authoritative": true,
+    "numeric_log_base_solver_authoritative": false,
+    "ordered_replay_requires_metadata": true
+  },
+  "additional_deployment_required": false
+}
