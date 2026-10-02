@@ -44,13 +44,15 @@
     }
   ],
   "log_abelian_interface": {
-    "coordinate": "x(P)=log(G(P))",
+    "base_coordinate": "lambda(G)=log(G), G>=1",
+    "signed_dual_coordinate": "xi(P_+n)=+lambda(G_n); xi(P_-n)=-lambda(G_n)=log(1/G_n)",
     "composition": "x+y=log(a)+log(b)=log(ab)",
     "omega_identity": {
       "G(Omega)": 1,
-      "x(Omega)": 0
+      "lambda(Omega)": 0,
+      "xi(Omega)": 0
     },
-    "semantics": "The representation layer is Abelian; decoded UTM causal execution need not commute."
+    "semantics": "The event representation is Abelian. Negative universe indices use a signed dual meta-coordinate, not the logarithm of a negative or sub-unit integer Godel number. Finite dual cancellation is a consistency surrogate and is not a proof of the A3 infinite limit."
   },
   "deployment_semantics": {
     "placement": "pre-verification layer before UTM-Guarded-Deployment-Gateway/1.0",
