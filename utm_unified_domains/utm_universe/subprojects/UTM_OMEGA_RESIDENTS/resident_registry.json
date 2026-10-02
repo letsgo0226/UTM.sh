@@ -3,15 +3,15 @@
   "world_id": "akashic-utm-main",
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
-  "base_world_commit": "2c87b521ef0cb02cd8bbb216998485831e618a56",
+  "base_world_commit": "2bce9848e7143887ca4cc0465af168460eb0abb4",
   "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3",
   "formal_horizon": "omega",
   "actual_infinite_physical_compute": false,
   "external_materialization_required_for_network_service": true,
   "stage": {
-    "stage": 2,
+    "stage": 3,
     "resource_budget": 1024,
-    "resource_used": 9,
+    "resource_used": 14,
     "valuation": {
       "0": 1,
       "1": 1,
@@ -21,7 +21,12 @@
       "5": 1,
       "6": 1,
       "7": 1,
-      "8": 1
+      "8": 1,
+      "9": 1,
+      "10": 1,
+      "11": 1,
+      "12": 1,
+      "13": 1
     },
     "oracle": null
   },
@@ -96,6 +101,46 @@
       "kind": "formal-coordination-layer",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-THREE-SYSTEM-NATIVE-1.0.json",
       "coordinate": 8,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-app-immortality-research-v1.0",
+      "protocol": "UTM-Omega-Application-Target/1.0",
+      "kind": "formal-research-application",
+      "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/IMMORTALITY_RESEARCH.json",
+      "coordinate": 9,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-app-cultured-meat-v1.0",
+      "protocol": "UTM-Omega-Application-Target/1.0",
+      "kind": "formal-research-application",
+      "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/CULTURED_MEAT.json",
+      "coordinate": 10,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-app-vegetarian-nutrition-v1.0",
+      "protocol": "UTM-Omega-Application-Target/1.0",
+      "kind": "formal-research-application",
+      "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/VEGETARIAN_NUTRITION.json",
+      "coordinate": 11,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-app-contraception-zero-harm-v1.0",
+      "protocol": "UTM-Omega-Application-Target/1.0",
+      "kind": "formal-research-application",
+      "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/CONTRACEPTION_ZERO_HARM.json",
+      "coordinate": 12,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-app-birth-zero-injury-v1.0",
+      "protocol": "UTM-Omega-Application-Target/1.0",
+      "kind": "formal-research-application",
+      "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/BIRTH_ZERO_INJURY.json",
+      "coordinate": 13,
       "empirical_claim": false
     }
   ],

@@ -51,6 +51,12 @@
       "purpose": "admit current formal UTM modules as one verified finite UTM-Omega resident stage",
       "manifest": "UTM-OMEGA-RESIDENTS-1.1.json",
       "requires_additional_service": false
+    },
+    {
+      "id": "UTM-OMEGA-LIFE-APPLICATIONS/1.0",
+      "purpose": "formal Omega research-target applications for longevity, food/nutrition, contraception, and childbirth",
+      "manifest": "UTM-OMEGA-LIFE-APPLICATIONS-1.0.json",
+      "requires_additional_service": false
     }
   ]
 }

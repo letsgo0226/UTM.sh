@@ -1,0 +1,37 @@
+{
+  "protocol": "UTM-Omega-Application-Target/1.0",
+  "scope": "formal-research-target-only",
+  "P_target_goal": 1,
+  "C_target": 1,
+  "P_empirical_hat": null,
+  "A_target": 1,
+  "G_target": 1,
+  "empirical_claim": false,
+  "real_world_validated": false,
+  "external_evidence_required": true,
+  "execution_boundary": {
+    "generates_real_world_intervention": false,
+    "authorizes_clinical_use": false,
+    "medical_action_enabled": false,
+    "target_certificate_is_not_empirical_proof": true
+  },
+  "app_id": "CULTURED_MEAT",
+  "display_name": "Cultured-Meat Research and Production Target",
+  "target_semantics": {
+    "formal_goal": "Produce animal-cell-derived food meeting declared safety, nutrition, quality, and scalable-production constraints.",
+    "real_world_claim": "REQUIRES_PRODUCT_SPECIFIC_VALIDATION",
+    "success_target": {
+      "food_safety": "pass",
+      "nutritional_requirements": "pass",
+      "contaminant_limits": "pass",
+      "scalability": "pass"
+    }
+  },
+  "evidence_gate": [
+    "validated cell line/process",
+    "contamination controls",
+    "composition testing",
+    "food-safety assessment",
+    "production-scale quality controls"
+  ]
+}

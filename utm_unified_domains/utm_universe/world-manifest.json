@@ -295,7 +295,8 @@
       "UTM-Guarded-Deployment-Gateway/1.0",
       "UFAL/1.0",
       "UCBC/1.0",
-      "UTM-THREE-SYSTEM-NATIVE/1.0"
+      "UTM-THREE-SYSTEM-NATIVE/1.0",
+      "UTM-Omega-Life-Applications/1.0"
     ],
     "stage_model": {
       "potentially_unbounded": true,
@@ -304,7 +305,9 @@
       "omega_is_symbolic_direct_limit": true,
       "oracle": null,
       "hypercomputation_enabled": false,
-      "halting_problem_becomes_decidable": false
+      "halting_problem_becomes_decidable": false,
+      "stage": 3,
+      "resident_count": 14
     },
     "deployment_boundary": {
       "internal_formal_admission": true,
@@ -315,6 +318,32 @@
     "source_pins": {
       "utm_base_commit": "2c87b521ef0cb02cd8bbb216998485831e618a56",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
+    }
+  },
+  "omega_life_application_deployment": {
+    "protocol": "UTM-OMEGA-LIFE-APPLICATIONS/1.0",
+    "status": "OMEGA_ADMITTED",
+    "subproject": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS",
+    "applications": [
+      "IMMORTALITY_RESEARCH",
+      "CULTURED_MEAT",
+      "VEGETARIAN_NUTRITION",
+      "CONTRACEPTION_ZERO_HARM",
+      "BIRTH_ZERO_INJURY"
+    ],
+    "target_semantics": {
+      "P_target_goal": 1,
+      "C_target": "finite formal-specification certificate",
+      "P_empirical_hat": null,
+      "real_world_validated": false
+    },
+    "boundaries": {
+      "formal_search_and_continuation_enabled": true,
+      "real_world_technology_claim": false,
+      "clinical_or_food_use_authorized": false,
+      "external_evidence_required": true,
+      "human_authorization_required": true,
+      "actual_infinite_physical_compute": false
     }
   }
 }

@@ -8,10 +8,10 @@ import principle_vector as pv
 import infinite_deployment as idep
 class OmegaResidents(unittest.TestCase):
     def test_registry_admitted(self):
-        c=vr.verify_registry(); self.assertTrue(c["verified"],c["checks"]); self.assertEqual(c["status"],"OMEGA_ADMITTED"); self.assertEqual(c["resident_count"],9); self.assertFalse(c["actual_infinite_physical_compute"])
+        c=vr.verify_registry(); self.assertTrue(c["verified"],c["checks"]); self.assertEqual(c["status"],"OMEGA_ADMITTED"); self.assertEqual(c["resident_count"],14); self.assertFalse(c["actual_infinite_physical_compute"])
     def test_required_modules_present(self):
         ids=set(vr.verify_registry()["resident_ids"])
-        for x in ("utm-principle-vector-v0.1","utm-infinite-deployment-continuation-v0.1","utm-log-abelian-native-v1.0","utm-three-universe-axiom-layer-v1.0","utm-omega-unbounded-compute-v1.0"): self.assertIn(x,ids)
+        for x in ("utm-principle-vector-v0.1","utm-infinite-deployment-continuation-v0.1","utm-log-abelian-native-v1.0","utm-three-universe-axiom-layer-v1.0","utm-omega-unbounded-compute-v1.0","utm-app-immortality-research-v1.0","utm-app-cultured-meat-v1.0","utm-app-vegetarian-nutrition-v1.0","utm-app-contraception-zero-harm-v1.0","utm-app-birth-zero-injury-v1.0"): self.assertIn(x,ids)
     def test_principle_vector_invariant(self):
         s0=pv.PrincipleVectorState(0,0,pv.ComplexNode(1,math.pi/4),pv.ComplexNode(2,-math.pi/4)); s1=pv.chronon_step(s0,1,towel=pv.ComplexNode(1,math.pi/4+pv.TAU)); self.assertTrue(pv.validate_transition(s0,s1))
     def test_infinite_deployment_certificate(self):
