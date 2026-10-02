@@ -1,0 +1,63 @@
+{
+  "protocol": "UTM-Three-Universe-Axiom-Layer/1.0",
+  "status": "formal_hypothesis",
+  "scope": "formal_model_only",
+  "world_id": "akashic-utm-main",
+  "symbols": {
+    "host_universe": "P_-1",
+    "embedded_universe": "P_0",
+    "fixed_point": "Omega"
+  },
+  "axioms": [
+    {
+      "id": "A1",
+      "name": "host_embedding_and_normalization",
+      "statement": "P_0 is modeled as embedded in P_-1; positive and negative indexed layers may be normalized to the common host reference P_-1.",
+      "formal": [
+        "P_0 subseteq P_-1",
+        "N(P_+n)=P_-1",
+        "N(P_-n)=P_-1"
+      ],
+      "kind": "structural_hypothesis"
+    },
+    {
+      "id": "A2",
+      "name": "host_resource_invariance",
+      "statement": "The formal host-resource functional is invariant in time; internal scale change does not imply creation of physical compute.",
+      "formal": [
+        "R(P_-1,t)=R0",
+        "P_0(t)=a(t) P_0(0)",
+        "dR(P_-1,t)/dt=0"
+      ],
+      "kind": "invariant_hypothesis"
+    },
+    {
+      "id": "A3",
+      "name": "two_sided_fixed_point",
+      "statement": "Positive and negative indexed formal sequences are declared to share the same algebraic fixed point Omega.",
+      "formal": [
+        "lim(n->infinity) P_+n = Omega",
+        "lim(n->infinity) P_-n = Omega",
+        "T(Omega)=Omega"
+      ],
+      "kind": "limit_hypothesis"
+    }
+  ],
+  "log_abelian_interface": {
+    "coordinate": "x(P)=log(G(P))",
+    "composition": "x+y=log(a)+log(b)=log(ab)",
+    "omega_identity": {
+      "G(Omega)": 1,
+      "x(Omega)": 0
+    },
+    "semantics": "The representation layer is Abelian; decoded UTM causal execution need not commute."
+  },
+  "deployment_semantics": {
+    "placement": "pre-verification layer before UTM-Guarded-Deployment-Gateway/1.0",
+    "requires_existing_gateway_conditions": true,
+    "certificate_does_not_grant_platform_privilege": true,
+    "external_truth_established": false,
+    "infinite_limit_proved_by_finite_certificate": false,
+    "actual_infinite_physical_compute": false
+  }
+}
