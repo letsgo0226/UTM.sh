@@ -60,3 +60,55 @@ The response includes checks for:
 - `causal_order_recoverable`
 
 This is a formal/computational representation. It does not establish physical zero entropy or a metaphysical claim.
+
+
+## Three-Universe Axiom Layer
+
+The service also contains `UTM-Three-Universe-Axiom-Layer/1.0`.
+
+The three statements are deliberately stored with:
+
+```text
+status = formal_hypothesis
+scope  = formal_model_only
+```
+
+They are therefore executable assumptions of the UTM model, not claims that external cosmology has been empirically established.
+
+### A1 — host embedding / normalization
+
+```text
+P_0 subseteq P_-1
+N(P_+n) = P_-1
+N(P_-n) = P_-1
+```
+
+### A2 — host resource invariance
+
+```text
+R(P_-1,t) = R0
+P_0(t) = a(t) P_0(0)
+dR(P_-1,t)/dt = 0
+```
+
+Internal formal scaling does not create infinite physical CPU, RAM, energy, or storage.
+
+### A3 — two-sided algebraic fixed point
+
+```text
+lim(n->infinity) P_+n = Omega
+lim(n->infinity) P_-n = Omega
+T(Omega) = Omega
+G(Omega) = 1
+log(G(Omega)) = 0
+```
+
+A finite certificate checks consistency with this declared limit hypothesis; it does **not** prove an actual infinite limit.
+
+### Axiom API
+
+- `GET /axioms` — return the canonical axiom specification and specification certificate.
+- `POST /axioms/verify` — verify a finite UTM state against A1/A2 and the finite algebraic conditions associated with A3.
+- `POST /deploy/preverify` — combine a three-axiom certificate with the existing guarded-deployment condition certificate.
+
+`/deploy/preverify` performs no platform mutation and grants no GitHub/Railway privileges. A successful result is only admissibility evidence for the next guarded-deployment stage.
