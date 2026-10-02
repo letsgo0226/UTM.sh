@@ -2,7 +2,7 @@
   "protocol": "UTM-Universe-Native-Subproject/1.0",
   "id": "UTM_OMEGA_LIFE_APPLICATIONS",
   "parent_world_id": "akashic-utm-main",
-  "purpose": "Formal UTM-Omega research-target applications for healthy-lifespan/immortality, cultured meat, vegetarian nutrition completion, contraception zero-harm target, and childbirth zero-injury target.",
+  "purpose": "Formal UTM-Omega research-target applications for household continuity/healthy-lifespan (humans, companion animals, and AI state-lineage continuity), cultured meat, vegetarian nutrition completion, contraception zero-harm, and childbirth zero-injury.",
   "application_protocol": "UTM-Omega-Application-Target/1.0",
   "applications": [
     "IMMORTALITY_RESEARCH.json",
@@ -21,5 +21,25 @@
     "empirical_truth_not_inferred": true
   },
   "external_validation_required": true,
-  "additional_deployment_required": false
+  "additional_deployment_required": false,
+  "household_continuity": {
+    "application": "IMMORTALITY_RESEARCH.json",
+    "solver": "immortality_continuity.py",
+    "subject_classes": [
+      "human",
+      "companion_feline",
+      "companion_canine",
+      "other_companion_animal",
+      "ai_system"
+    ],
+    "pipeline": [
+      "goal",
+      "candidate_generator",
+      "formal_verifier",
+      "evidence_gate",
+      "best_verified_so_far"
+    ],
+    "biological_immortality_established": false,
+    "ai_consciousness_or_personhood_established": false
+  }
 }
