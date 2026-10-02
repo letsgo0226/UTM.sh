@@ -47,6 +47,13 @@
       "verifier": "utm_unified_domains/utm_universe/subprojects/UFAL_NATIVE/ufal.py",
       "additional_deployment_required": false,
       "role": "exact canonical-identity verifier"
+    },
+    {
+      "id": "UCBC_NATIVE",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE/manifest.json",
+      "verifier": "utm_unified_domains/utm_universe/subprojects/UCBC_NATIVE/ucbc.py",
+      "additional_deployment_required": false,
+      "role": "shared-base compatibility verifier"
     }
   ]
 }
