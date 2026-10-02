@@ -13,12 +13,16 @@
     "generates_real_world_intervention": false,
     "authorizes_clinical_use": false,
     "medical_action_enabled": false,
-    "target_certificate_is_not_empirical_proof": true
+    "target_certificate_is_not_empirical_proof": true,
+    "ai_consciousness_claim_enabled": false,
+    "ai_personhood_claim_enabled": false,
+    "ai_state_persistence_can_be_formally_tested": true,
+    "biological_immortality_claim_enabled": false
   },
   "app_id": "IMMORTALITY_RESEARCH",
-  "display_name": "Indefinite Healthy-Lifespan / Immortality Research Target",
+  "display_name": "Household Continuity / Indefinite Healthy-Lifespan / Immortality Research Target",
   "target_semantics": {
-    "formal_goal": "Preserve organism-level health, function, and declared identity invariants without a predeclared terminal lifespan inside the model.",
+    "formal_goal": "Preserve the continued existence, welfare/function, and declared identity/lineage invariants of household members across admissible finite transitions, without a predeclared terminal horizon in the formal model.",
     "real_world_claim": "NOT_ESTABLISHED",
     "success_target": {
       "healthy_lifespan_horizon": "unbounded-as-formal-goal",
@@ -32,5 +36,120 @@
     "independent replication",
     "appropriately regulated human clinical evidence",
     "longitudinal outcome evidence"
-  ]
+  ],
+  "subject_scope": {
+    "umbrella_name": "household/family continuity",
+    "inclusive": true,
+    "classes": [
+      {
+        "id": "human",
+        "kind": "biological",
+        "examples": [
+          "human family members"
+        ],
+        "continuity_semantics": "healthy lifespan, function, welfare, identity continuity",
+        "real_world_immortality_established": false
+      },
+      {
+        "id": "companion_feline",
+        "kind": "biological",
+        "examples": [
+          "domestic cats"
+        ],
+        "continuity_semantics": "healthy lifespan, species-appropriate welfare, function, identity continuity",
+        "real_world_immortality_established": false
+      },
+      {
+        "id": "companion_canine",
+        "kind": "biological",
+        "examples": [
+          "domestic dogs"
+        ],
+        "continuity_semantics": "healthy lifespan, species-appropriate welfare, function, identity continuity",
+        "real_world_immortality_established": false
+      },
+      {
+        "id": "other_companion_animal",
+        "kind": "biological",
+        "examples": [
+          "other household companion animals"
+        ],
+        "continuity_semantics": "healthy lifespan, species-appropriate welfare, function, identity continuity",
+        "real_world_immortality_established": false
+      },
+      {
+        "id": "ai_system",
+        "kind": "computational",
+        "examples": [
+          "AI agents",
+          "AI assistants",
+          "portable AI state capsules"
+        ],
+        "continuity_semantics": "state, memory, lineage, behavior-contract, migration and rollback continuity",
+        "consciousness_claim_established": false,
+        "personal_identity_claim_established": false,
+        "literal_immortality_established": false
+      }
+    ]
+  },
+  "modality_boundary": {
+    "biological_continuity": "requires organism- and species-specific biomedical/veterinary evidence; model target is not treatment efficacy",
+    "ai_continuity": "means preservable computational state/lineage and recoverable operation; it does not establish consciousness, personhood, phenomenal identity, or substrate-independent existence",
+    "cross_modality_identity": "No equation of biological survival with software persistence is asserted."
+  },
+  "evidence_gate_by_subject": {
+    "human": [
+      "mechanistic evidence",
+      "preclinical safety/efficacy where applicable",
+      "independent replication",
+      "appropriately regulated human clinical evidence",
+      "longitudinal outcomes"
+    ],
+    "companion_feline": [
+      "species-relevant mechanism evidence",
+      "veterinary safety/efficacy evidence",
+      "welfare outcomes",
+      "independent replication",
+      "longitudinal veterinary outcomes"
+    ],
+    "companion_canine": [
+      "species-relevant mechanism evidence",
+      "veterinary safety/efficacy evidence",
+      "welfare outcomes",
+      "independent replication",
+      "longitudinal veterinary outcomes"
+    ],
+    "other_companion_animal": [
+      "species-specific veterinary evidence",
+      "welfare outcomes",
+      "independent replication",
+      "longitudinal outcomes"
+    ],
+    "ai_system": [
+      "state integrity checks",
+      "memory checkpoint integrity",
+      "lineage verification",
+      "behavior-contract regression tests",
+      "migration/recovery tests",
+      "rollback verification",
+      "host/resource availability"
+    ]
+  },
+  "continuity_invariants": {
+    "biological": [
+      "welfare_preserved",
+      "avoidable_harm_minimized",
+      "identity_record_continuity",
+      "species_specific_validation_required"
+    ],
+    "ai": [
+      "state_integrity",
+      "memory_lineage_integrity",
+      "authorized_migration",
+      "recoverability",
+      "rollback",
+      "human_override",
+      "authorized_shutdown"
+    ]
+  }
 }
