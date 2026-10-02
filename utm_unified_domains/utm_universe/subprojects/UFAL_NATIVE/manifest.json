@@ -1,0 +1,28 @@
+{
+  "protocol": "UFAL-Native/1.0",
+  "id": "UFAL_NATIVE",
+  "parent_world_id": "akashic-utm-main",
+  "canonical_protocol": "utm_unified_domains/utm_universe/protocols/UFAL-1.0.json",
+  "verifier": "ufal.py",
+  "role": "exact uniqueness certificate for prime-exponent state and its additive log representation",
+  "shared_with": [
+    "LOG_ABELIAN_OMEGA_NATIVE",
+    "THREE_SYSTEM_NATIVE",
+    "TRADER_42_NATIVE",
+    "COSMIC_LOVE_NATIVE"
+  ],
+  "identity_chain": [
+    "semantic atom",
+    "canonical prime coordinate",
+    "exact exponent vector",
+    "exact Godel integer",
+    "derived additive log coordinate"
+  ],
+  "boundaries": {
+    "float_log_is_canonical_identity": false,
+    "unordered_factor_multiset_implies_causal_order": false,
+    "causal_order_requires_step_metadata_in_prime_identity": true,
+    "physical_host_required_for_execution": true
+  },
+  "additional_deployment_required": false
+}
