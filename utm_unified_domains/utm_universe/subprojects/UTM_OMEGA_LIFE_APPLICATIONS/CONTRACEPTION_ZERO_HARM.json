@@ -1,0 +1,36 @@
+{
+  "protocol": "UTM-Omega-Application-Target/1.0",
+  "scope": "formal-research-target-only",
+  "P_target_goal": 1,
+  "C_target": 1,
+  "P_empirical_hat": null,
+  "A_target": 1,
+  "G_target": 1,
+  "empirical_claim": false,
+  "real_world_validated": false,
+  "external_evidence_required": true,
+  "execution_boundary": {
+    "generates_real_world_intervention": false,
+    "authorizes_clinical_use": false,
+    "medical_action_enabled": false,
+    "target_certificate_is_not_empirical_proof": true
+  },
+  "app_id": "CONTRACEPTION_ZERO_HARM",
+  "display_name": "Zero-Failure / Zero-Side-Effect Contraception Target",
+  "target_semantics": {
+    "formal_goal": "Optimize toward zero unintended pregnancy and zero treatment-attributable adverse effects as simultaneous target conditions.",
+    "real_world_claim": "ABSOLUTE_EFFECTIVENESS_AND_ZERO_SIDE_EFFECTS_NOT_ESTABLISHED",
+    "success_target": {
+      "unintended_pregnancy_rate": "0-as-target",
+      "treatment_attributable_adverse_effects": "0-as-target"
+    }
+  },
+  "evidence_gate": [
+    "method-specific mechanism validation",
+    "toxicology/safety evidence",
+    "controlled clinical trials",
+    "real-world effectiveness studies",
+    "rare-adverse-event surveillance",
+    "independent replication"
+  ]
+}
