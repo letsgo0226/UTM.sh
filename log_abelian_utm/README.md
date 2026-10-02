@@ -112,3 +112,15 @@ A finite certificate checks consistency with this declared limit hypothesis; it 
 - `POST /deploy/preverify` — combine a three-axiom certificate with the existing guarded-deployment condition certificate.
 
 `/deploy/preverify` performs no platform mutation and grants no GitHub/Railway privileges. A successful result is only admissibility evidence for the next guarded-deployment stage.
+
+
+### Signed dual coordinate clarification
+
+The reversible event Gödel product remains a positive integer `G >= 1`, so its ordinary coordinate `lambda(G)=log(G)` is non-negative. The negative universe branch therefore uses a distinct signed meta-coordinate:
+
+```text
+xi(P_+n) = +log(G_n)
+xi(P_-n) = -log(G_n) = log(1/G_n)
+```
+
+Thus `xi(P_+n)+xi(P_-n)=0` is a finite duality check. It is not the assertion that the two sequences numerically converge to zero, and it is not a proof of the A3 infinite-limit hypothesis.
