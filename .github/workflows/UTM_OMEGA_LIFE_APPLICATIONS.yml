@@ -25,12 +25,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile application verifier
-        run: python3 -m py_compile utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/verify_applications.py
+      - name: Compile application verifiers
+        run: |
+          python3 -m py_compile \
+            utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/verify_applications.py \
+            utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/immortality_continuity.py
       - name: Verify five application targets
         run: python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/verify_applications.py
       - name: Application tests
-        run: python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/test_applications.py
+        run: |
+          python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/test_applications.py
+          python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/test_immortality_continuity.py
       - name: Verify updated Omega resident stage
         run: |
           python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/verify_residents.py
