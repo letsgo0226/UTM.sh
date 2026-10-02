@@ -13,6 +13,7 @@
     "THREE-UNIVERSE-AXIOMS/1.0",
     "UTM-OMEGA/1.0",
     "UFAL/1.0",
+    "UCBC/1.0",
     "LOG-ABELIAN-NATIVE/1.0",
     "UTM-Guarded-Deployment-Gateway/1.0"
   ],
@@ -39,6 +40,13 @@
     "exact_encoding": "G_total = G_U * G_T * G_C over disjoint canonical prime identities",
     "derived_coordinate": "X_total = X_U + X_T + X_C = log_c(G_total)",
     "uniqueness": "exact aggregate decodes to one canonical prime-exponent state",
-    "ordering": "causal order is recovered only when step metadata is included in prime identities"
+    "ordering": "causal order is recovered only when step metadata is included in prime identities",
+    "compatibility_codec": {
+      "protocol": "UCBC/1.0",
+      "relation": "G_total=c^X_total, X_total=log_c(G_total)",
+      "uniqueness": "compatible exact (identity,coordinate) relations determine at most one positive c!=1",
+      "existence": "requires equality of the candidate bases across all certified relations",
+      "c_alone_is_full_payload": false
+    }
   }
 }
