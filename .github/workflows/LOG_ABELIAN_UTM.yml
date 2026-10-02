@@ -22,4 +22,4 @@ jobs:
       - name: Unit tests
         run: python -m unittest discover -v -s log_abelian_utm -p 'test_*.py'
       - name: Syntax check
-        run: python -m py_compile log_abelian_utm/app.py log_abelian_utm/axiom_verifier.py
+        run: python -m py_compile log_abelian_utm/app.py log_abelian_utm/axiom_verifier.py log_abelian_utm/omega_verifier.py
