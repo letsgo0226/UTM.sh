@@ -205,5 +205,42 @@
       "verified_head_sha": "aa80ad2b391969f4bffb2f96bf6f5d58c56c098e",
       "note": "Evidence for the pre-evidence commit; this manifest update itself is re-verified by CI before merge."
     }
+  },
+  "three_system_native_deployment": {
+    "protocol": "UTM-THREE-SYSTEM-NATIVE/1.0",
+    "status": "registered-in-world-law",
+    "systems": {
+      "universe": "akashic-utm-main",
+      "trader": "TRADER_42_NATIVE",
+      "cosmic": "COSMIC_LOVE_NATIVE"
+    },
+    "coordinator": "THREE_SYSTEM_NATIVE",
+    "shared_layers": [
+      "THREE-UNIVERSE-AXIOMS/1.0",
+      "UTM-OMEGA/1.0",
+      "LOG-ABELIAN-NATIVE/1.0",
+      "UTM-Guarded-Deployment-Gateway/1.0"
+    ],
+    "global_state": "S_n=(U_n,T_n,C_n)",
+    "trader_boundary": {
+      "paper_only": true,
+      "exchange_order_path": false,
+      "live_trading_authority": false,
+      "credential_access": false,
+      "empirical_host_runtime": "utm_unified_domains/domains/Trader_42.sh"
+    },
+    "cosmic_boundary": {
+      "formal_model_only": true,
+      "empirical_truth_claim": false,
+      "host_runtime": "utm_unified_domains/domains/cosmic-love-infinity-tm.sh"
+    },
+    "omega_boundary": {
+      "potentially_unbounded": true,
+      "every_executed_stage_is_finite": true,
+      "actual_infinite_physical_compute": false,
+      "hypercomputation_enabled": false
+    },
+    "additional_service_required": false,
+    "physical_host_required_for_execution": true
   }
 }
