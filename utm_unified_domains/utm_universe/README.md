@@ -219,3 +219,34 @@ The Cosmic Love core is registered as a formal invariant gate. Its model-interna
 ### Shared UTM-omega boundary
 
 All three systems share the same potentially-unbounded formal horizon, but every actually executed stage remains finite. Certificate aggregation may use the Log-Abelian direct-sum representation, while subsystem execution remains causally ordered.
+
+
+## UFAL — Unique Factorization Additive Log Principle
+
+The native Log-Abelian layer now has an exact uniqueness bridge between Gödel identity and logarithmic coordinates.
+
+For finite-support `m`:
+
+```text
+Gamma(m) = product_i p_i^m_i
+Lambda_c(m) = sum_i m_i log_c(p_i)
+```
+
+with one fixed base `c>0, c!=1`.
+
+Unique prime factorization makes `m <-> Gamma(m)` exact and reversible. On this canonical prime-exponent domain, the exact logarithmic coordinate is injective as well:
+
+```text
+Lambda_c(m) = Lambda_c(n)  iff  m = n
+```
+
+The authoritative state is always the exponent vector or exact Gödel integer. Floating-point logs are derived display/metric values only and never decide identity.
+
+For the three-system architecture:
+
+```text
+G_total = G_U * G_T * G_C
+X_total = X_U + X_T + X_C = log_c(G_total)
+```
+
+so Abelian certificate aggregation preserves a unique canonical prime-exponent state. The aggregate alone is unordered; causal replay remains unique only when subsystem/role/step metadata is included in the prime identity.
