@@ -124,3 +124,80 @@ xi(P_-n) = -log(G_n) = log(1/G_n)
 ```
 
 Thus `xi(P_+n)+xi(P_-n)=0` is a finite duality check. It is not the assertion that the two sequences numerically converge to zero, and it is not a proof of the A3 infinite-limit hypothesis.
+
+
+## UTM-omega potentially-unbounded compute layer
+
+`UTM-Omega-Unbounded-Compute/1.0` formalizes the phrase "infinite compute inside the UTM Universe" as a potentially-unbounded sequence of finite executable stages:
+
+```text
+C_0 subseteq C_1 subseteq C_2 subseteq ...
+C_omega := formal direct-limit object of the finite stages
+```
+
+The executable rule is:
+
+```text
+for every actually executed stage n:
+  n is finite
+  resource_budget(n) is finite
+  resource_used(n) <= resource_budget(n)
+```
+
+There is no required final finite stage, but the model does not instantiate infinite physical CPU, RAM, storage, time, energy, or hardware.
+
+### Infinite-dimensional Abelian representation
+
+At each executable stage the state is a finite-support valuation vector:
+
+```text
+v = (m_0,m_1,m_2,...) with finite support
+```
+
+Composition is componentwise:
+
+```text
+(v+w)_i = v_i + w_i
+```
+
+and is Abelian. For every finite-support stage:
+
+```text
+Lambda(v) = sum_i m_i log(p_i)
+Lambda(v+w) = Lambda(v) + Lambda(w)
+```
+
+`C_omega` is kept as a symbolic completion/direct-limit object. The implementation does not require a divergent infinite prime product to become a Python integer.
+
+### Computability boundary
+
+Potentially-unbounded runtime does not change an ordinary UTM into a halting oracle:
+
+```text
+oracle = null
+hypercomputation_enabled = false
+halting_problem_becomes_decidable = false
+actual_infinite_physical_compute = false
+```
+
+An oracle or hypercomputation model would be a different formal system and is intentionally not smuggled into this layer.
+
+### Omega API
+
+- `GET /omega` — canonical UTM-omega specification and boundary checks.
+- `POST /omega/verify` — verify one finite executable stage.
+- `POST /omega/compose` — verify componentwise Abelian composition and the logarithmic homomorphism.
+- `POST /omega/extend` — verify a monotone transition from one finite stage to a later finite stage.
+- `POST /deploy/preverify` — now requires both a valid three-axiom state and a valid finite `utm_omega_state` before the request is admissible for the existing guarded gateway.
+
+Thus the deployment chain is:
+
+```text
+Three-Universe Axiom Layer
+  -> UTM-omega finite-stage check
+  -> Log-Abelian representation
+  -> Guarded Deployment Gateway VERIFY
+  -> external authorization
+```
+
+The formal limit symbol `Omega` is never treated as evidence that an actually infinite computation has completed.
