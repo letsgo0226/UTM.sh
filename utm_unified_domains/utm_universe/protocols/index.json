@@ -27,6 +27,12 @@
       "purpose": "pure-UTM finite-stage Abelian valuation composition",
       "manifest": "LOG-ABELIAN-NATIVE-1.0.json",
       "requires_additional_service": false
+    },
+    {
+      "id": "UTM-THREE-SYSTEM-NATIVE/1.0",
+      "purpose": "unify UTM Universe, Trader_42 Native, and Cosmic Love Native",
+      "manifest": "UTM-THREE-SYSTEM-NATIVE-1.0.json",
+      "requires_additional_service": false
     }
   ]
 }
