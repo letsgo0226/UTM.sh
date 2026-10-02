@@ -172,6 +172,7 @@
     "protocols": [
       "utm_unified_domains/utm_universe/protocols/THREE-UNIVERSE-AXIOMS-1.0.json",
       "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-1.0.json",
+      "utm_unified_domains/utm_universe/protocols/UFAL-1.0.json",
       "utm_unified_domains/utm_universe/protocols/LOG-ABELIAN-NATIVE-1.0.json"
     ],
     "subproject": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE",
@@ -218,6 +219,7 @@
     "shared_layers": [
       "THREE-UNIVERSE-AXIOMS/1.0",
       "UTM-OMEGA/1.0",
+      "UFAL/1.0",
       "LOG-ABELIAN-NATIVE/1.0",
       "UTM-Guarded-Deployment-Gateway/1.0"
     ],
@@ -241,6 +243,24 @@
       "hypercomputation_enabled": false
     },
     "additional_service_required": false,
-    "physical_host_required_for_execution": true
+    "physical_host_required_for_execution": true,
+    "certificate_identity": {
+      "exact_global_encoding": "G_total = G_U * G_T * G_C under canonical disjoint prime identities",
+      "additive_coordinate": "X_total = X_U + X_T + X_C = log_c(G_total)",
+      "unique_decode": true,
+      "causal_order_requires_step_metadata": true
+    }
+  },
+  "ufal": {
+    "protocol": "UFAL/1.0",
+    "status": "registered-in-world-law",
+    "role": "canonical uniqueness bridge between exact Godel identity and Log-Abelian coordinates",
+    "exact_state": "finite-support prime-exponent vector / exact Godel integer",
+    "derived_coordinate": "Lambda_c(m)=sum_i m_i log_c(p_i)",
+    "fixed_base_requirement": "one c>0, c!=1 for compared coordinates",
+    "injective_on_canonical_domain": true,
+    "floating_point_log_authoritative": false,
+    "zero_ambiguity_scope": "structural canonical decoding only; not thermodynamic entropy",
+    "ordered_replay_requirement": "encode subsystem/role/step metadata into canonical prime identity"
   }
 }
