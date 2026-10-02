@@ -281,5 +281,40 @@
     "uniqueness": "compatible fixed (a,x) determines one positive c; all certified pairs must yield that same c",
     "c_alone_is_full_payload": false,
     "exactness_boundary": "integer/symbolic relations authoritative; numeric real-log recovery diagnostic only"
+  },
+  "omega_resident_deployment": {
+    "protocol": "UTM-OMEGA-RESIDENTS/1.1",
+    "status": "OMEGA_ADMITTED",
+    "subproject": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS",
+    "residents": [
+      "UTM-Principle-Vector/0.1",
+      "UTM-Infinite-Deployment-Continuation/0.1",
+      "LOG-ABELIAN-NATIVE/1.0",
+      "UTM-Three-Universe-Axiom-Layer/1.0",
+      "UTM-Omega-Unbounded-Compute/1.0",
+      "UTM-Guarded-Deployment-Gateway/1.0",
+      "UFAL/1.0",
+      "UCBC/1.0",
+      "UTM-THREE-SYSTEM-NATIVE/1.0"
+    ],
+    "stage_model": {
+      "potentially_unbounded": true,
+      "every_executed_stage_is_finite": true,
+      "actual_infinite_physical_compute": false,
+      "omega_is_symbolic_direct_limit": true,
+      "oracle": null,
+      "hypercomputation_enabled": false,
+      "halting_problem_becomes_decidable": false
+    },
+    "deployment_boundary": {
+      "internal_formal_admission": true,
+      "additional_service_required": false,
+      "physical_host_required_for_execution": true,
+      "external_platform_authority_created": false
+    },
+    "source_pins": {
+      "utm_base_commit": "2c87b521ef0cb02cd8bbb216998485831e618a56",
+      "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
+    }
   }
 }

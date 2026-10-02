@@ -1,0 +1,47 @@
+name: UTM Omega Residents
+
+on:
+  push:
+    branches: [utm-omega-resident-bundle]
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UTM_OMEGA_RESIDENTS.yml'
+  pull_request:
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UTM_OMEGA_RESIDENTS.yml'
+
+jobs:
+  verify-residents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile resident modules
+        run: |
+          python3 -m py_compile \
+            utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/principle_vector.py \
+            utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/infinite_deployment.py \
+            utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/verify_residents.py
+      - name: Verify UTM-Omega resident stage
+        run: python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/verify_residents.py
+      - name: Resident integration tests
+        run: python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/test_residents.py
+      - name: JSON manifests parse
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for f in [
+            'utm_unified_domains/utm_universe/world-manifest.json',
+            'utm_unified_domains/utm_universe/protocols/index.json',
+            'utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENTS-1.1.json',
+            'utm_unified_domains/utm_universe/subprojects/index.json',
+            'utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/manifest.json',
+            'utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/resident_registry.json',
+          ]:
+              json.loads(Path(f).read_text())
+              print('OK',f)
+          PY
