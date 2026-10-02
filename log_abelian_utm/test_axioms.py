@@ -40,6 +40,42 @@ class ThreeUniverseAxiomTests(unittest.TestCase):
         self.assertFalse(r["axiom_layer_valid"])
         self.assertFalse(r["checks"]["A2_host_resource_invariant"])
 
+    def test_gateway_requires_cczis(self):
+        good = {
+            "consistent": True,
+            "sufficiently_complete": True,
+            "integrity_verified": True,
+            "cczis_verified": True,
+            "human_override_preserved": True,
+            "non_coercion_preserved": True,
+            "reversible_or_rollback": True,
+            "authorized_shutdown_preserved": True,
+            "target_certificate_empirical_separation": True,
+            "no_arbitrary_host_code_execution": True,
+        }
+        state = {
+            "state": {
+                "host_universe":"P_-1",
+                "embedded_universe":"P_0",
+                "host_resource_baseline":1,
+                "host_resource_now":1,
+                "godel":1
+            }
+        }
+        ok = av.verify_deployment_gate({
+            "condition_certificate": good,
+            "three_axiom_state": state
+        })
+        self.assertTrue(ok["admissible_for_gateway_verification"])
+
+        bad = dict(good)
+        bad["cczis_verified"] = False
+        no = av.verify_deployment_gate({
+            "condition_certificate": bad,
+            "three_axiom_state": state
+        })
+        self.assertFalse(no["admissible_for_gateway_verification"])
+
     def test_unpaired_coordinates_rejected(self):
         r = av.verify_state({
             "state":{
