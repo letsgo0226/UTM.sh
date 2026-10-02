@@ -16,6 +16,16 @@
     "P_empirical_hat": null,
     "real_world_validated": false,
     "omega_admission_does_not_establish_technology": true,
-    "medical_or_food_use_requires_external_evidence_and_authorization": true
+    "medical_or_food_use_requires_external_evidence_and_authorization": true,
+    "household_continuity_scope": [
+      "human",
+      "companion_feline",
+      "companion_canine",
+      "other_companion_animal",
+      "ai_system"
+    ],
+    "ai_continuity": "state-memory-lineage-migration-recovery-rollback",
+    "ai_consciousness_or_personhood_established": false,
+    "biological_immortality_established": false
   }
 }
