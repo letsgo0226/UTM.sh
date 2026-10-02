@@ -1,0 +1,46 @@
+name: UTM Three-System Native
+
+on:
+  push:
+    branches: [utm-three-system-native]
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UTM_THREE_SYSTEM_NATIVE.yml'
+  pull_request:
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UTM_THREE_SYSTEM_NATIVE.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pure-UTM three-system tests
+        run: python3 utm_unified_domains/utm_universe/subprojects/THREE_SYSTEM_NATIVE/test_native.py
+      - name: TM syntax compile checks
+        run: |
+          sh TMCC.sh utm_unified_domains/utm_universe/subprojects/TRADER_42_NATIVE/TRADER_POLICY.tm
+          sh TMCC.sh utm_unified_domains/utm_universe/subprojects/COSMIC_LOVE_NATIVE/COSMIC_LOVE_INVARIANT.tm
+          sh TMCC.sh utm_unified_domains/utm_universe/subprojects/THREE_SYSTEM_NATIVE/THREE_SYSTEM_GATE.tm
+      - name: Manifest and index checks
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          files=[
+            'utm_unified_domains/utm_universe/world-manifest.json',
+            'utm_unified_domains/utm_universe/protocols/index.json',
+            'utm_unified_domains/utm_universe/protocols/UTM-THREE-SYSTEM-NATIVE-1.0.json',
+            'utm_unified_domains/utm_universe/subprojects/index.json',
+            'utm_unified_domains/utm_universe/subprojects/TRADER_42_NATIVE/manifest.json',
+            'utm_unified_domains/utm_universe/subprojects/COSMIC_LOVE_NATIVE/manifest.json',
+            'utm_unified_domains/utm_universe/subprojects/THREE_SYSTEM_NATIVE/manifest.json',
+          ]
+          for f in files:
+              json.loads(Path(f).read_text())
+              print('OK',f)
+          PY

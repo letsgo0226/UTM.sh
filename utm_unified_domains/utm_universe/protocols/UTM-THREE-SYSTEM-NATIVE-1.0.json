@@ -1,0 +1,35 @@
+{
+  "protocol": "UTM-THREE-SYSTEM-NATIVE/1.0",
+  "world_id": "akashic-utm-main",
+  "architecture": {
+    "host_world": "UTM Universe",
+    "native_subsystems": [
+      "TRADER_42_NATIVE",
+      "COSMIC_LOVE_NATIVE"
+    ],
+    "coordinator": "THREE_SYSTEM_NATIVE"
+  },
+  "shared_layers": [
+    "THREE-UNIVERSE-AXIOMS/1.0",
+    "UTM-OMEGA/1.0",
+    "LOG-ABELIAN-NATIVE/1.0",
+    "UTM-Guarded-Deployment-Gateway/1.0"
+  ],
+  "global_state": "S_n=(U_n,T_n,C_n)",
+  "certificate_space": "V_total = V_U direct_sum V_T direct_sum V_C",
+  "causal_semantics": "subsystem execution order is preserved; only certificate aggregation is Abelian",
+  "native_programs": {
+    "trader": "utm_unified_domains/utm_universe/subprojects/TRADER_42_NATIVE/TRADER_POLICY.tm",
+    "cosmic": "utm_unified_domains/utm_universe/subprojects/COSMIC_LOVE_NATIVE/COSMIC_LOVE_INVARIANT.tm",
+    "coordinator": "utm_unified_domains/utm_universe/subprojects/THREE_SYSTEM_NATIVE/THREE_SYSTEM_GATE.tm"
+  },
+  "boundaries": {
+    "physical_host_required": true,
+    "actual_infinite_physical_compute": false,
+    "trader_paper_only": true,
+    "trader_live_order_authority": false,
+    "cosmic_formal_model_only": true,
+    "cosmic_empirical_truth_claim": false
+  },
+  "requires_additional_service": false
+}

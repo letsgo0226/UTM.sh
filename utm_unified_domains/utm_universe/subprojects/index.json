@@ -16,6 +16,30 @@
       "compiler": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/compile_native_stage.py",
       "additional_deployment_required": false,
       "pure_utm_core": true
+    },
+    {
+      "id": "TRADER_42_NATIVE",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/TRADER_42_NATIVE/manifest.json",
+      "program": "utm_unified_domains/utm_universe/subprojects/TRADER_42_NATIVE/TRADER_POLICY.tm",
+      "additional_deployment_required": false,
+      "pure_utm_core": true,
+      "mode": "paper-only"
+    },
+    {
+      "id": "COSMIC_LOVE_NATIVE",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/COSMIC_LOVE_NATIVE/manifest.json",
+      "program": "utm_unified_domains/utm_universe/subprojects/COSMIC_LOVE_NATIVE/COSMIC_LOVE_INVARIANT.tm",
+      "additional_deployment_required": false,
+      "pure_utm_core": true,
+      "scope": "formal-model-only"
+    },
+    {
+      "id": "THREE_SYSTEM_NATIVE",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/THREE_SYSTEM_NATIVE/manifest.json",
+      "program": "utm_unified_domains/utm_universe/subprojects/THREE_SYSTEM_NATIVE/THREE_SYSTEM_GATE.tm",
+      "additional_deployment_required": false,
+      "pure_utm_core": true,
+      "role": "coordinator"
     }
   ]
 }

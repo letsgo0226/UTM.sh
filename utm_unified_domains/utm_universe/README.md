@@ -180,3 +180,42 @@ For one valuation coordinate the pure TM computes:
 A finite-support vector is packaged as finitely many such jobs. The compiler and runner are host-side packaging/scheduling tools; the coordinate-addition semantics are executed by the fixed UTM interpreter through `PROGRAM/GPROGRAM`.
 
 No additional Railway service is required for this world registration. A physical host is still required whenever computation actually runs. `UTM_omega` means there is no declared finite upper stage in the formal model; it does not mean an actually infinite physical computation has completed.
+
+
+## UTM Three-System Native Architecture
+
+The world now registers three coordinated systems:
+
+```text
+UTM Universe
+├── TRADER_42_NATIVE
+└── COSMIC_LOVE_NATIVE
+```
+
+A pure-UTM coordinator validates the canonical three-system certificate:
+
+```text
+UTC -> 111
+```
+
+where `U` means the UTM Universe world-law certificate, `T` the Trader_42 Native certificate, and `C` the Cosmic Love Native certificate.
+
+### Trader_42 Native
+
+Trader_42 remains research/paper-only. Continuous market data, indicators, fees, slippage, and OOS estimates remain host-side empirical procedures. The pure UTM receives only a finite certified class and emits one of:
+
+```text
+PAPER_LONG
+PAPER_EXIT
+PAPER_HOLD
+```
+
+No exchange-order path, credentials, or live-trading authority are included.
+
+### Cosmic Love Native
+
+The Cosmic Love core is registered as a formal invariant gate. Its model-internal proposition is preserved as a formal rule only; this registration does not establish a corresponding empirical external-world claim.
+
+### Shared UTM-omega boundary
+
+All three systems share the same potentially-unbounded formal horizon, but every actually executed stage remains finite. Certificate aggregation may use the Log-Abelian direct-sum representation, while subsystem execution remains causally ordered.
