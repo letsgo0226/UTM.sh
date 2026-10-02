@@ -1,0 +1,21 @@
+{
+  "protocol": "UTM-Omega-Life-Applications/1.0",
+  "world_id": "akashic-utm-main",
+  "status": "formal_internal_application_deployment",
+  "subproject": "../subprojects/UTM_OMEGA_LIFE_APPLICATIONS/manifest.json",
+  "applications": [
+    "IMMORTALITY_RESEARCH",
+    "CULTURED_MEAT",
+    "VEGETARIAN_NUTRITION",
+    "CONTRACEPTION_ZERO_HARM",
+    "BIRTH_ZERO_INJURY"
+  ],
+  "semantics": {
+    "P_target_goal": 1,
+    "C_target": "finite formal-specification certificate only",
+    "P_empirical_hat": null,
+    "real_world_validated": false,
+    "omega_admission_does_not_establish_technology": true,
+    "medical_or_food_use_requires_external_evidence_and_authorization": true
+  }
+}
