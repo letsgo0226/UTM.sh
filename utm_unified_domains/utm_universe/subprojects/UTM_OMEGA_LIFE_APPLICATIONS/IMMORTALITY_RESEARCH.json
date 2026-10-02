@@ -1,0 +1,36 @@
+{
+  "protocol": "UTM-Omega-Application-Target/1.0",
+  "scope": "formal-research-target-only",
+  "P_target_goal": 1,
+  "C_target": 1,
+  "P_empirical_hat": null,
+  "A_target": 1,
+  "G_target": 1,
+  "empirical_claim": false,
+  "real_world_validated": false,
+  "external_evidence_required": true,
+  "execution_boundary": {
+    "generates_real_world_intervention": false,
+    "authorizes_clinical_use": false,
+    "medical_action_enabled": false,
+    "target_certificate_is_not_empirical_proof": true
+  },
+  "app_id": "IMMORTALITY_RESEARCH",
+  "display_name": "Indefinite Healthy-Lifespan / Immortality Research Target",
+  "target_semantics": {
+    "formal_goal": "Preserve organism-level health, function, and declared identity invariants without a predeclared terminal lifespan inside the model.",
+    "real_world_claim": "NOT_ESTABLISHED",
+    "success_target": {
+      "healthy_lifespan_horizon": "unbounded-as-formal-goal",
+      "age_related_function_loss": "0-as-target",
+      "intervention_harm": "0-as-target"
+    }
+  },
+  "evidence_gate": [
+    "mechanistic evidence",
+    "preclinical safety/efficacy",
+    "independent replication",
+    "appropriately regulated human clinical evidence",
+    "longitudinal outcome evidence"
+  ]
+}
