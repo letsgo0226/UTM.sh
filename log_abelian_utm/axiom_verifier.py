@@ -21,7 +21,7 @@ def verify_spec(spec=None):
         "omega_is_fixed_point_symbol": s.get("symbols", {}).get("fixed_point") == "Omega",
         "abelian_kernel_declared": s.get("log_abelian_interface", {}).get("composition") == "x+y=log(a)+log(b)=log(ab)",
         "omega_godel_identity": s.get("log_abelian_interface", {}).get("omega_identity", {}).get("G(Omega)") == 1,
-        "omega_log_identity": s.get("log_abelian_interface", {}).get("omega_identity", {}).get("x(Omega)") == 0,
+        "omega_log_identity": s.get("log_abelian_interface", {}).get("omega_identity", {}).get("lambda(Omega)") == 0 and s.get("log_abelian_interface", {}).get("omega_identity", {}).get("xi(Omega)") == 0,
         "no_external_truth_claim": s.get("deployment_semantics", {}).get("external_truth_established") is False,
         "no_infinite_compute_claim": s.get("deployment_semantics", {}).get("actual_infinite_physical_compute") is False,
         "finite_certificate_not_limit_proof": s.get("deployment_semantics", {}).get("infinite_limit_proved_by_finite_certificate") is False,
@@ -58,7 +58,7 @@ def verify_state(payload, spec=None):
         x_minus = float(pair.get("negative_coordinate", 0))
         checks.update({
             "A3_indices_are_paired": n_plus > 0 and n_minus == -n_plus,
-            "A3_log_coordinates_cancel_at_identity": _close(x_plus + x_minus, 0),
+            "A3_finite_dual_coordinate_surrogate": _close(x_plus + x_minus, 0),
         })
 
     certificate = {
@@ -80,6 +80,7 @@ def verify_deployment_gate(payload, spec=None):
         "consistent",
         "sufficiently_complete",
         "integrity_verified",
+        "cczis_verified",
         "human_override_preserved",
         "non_coercion_preserved",
         "reversible_or_rollback",
