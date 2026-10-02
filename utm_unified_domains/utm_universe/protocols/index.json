@@ -1,1 +1,32 @@
-{"protocols":[{"id":"URAP/1.0","purpose":"AI-readable resident admission","one_liner":"URAP-1.0.one-liner.sh","manifest":"URAP-1.0.json","runtime_origin":"https://cosmic-love-infinity-tm-production.up.railway.app","admit":"/resident/admit","inspect":"/resident/<resident_id>","requires_additional_service":false}]}
+{
+  "protocols": [
+    {
+      "id": "URAP/1.0",
+      "purpose": "AI-readable resident admission",
+      "one_liner": "URAP-1.0.one-liner.sh",
+      "manifest": "URAP-1.0.json",
+      "runtime_origin": "https://cosmic-love-infinity-tm-production.up.railway.app",
+      "admit": "/resident/admit",
+      "inspect": "/resident/<resident_id>",
+      "requires_additional_service": false
+    },
+    {
+      "id": "THREE-UNIVERSE-AXIOMS/1.0",
+      "purpose": "formal UTM Universe axiom layer",
+      "manifest": "THREE-UNIVERSE-AXIOMS-1.0.json",
+      "requires_additional_service": false
+    },
+    {
+      "id": "UTM-OMEGA/1.0",
+      "purpose": "potentially-unbounded finite-stage semantics",
+      "manifest": "UTM-OMEGA-1.0.json",
+      "requires_additional_service": false
+    },
+    {
+      "id": "LOG-ABELIAN-NATIVE/1.0",
+      "purpose": "pure-UTM finite-stage Abelian valuation composition",
+      "manifest": "LOG-ABELIAN-NATIVE-1.0.json",
+      "requires_additional_service": false
+    }
+  ]
+}
