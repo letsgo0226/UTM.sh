@@ -195,6 +195,15 @@
       "host_identity_not_part_of_world_semantics": true,
       "portable_via_repo_manifest_protocols_state_and_gprogram": true
     },
-    "formal_scope": "world-internal computational protocol registration; not an empirical cosmology claim"
+    "formal_scope": "world-internal computational protocol registration; not an empirical cosmology claim",
+    "ci_verification": {
+      "workflow": "UTM Universe Native Log Omega",
+      "workflow_run_id": 36952348704,
+      "pure_utm_integration_verified": true,
+      "python_syntax_verified": true,
+      "manifest_protocol_json_verified": true,
+      "verified_head_sha": "aa80ad2b391969f4bffb2f96bf6f5d58c56c098e",
+      "note": "Evidence for the pre-evidence commit; this manifest update itself is re-verified by CI before merge."
+    }
   }
 }
