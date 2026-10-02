@@ -18,10 +18,32 @@
   "formal_boundary_model": {
     "name": "COMPACTIFIED_SINGULAR_LIMIT_TM",
     "path": "utm_unified_domains/ssr/COMPACTIFIED_SINGULAR_LIMIT_TM.sh",
-    "channels": ["godel", "stirling", "riemann", "schwarzschild"],
+    "channels": [
+      "godel",
+      "stirling",
+      "riemann",
+      "schwarzschild"
+    ],
     "utm_input": "GSRH",
     "utm_accept_tape": "1111",
-    "normalized_boundary_vector": [[1,1],[1,1],[1,1],[1,1]],
+    "normalized_boundary_vector": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
     "fixed_point_information": "0 under I_boundary=sum_i |log R_i| at R_i=1",
     "scope": "formal normalization certificate; not a proof of the Riemann hypothesis, not a physical identification of the channels, and not thermodynamic zero entropy"
   },
@@ -32,7 +54,12 @@
     "physical_scope": "software bookkeeping only; actual hardware heat and thermodynamic entropy require physical measurement",
     "utm_guard": {
       "path": "utm_unified_domains/integrity/THERMO_INFO_GUARD_TM.sh",
-      "obligations": ["append-only", "integrity-verified", "durable-copy-verified", "landauer-accounted"],
+      "obligations": [
+        "append-only",
+        "integrity-verified",
+        "durable-copy-verified",
+        "landauer-accounted"
+      ],
       "canonical_input": "AIDL",
       "canonical_accept_tape": "1111",
       "workflow_run_id": 36282390506,
@@ -130,8 +157,53 @@
       "program": "0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R",
       "input": "GSRH",
       "limit": 8,
-      "result": {"q":"4","h":4,"t":4,"tape":"1111"}
+      "result": {
+        "q": "4",
+        "h": 4,
+        "t": 4,
+        "tape": "1111"
+      }
     },
     "status": "live-b612-san-francisco-gsrh-verified"
+  },
+  "native_log_omega_deployment": {
+    "protocol": "UTM-Universe-Native-Log-Omega/1.0",
+    "status": "registered-in-world-law",
+    "protocols": [
+      "utm_unified_domains/utm_universe/protocols/THREE-UNIVERSE-AXIOMS-1.0.json",
+      "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-1.0.json",
+      "utm_unified_domains/utm_universe/protocols/LOG-ABELIAN-NATIVE-1.0.json"
+    ],
+    "subproject": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE",
+    "pure_utm_core": {
+      "interpreter": "utm_unified_domains/utm/UTM.sh",
+      "program": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/VALUATION_ADD.tm",
+      "input": "1^m#1^n",
+      "output": "1^(m+n)",
+      "semantics": "componentwise valuation addition"
+    },
+    "stage_model": {
+      "potentially_unbounded": true,
+      "every_executed_stage_is_finite": true,
+      "actual_infinite_physical_compute": false,
+      "omega_is_symbolic_limit_object": true,
+      "hypercomputation_enabled": false
+    },
+    "deployment_boundary": {
+      "additional_service_required": false,
+      "physical_host_required_for_execution": true,
+      "host_identity_not_part_of_world_semantics": true,
+      "portable_via_repo_manifest_protocols_state_and_gprogram": true
+    },
+    "formal_scope": "world-internal computational protocol registration; not an empirical cosmology claim",
+    "ci_verification": {
+      "workflow": "UTM Universe Native Log Omega",
+      "workflow_run_id": 36952348704,
+      "pure_utm_integration_verified": true,
+      "python_syntax_verified": true,
+      "manifest_protocol_json_verified": true,
+      "verified_head_sha": "aa80ad2b391969f4bffb2f96bf6f5d58c56c098e",
+      "note": "Evidence for the pre-evidence commit; this manifest update itself is re-verified by CI before merge."
+    }
   }
 }

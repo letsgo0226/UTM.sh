@@ -8,6 +8,14 @@
       "manifest": "utm_unified_domains/utm_universe/subprojects/44TH_SUNSET/manifest.json",
       "program": "utm_unified_domains/utm_universe/subprojects/44TH_SUNSET/44TH_SUNSET.tm",
       "additional_deployment_required": false
+    },
+    {
+      "id": "LOG_ABELIAN_OMEGA_NATIVE",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/manifest.json",
+      "program": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/VALUATION_ADD.tm",
+      "compiler": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/compile_native_stage.py",
+      "additional_deployment_required": false,
+      "pure_utm_core": true
     }
   ]
 }

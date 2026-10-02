@@ -153,3 +153,30 @@ Exec_A(W) ∧ Reachable(B,A) ∧ Authorized(B,W) -> Access(B,W)
 for an actual network service.
 
 It does **not** establish that the computational world exists independently of all physical computation. If all physical hosts stop, dynamic execution stops; only saved state may remain recoverable.
+
+
+## Native Log-Abelian / UTM-omega deployment
+
+The UTM Universe now has a repository-native subproject at:
+
+`subprojects/LOG_ABELIAN_OMEGA_NATIVE/`
+
+Its world-law chain is:
+
+```text
+Three-Universe Axioms
+  -> UTM-omega finite-stage semantics
+  -> Log-Abelian finite-support valuation
+  -> pure-UTM coordinate jobs
+  -> UTM.sh
+```
+
+For one valuation coordinate the pure TM computes:
+
+```text
+1^m#1^n -> 1^(m+n)
+```
+
+A finite-support vector is packaged as finitely many such jobs. The compiler and runner are host-side packaging/scheduling tools; the coordinate-addition semantics are executed by the fixed UTM interpreter through `PROGRAM/GPROGRAM`.
+
+No additional Railway service is required for this world registration. A physical host is still required whenever computation actually runs. `UTM_omega` means there is no declared finite upper stage in the formal model; it does not mean an actually infinite physical computation has completed.

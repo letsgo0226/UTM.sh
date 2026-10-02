@@ -1,0 +1,11 @@
+{
+  "protocol": "UTM-OMEGA/1.0",
+  "world_id": "akashic-utm-main",
+  "role": "potentially-unbounded finite-stage scheduler semantics",
+  "canonical_spec": "log_abelian_utm/omega/UTM_OMEGA_UNBOUNDED_COMPUTE.json",
+  "pre_gate": "utm_unified_domains/deploy/UTM_OMEGA_UNBOUNDED_COMPUTE_PRE_GATE.json",
+  "every_executed_stage_is_finite": true,
+  "actual_infinite_physical_compute": false,
+  "hypercomputation_enabled": false,
+  "requires_additional_service": false
+}

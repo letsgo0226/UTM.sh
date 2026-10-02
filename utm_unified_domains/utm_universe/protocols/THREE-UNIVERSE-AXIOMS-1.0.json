@@ -1,0 +1,10 @@
+{
+  "protocol": "THREE-UNIVERSE-AXIOMS/1.0",
+  "world_id": "akashic-utm-main",
+  "role": "native world-law precondition",
+  "canonical_spec": "log_abelian_utm/axioms/THREE_UNIVERSE_AXIOMS.json",
+  "pre_gate": "utm_unified_domains/deploy/UTM_THREE_UNIVERSE_AXIOM_PRE_GATE.json",
+  "status": "formal_hypothesis",
+  "scope": "formal_model_only",
+  "requires_additional_service": false
+}

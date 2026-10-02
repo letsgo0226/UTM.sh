@@ -1,0 +1,19 @@
+{
+  "protocol": "LOG-ABELIAN-NATIVE/1.0",
+  "world_id": "akashic-utm-main",
+  "role": "pure-UTM finite-stage valuation composition",
+  "subproject": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE",
+  "tm_program": "VALUATION_ADD.tm",
+  "interpreter": "utm_unified_domains/utm/UTM.sh",
+  "algebra": {
+    "operation": "(v+w)_i=v_i+w_i",
+    "abelian": true,
+    "log_interpretation": "Lambda(v+w)=Lambda(v)+Lambda(w)"
+  },
+  "execution_boundary": {
+    "coordinate_arithmetic_runs_in_utm": true,
+    "compiler_only_packages_jobs": true,
+    "physical_host_required": true
+  },
+  "requires_additional_service": false
+}
