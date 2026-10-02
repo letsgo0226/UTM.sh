@@ -12,6 +12,7 @@
   "shared_layers": [
     "THREE-UNIVERSE-AXIOMS/1.0",
     "UTM-OMEGA/1.0",
+    "UFAL/1.0",
     "LOG-ABELIAN-NATIVE/1.0",
     "UTM-Guarded-Deployment-Gateway/1.0"
   ],
@@ -31,5 +32,13 @@
     "cosmic_formal_model_only": true,
     "cosmic_empirical_truth_claim": false
   },
-  "requires_additional_service": false
+  "requires_additional_service": false,
+  "certificate_identity": {
+    "principle": "UFAL/1.0",
+    "aggregate": "V_total = V_U direct_sum V_T direct_sum V_C",
+    "exact_encoding": "G_total = G_U * G_T * G_C over disjoint canonical prime identities",
+    "derived_coordinate": "X_total = X_U + X_T + X_C = log_c(G_total)",
+    "uniqueness": "exact aggregate decodes to one canonical prime-exponent state",
+    "ordering": "causal order is recovered only when step metadata is included in prime identities"
+  }
 }

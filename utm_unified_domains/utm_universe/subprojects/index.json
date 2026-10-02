@@ -40,6 +40,13 @@
       "additional_deployment_required": false,
       "pure_utm_core": true,
       "role": "coordinator"
+    },
+    {
+      "id": "UFAL_NATIVE",
+      "manifest": "utm_unified_domains/utm_universe/subprojects/UFAL_NATIVE/manifest.json",
+      "verifier": "utm_unified_domains/utm_universe/subprojects/UFAL_NATIVE/ufal.py",
+      "additional_deployment_required": false,
+      "role": "exact canonical-identity verifier"
     }
   ]
 }

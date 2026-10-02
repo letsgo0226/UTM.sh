@@ -33,6 +33,12 @@
       "purpose": "unify UTM Universe, Trader_42 Native, and Cosmic Love Native",
       "manifest": "UTM-THREE-SYSTEM-NATIVE-1.0.json",
       "requires_additional_service": false
+    },
+    {
+      "id": "UFAL/1.0",
+      "purpose": "unique prime-factor identity plus injective additive-log coordinate",
+      "manifest": "UFAL-1.0.json",
+      "requires_additional_service": false
     }
   ]
 }

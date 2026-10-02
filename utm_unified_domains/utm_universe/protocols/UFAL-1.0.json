@@ -1,0 +1,45 @@
+{
+  "protocol": "UFAL/1.0",
+  "name": "Unique Factorization Additive Log Principle",
+  "world_id": "akashic-utm-main",
+  "position": "between exact Godel identity and derived Log-Abelian coordinate",
+  "domain": {
+    "state": "finite-support exponent vector m in N^(I)",
+    "prime_basis": "canonical injective enumeration i -> p_i",
+    "exact_encoding": "Gamma(m)=product_i p_i^(m_i)",
+    "derived_coordinate": "Lambda_c(m)=sum_i m_i log_c(p_i)",
+    "log_base": "one fixed c>0, c!=1 for the compared states"
+  },
+  "theorems_used": {
+    "unique_factorization": "Gamma(m)=Gamma(n) iff m=n",
+    "additive_homomorphism": "Lambda_c(m+n)=Lambda_c(m)+Lambda_c(n)",
+    "injective_log_coordinate": "Lambda_c(m)=Lambda_c(n) iff m=n, in exact mathematics on the canonical prime-exponent domain"
+  },
+  "identity_semantics": {
+    "individual_prime_atom": "p_i <-> log_c(p_i) under fixed base c",
+    "aggregate": "a sum uniquely identifies the canonical prime-exponent multiset, not an arbitrary ordered decomposition",
+    "ordered_replay": "role/step metadata must be included in the prime index when causal order must be reconstructed"
+  },
+  "canonical_truth": {
+    "authoritative": ["prime-exponent vector", "exact Godel integer"],
+    "derived_only": ["floating-point logarithm"],
+    "float_equality_may_define_identity": false
+  },
+  "three_system_namespace": {
+    "systems": {"U": 0, "T": 1, "C": 2},
+    "atom_index": "Cantor(Cantor(system_id, role_id), step)",
+    "purpose": "make subsystem, role, and causal step part of the prime identity"
+  },
+  "zero_ambiguity": {
+    "definition": "H_ambiguity(G)=log(N_valid_canonical_decodings(G))",
+    "canonical_prime_encoding": "N_valid_canonical_decodings(G)=1",
+    "therefore": "H_ambiguity(G)=0",
+    "scope": "structural decoding ambiguity only; not thermodynamic entropy"
+  },
+  "boundaries": {
+    "does_not_recover_arbitrary_summand_order": true,
+    "does_not_make_float_logs_exact": true,
+    "does_not_prove_external_world_claims": true
+  },
+  "requires_additional_service": false
+}

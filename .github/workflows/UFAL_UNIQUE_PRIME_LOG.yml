@@ -1,0 +1,44 @@
+name: UFAL Unique Prime Log
+
+on:
+  push:
+    branches: [ufal-unique-prime-log]
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UFAL_UNIQUE_PRIME_LOG.yml'
+  pull_request:
+    paths:
+      - 'utm_unified_domains/utm_universe/**'
+      - '.github/workflows/UFAL_UNIQUE_PRIME_LOG.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: UFAL exact uniqueness tests
+        working-directory: utm_unified_domains/utm_universe/subprojects/UFAL_NATIVE
+        run: python3 test_ufal.py
+      - name: Python syntax check
+        run: python3 -m py_compile utm_unified_domains/utm_universe/subprojects/UFAL_NATIVE/ufal.py
+      - name: Protocol and manifest JSON checks
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          files=[
+            'utm_unified_domains/utm_universe/world-manifest.json',
+            'utm_unified_domains/utm_universe/protocols/index.json',
+            'utm_unified_domains/utm_universe/protocols/UFAL-1.0.json',
+            'utm_unified_domains/utm_universe/protocols/LOG-ABELIAN-NATIVE-1.0.json',
+            'utm_unified_domains/utm_universe/protocols/UTM-THREE-SYSTEM-NATIVE-1.0.json',
+            'utm_unified_domains/utm_universe/subprojects/index.json',
+            'utm_unified_domains/utm_universe/subprojects/UFAL_NATIVE/manifest.json',
+          ]
+          for f in files:
+              json.loads(Path(f).read_text())
+              print('OK',f)
+          PY

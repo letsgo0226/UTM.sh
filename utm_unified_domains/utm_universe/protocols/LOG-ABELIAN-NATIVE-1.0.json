@@ -15,5 +15,12 @@
     "compiler_only_packages_jobs": true,
     "physical_host_required": true
   },
-  "requires_additional_service": false
+  "requires_additional_service": false,
+  "ufal_dependency": "UFAL/1.0",
+  "identity_semantics": {
+    "canonical_state": "prime-exponent vector / exact Godel integer",
+    "derived_coordinate": "Lambda_c(v)=sum_i v_i log_c(p_i)",
+    "injective_on_canonical_domain": true,
+    "floating_point_log_authoritative": false
+  }
 }
