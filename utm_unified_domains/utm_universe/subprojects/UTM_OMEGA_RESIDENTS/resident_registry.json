@@ -1,0 +1,112 @@
+{
+  "protocol": "UTM-Omega-Resident-Registry/1.1",
+  "world_id": "akashic-utm-main",
+  "status": "OMEGA_ADMITTED",
+  "scope": "formal-computation-model-only",
+  "base_world_commit": "2c87b521ef0cb02cd8bbb216998485831e618a56",
+  "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3",
+  "formal_horizon": "omega",
+  "actual_infinite_physical_compute": false,
+  "external_materialization_required_for_network_service": true,
+  "stage": {
+    "stage": 2,
+    "resource_budget": 1024,
+    "resource_used": 9,
+    "valuation": {
+      "0": 1,
+      "1": 1,
+      "2": 1,
+      "3": 1,
+      "4": 1,
+      "5": 1,
+      "6": 1,
+      "7": 1,
+      "8": 1
+    },
+    "oracle": null
+  },
+  "residents": [
+    {
+      "id": "utm-principle-vector-v0.1",
+      "protocol": "UTM-Principle-Vector/0.1",
+      "kind": "formal-module",
+      "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/principle_vector.py",
+      "coordinate": 0,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-infinite-deployment-continuation-v0.1",
+      "protocol": "UTM-Infinite-Deployment-Continuation/0.1",
+      "kind": "formal-deployment-protocol",
+      "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/infinite_deployment.py",
+      "coordinate": 1,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-log-abelian-native-v1.0",
+      "protocol": "LOG-ABELIAN-NATIVE/1.0",
+      "kind": "formal-module",
+      "path": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/manifest.json",
+      "coordinate": 2,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-three-universe-axiom-layer-v1.0",
+      "protocol": "UTM-Three-Universe-Axiom-Layer/1.0",
+      "kind": "formal-hypothesis-layer",
+      "path": "log_abelian_utm/axioms/THREE_UNIVERSE_AXIOMS.json",
+      "coordinate": 3,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-omega-unbounded-compute-v1.0",
+      "protocol": "UTM-Omega-Unbounded-Compute/1.0",
+      "kind": "formal-computation-layer",
+      "path": "log_abelian_utm/omega/UTM_OMEGA_UNBOUNDED_COMPUTE.json",
+      "coordinate": 4,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-guarded-deployment-gateway-v1.0",
+      "protocol": "UTM-Guarded-Deployment-Gateway/1.0",
+      "kind": "formal-deployment-gate",
+      "path": "utm_unified_domains/deploy/UTM_DEPLOYMENT_GATEWAY_POLICY.json",
+      "coordinate": 5,
+      "empirical_claim": false
+    },
+    {
+      "id": "ufal-v1.0",
+      "protocol": "UFAL/1.0",
+      "kind": "formal-identity-layer",
+      "path": "utm_unified_domains/utm_universe/protocols/UFAL-1.0.json",
+      "coordinate": 6,
+      "empirical_claim": false
+    },
+    {
+      "id": "ucbc-v1.0",
+      "protocol": "UCBC/1.0",
+      "kind": "formal-compatibility-layer",
+      "path": "utm_unified_domains/utm_universe/protocols/UCBC-1.0.json",
+      "coordinate": 7,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-three-system-native-v1.0",
+      "protocol": "UTM-THREE-SYSTEM-NATIVE/1.0",
+      "kind": "formal-coordination-layer",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-THREE-SYSTEM-NATIVE-1.0.json",
+      "coordinate": 8,
+      "empirical_claim": false
+    }
+  ],
+  "invariants": {
+    "every_executed_stage_is_finite": true,
+    "no_oracle": true,
+    "hypercomputation_enabled": false,
+    "halting_problem_becomes_decidable": false,
+    "external_authority_not_created": true,
+    "human_override_preserved": true,
+    "authorized_shutdown_preserved": true,
+    "reversibility_or_rollback_preserved": true
+  }
+}
