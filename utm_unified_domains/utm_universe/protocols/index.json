@@ -80,6 +80,13 @@
       "purpose": "checkpointed resident UTM computation and authenticated peer replication/takeover",
       "manifest": "UTM-FEDERATED-COMPUTE-FABRIC-1.0.json",
       "requires_additional_service": true
+    },
+    {
+      "id": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
+      "purpose": "turn a Python-capable host into a resident-admission and federated UTM compute node with a sub-2KB one-liner",
+      "one_liner": "UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
+      "manifest": "UTM-FIELD-NODE-BOOTSTRAP-1.0.json",
+      "requires_additional_service": false
     }
   ]
 }
