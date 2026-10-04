@@ -1,0 +1,121 @@
+name: UTM Cross-Provider Live Failover
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/UTM_CROSS_PROVIDER_LIVE.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-failover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      PRIMARY: https://utm-universe-production.up.railway.app
+      RENDER: https://utm-universe-render-peer.onrender.com
+    steps:
+      - name: Verify Railway and Render health
+        run: |
+          set -euo pipefail
+          for base in "$PRIMARY" "$RENDER"; do
+            ok=0
+            for i in $(seq 1 60); do
+              if curl -fsS --max-time 15 "$base/health" >/tmp/health.json; then ok=1; break; fi
+              sleep 2
+            done
+            test "$ok" = 1
+            python3 - <<'PY'
+          import json
+          h=json.load(open('/tmp/health.json'))
+          assert h['ok'] is True and h['world_id']=='akashic-utm-main'
+          PY
+          done
+
+      - name: Create checkpointed job on Railway
+        run: |
+          set -euo pipefail
+          AGENT="cross-provider-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          curl -fsS --max-time 20 -X POST -H 'Content-Type: application/json' \
+            --data "{\"capsule\":{\"agent_id\":\"$AGENT\",\"program_id\":\"cross-provider-live-test\",\"state\":{\"provider\":\"railway\"},\"lineage\":\"ci\"}}" \
+            "$PRIMARY/resident/admit" > /tmp/admit.json
+          RID=$(python3 -c 'import json;print(json.load(open("/tmp/admit.json"))["resident_id"])')
+          curl -fsS --max-time 20 -X POST -H 'Content-Type: application/json' \
+            --data "{\"resident_id\":\"$RID\",\"task\":{\"kind\":\"utm\",\"program\":\"0,1,0,1,R\",\"input\":\"111\",\"steps\":2}}" \
+            "$PRIMARY/compute/jobs" > /tmp/job.json
+          JID=$(python3 -c 'import json;print(json.load(open("/tmp/job.json"))["job_id"])')
+          python3 - <<'PY'
+          import json
+          j=json.load(open('/tmp/job.json'))
+          assert j['total_steps']==2 and j['owner_node']=='utm-primary' and j['epoch']==0 and j['halted'] is False
+          PY
+          echo "RID=$RID" >> "$GITHUB_ENV"
+          echo "JID=$JID" >> "$GITHUB_ENV"
+
+      - name: Wait for Render to receive Railway checkpoint
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 75); do
+            if curl -fsS --max-time 20 "$RENDER/compute/jobs/$JID" > /tmp/render-before.json; then
+              if python3 - <<'PY'
+          import json
+          j=json.load(open('/tmp/render-before.json'))
+          raise SystemExit(0 if j.get('owner_node')=='utm-primary' and j.get('total_steps')==2 and j.get('epoch')==0 else 1)
+          PY
+              then ok=1; break; fi
+            fi
+            sleep 2
+          done
+          test "$ok" = 1
+
+      - name: Take over and continue on Render
+        run: |
+          set -euo pipefail
+          curl -fsS --max-time 20 -X POST -H 'Content-Type: application/json' --data '{}' \
+            "$RENDER/compute/jobs/$JID/takeover" > /tmp/takeover.json
+          curl -fsS --max-time 20 -X POST -H 'Content-Type: application/json' --data '{"steps":4}' \
+            "$RENDER/compute/jobs/$JID/continue" > /tmp/render-after.json
+          python3 - <<'PY'
+          import json
+          t=json.load(open('/tmp/takeover.json'))
+          j=json.load(open('/tmp/render-after.json'))
+          assert t['owner_node']=='render-peer-1' and t['epoch']==1
+          assert j['owner_node']=='render-peer-1' and j['epoch']==1
+          assert j['halted'] is True and j['total_steps']==3
+          PY
+
+      - name: Verify Render result replicates back to Railway
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 75); do
+            curl -fsS --max-time 20 "$PRIMARY/compute/jobs/$JID" > /tmp/primary-after.json || true
+            if python3 - <<'PY'
+          import json
+          try:
+              j=json.load(open('/tmp/primary-after.json'))
+          except Exception:
+              raise SystemExit(1)
+          raise SystemExit(0 if j.get('owner_node')=='render-peer-1' and j.get('epoch')==1 and j.get('halted') is True and j.get('total_steps')==3 else 1)
+          PY
+            then ok=1; break; fi
+            sleep 2
+          done
+          test "$ok" = 1
+          python3 - <<'PY'
+          import json
+          j=json.load(open('/tmp/primary-after.json'))
+          print(json.dumps({
+            "verified": True,
+            "source_provider": "Railway",
+            "takeover_provider": "Render",
+            "job_id": j["job_id"],
+            "owner_node": j["owner_node"],
+            "epoch": j["epoch"],
+            "total_steps": j["total_steps"],
+            "halted": j["halted"]
+          },separators=(',',':')))
+          PY

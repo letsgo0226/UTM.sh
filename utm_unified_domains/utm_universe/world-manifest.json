@@ -472,8 +472,8 @@
     "takeover_supported": true,
     "strong_consensus_claim": false,
     "cross_provider_peer_protocol_supported": true,
-    "railway_wide_failure_survival": "pending: cross-provider Render peer blueprint is ready but not yet materialized",
-    "all_hosts_stopped_means": "computation stops; persisted state may later resume",
+    "railway_wide_failure_survival": "verified for an already-synchronized live Render peer: Railway-originated jobs can be taken over and continued on Render. This is not yet durable across a simultaneous Railway-wide outage plus Render restart because Render local storage is ephemeral.",
+    "all_hosts_stopped_means": "computation stops; only state on durable surviving storage can later resume",
     "source_snapshot_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
     "protocol_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe",
     "live_materialization": {
@@ -500,22 +500,41 @@
     },
     "cross_provider_materialization": {
       "provider": "Render",
-      "status": "BLUEPRINT_READY_AWAITING_PROVIDER_CONNECTION",
-      "blueprint": "render.yaml",
-      "intended_node_id": "render-peer-1",
-      "intended_region": "singapore",
-      "compute_plan": "0.5c-512mb",
-      "persistent_disk": {
-        "mount_path": "/data",
-        "size_gb": 1
-      },
-      "healthcheck": "/health",
+      "status": "LIVE_CROSS_PROVIDER_FAILOVER_VERIFIED",
+      "service_id": "srv-db1a16favr4c73av739g",
+      "endpoint": "https://utm-universe-render-peer.onrender.com",
+      "node_id": "render-peer-1",
+      "region": "singapore",
+      "compute_plan": "free",
+      "source_branch": "main",
+      "source_repo": "https://github.com/letsgo0226/UTM.sh",
+      "local_state_paths": [
+        "/tmp/akashic.jsonl",
+        "/tmp/compute-fabric.json"
+      ],
+      "persistent_storage": false,
+      "federation_interval_seconds": 30,
       "federation_peers": [
         "https://utm-universe-production.up.railway.app",
         "https://utm-universe-peer-production.up.railway.app"
       ],
-      "secret_policy": "FEDERATION_TOKEN is supplied through provider secret configuration and is not committed to Git.",
-      "billing_note": "Blueprint preparation does not create billable Render resources; actual deployment is deferred until provider connection and explicit deployment."
-    }
+      "authenticated_snapshot_pull": true,
+      "inbound_snapshot_2xx_verified": true,
+      "live_failover_workflow": {
+        "name": "UTM Cross-Provider Live Failover",
+        "run_id": 37226448482,
+        "status": "SUCCESS",
+        "verified_sequence": [
+          "create checkpointed job on Railway",
+          "replicate checkpoint to Render",
+          "take over job on render-peer-1",
+          "continue computation on Render until halt",
+          "replicate completed checkpoint back to Railway"
+        ]
+      },
+      "billing": "free plan; no Render paid resource created",
+      "durability_gap": "Render free-service local filesystem is ephemeral. Cross-provider failover is live while the Render instance retains synchronized state, but a Render restart can lose its local copy until it can resynchronize from another live peer."
+    },
+    "stage_note": "Cross-provider materialization evidence does not create a new formal resident; UTM-Omega remains at finite stage 8."
   }
 }
