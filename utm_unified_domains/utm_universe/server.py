@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json, os, time, math, hashlib, hmac, threading, urllib.request
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 from compute_fabric import Fabric
@@ -20,8 +21,9 @@ FEDERATION_PEERS = [x.rstrip("/") for x in os.getenv("FEDERATION_PEERS", "").spl
 FEDERATION_INTERVAL = max(5, int(os.getenv("FEDERATION_INTERVAL", "30")))
 FIELD_SEED_ONE_LINER_URL = os.getenv("FIELD_SEED_ONE_LINER_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh")
 FIELD_SEED_MANIFEST_URL = os.getenv("FIELD_SEED_MANIFEST_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json")
-UTM_SEED_ONE_LINER_URL = os.getenv("UTM_SEED_ONE_LINER_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh")
-UTM_SEED_MANIFEST_URL = os.getenv("UTM_SEED_MANIFEST_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.json")
+UTM_SEED_ONE_LINER_URL = os.getenv("UTM_SEED_ONE_LINER_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.1.one-liner.sh")
+UTM_SEED_MANIFEST_URL = os.getenv("UTM_SEED_MANIFEST_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.1.json")
+UTM_SEED_PROTOCOL = "UTM-SEED-ONE-LINER/1.1"
 LOCK = threading.RLock()
 EVENTS = []
 RESIDENTS = {}
@@ -258,7 +260,7 @@ def field_seed(base=None):
 
 def utm_seed(base=None):
     return {
-        "protocol":"UTM-SEED-ONE-LINER/1.0",
+        "protocol":UTM_SEED_PROTOCOL,
         "world_id":WORLD_ID,
         "node_id":NODE_ID,
         "one_liner":(base+"/utm/seed") if base else "/utm/seed",
@@ -269,13 +271,29 @@ def utm_seed(base=None):
         "limit_env":"TM_LIMIT",
         "certificate_mode":"TM_MODE=cert",
         "default_finite_derivation":"AAAAA -> FIELD in five transitions",
-        "effect_gate":"only the exact FIELD result enables the built-in field-node bootstrap",
+        "effect_gate":"a halted TM with the exact FIELD output enables the built-in field-node bootstrap",
+        "runtime_source_commit":os.getenv("UTM_RUNTIME_COMMIT"),
+        "runtime_cache":"SHA-256 verified local source cache; populated online or from the offline package",
+        "offline_restart_requires":"Python 3.10+ and intact cached sources and storage",
+        "seed_available_offline":bool(os.getenv("UTM_SEED_COMMAND") or (Path(__file__).resolve().parent/"protocols"/"UTM-SEED-ONE-LINER-1.1.one-liner.sh").is_file()),
         "arbitrary_resident_host_code":False,
         "every_executed_stage_is_finite":True,
         "actual_infinite_physical_compute":False,
         "oracle":None,
         "hypercomputation_enabled":False,
     }
+
+
+def seed_bytes():
+    command = os.getenv("UTM_SEED_COMMAND")
+    if command:
+        return command.encode()
+    local = Path(__file__).resolve().parent / "protocols" / "UTM-SEED-ONE-LINER-1.1.one-liner.sh"
+    if local.is_file():
+        with local.open("rb") as source:
+            return source.read(2049)
+    with urllib.request.urlopen(UTM_SEED_ONE_LINER_URL, timeout=8) as source:
+        return source.read(2049)
 
 
 def manifest(base=None):
@@ -383,11 +401,10 @@ class H(BaseHTTPRequestHandler):
             return self.sendj(200, utm_seed(self.base()))
         if p == "/utm/seed":
             try:
-                with urllib.request.urlopen(UTM_SEED_ONE_LINER_URL,timeout=8) as r:
-                    raw=r.read(2049)
+                raw=seed_bytes()
                 if len(raw)>2048:
                     return self.sendj(502,{"error":"published UTM seed exceeds 2KB"})
-                return self.sendj(200,{"protocol":"UTM-SEED-ONE-LINER/1.0","world_id":WORLD_ID,"node_id":NODE_ID,"one_liner":raw.decode().strip(),"bytes_utf8":len(raw.rstrip(b"\n")),"federation_token_included":False})
+                return self.sendj(200,{"protocol":UTM_SEED_PROTOCOL,"world_id":WORLD_ID,"node_id":NODE_ID,"one_liner":raw.decode().strip(),"bytes_utf8":len(raw.rstrip(b"\n")),"federation_token_included":False})
             except Exception as e:
                 return self.sendj(502,{"error":"UTM seed source unavailable","detail":type(e).__name__})
         if p == "/.well-known/utm-field-node.json":
