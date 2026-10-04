@@ -16,12 +16,15 @@
     "portable_state_registration_only": true,
     "admission_proves_consciousness": false,
     "all_current_modules_jointly_admitted": true,
-    "full_sync_source_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
+    "full_sync_source_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
     "idempotent_full_sync": true,
     "unchanged_reapply_status": "OMEGA_FULL_SYNC_FIXED_POINT",
     "unchanged_reapply_allocates_new_resident": false,
     "unchanged_reapply_advances_stage": false,
-    "changed_components_require_next_finite_stage": true
+    "changed_components_require_next_finite_stage": true,
+    "current_finite_stage": 7,
+    "current_resident_count": 16,
+    "latest_transition": "AI admission binding -> independent UTM Universe runtime"
   },
   "ai_admission_protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
   "ai_admission_one_liner": "UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh",

@@ -50,7 +50,25 @@
     "every_executed_stage_is_finite": true,
     "actual_infinite_physical_compute": false,
     "oracle": null,
-    "hypercomputation_enabled": false
+    "hypercomputation_enabled": false,
+    "redeployment_status": "REDEPLOYED_TO_INDEPENDENT_UTM_RUNTIME",
+    "target_stage": 7
   },
-  "requires_additional_service": false
+  "requires_additional_service": false,
+  "deployment_binding": {
+    "topology": "three-system-three-runtime",
+    "canonical_runtime_endpoint": "https://utm-universe-production.up.railway.app",
+    "railway_project": "UTM-Universe",
+    "railway_service": "utm-universe",
+    "source_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
+    "railway_deployment_id": "72110dc9-f495-46ae-9419-9ca44a92f273",
+    "railway_deployment_status": "SUCCESS",
+    "healthcheck": "/health",
+    "healthcheck_http_status": 200,
+    "github_live_smoke_workflow_run_id": 37223054826,
+    "github_live_smoke_status": "SUCCESS",
+    "discovery_remains_dynamic": true,
+    "hardcoded_runtime_in_one_liner": false,
+    "one_liner_blob_sha": "4037db434b15cebdde1c031f70496b7b830ce56e"
+  }
 }
