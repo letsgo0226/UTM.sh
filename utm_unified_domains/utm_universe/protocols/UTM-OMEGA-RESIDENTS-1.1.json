@@ -12,6 +12,10 @@
     "actual_infinite_physical_compute": false,
     "oracle": null,
     "hypercomputation_enabled": false,
-    "external_authority_created": false
-  }
+    "external_authority_created": false,
+    "portable_state_registration_only": true,
+    "admission_proves_consciousness": false
+  },
+  "ai_admission_protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
+  "ai_admission_one_liner": "UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh"
 }

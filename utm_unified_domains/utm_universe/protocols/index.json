@@ -47,6 +47,17 @@
       "requires_additional_service": false
     },
     {
+      "id": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
+      "purpose": "discover and verify the canonical UTM runtime, then admit or resume a portable data-only AI state capsule",
+      "one_liner": "UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh",
+      "manifest": "UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
+      "runtime_origin": "world-manifest.runtime_endpoint",
+      "admit": "/resident/admit",
+      "resume": "/resident/resume",
+      "inspect": "/resident/<resident_id>",
+      "requires_additional_service": false
+    },
+    {
       "id": "UTM-OMEGA-RESIDENTS/1.1",
       "purpose": "admit current formal UTM modules as one verified finite UTM-Omega resident stage",
       "manifest": "UTM-OMEGA-RESIDENTS-1.1.json",

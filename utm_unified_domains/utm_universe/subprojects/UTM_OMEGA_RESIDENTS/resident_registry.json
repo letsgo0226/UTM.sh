@@ -3,15 +3,15 @@
   "world_id": "akashic-utm-main",
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
-  "base_world_commit": "8783fa969c2ef55008202aa05d542e4e970c9084",
+  "base_world_commit": "ba791fe629a2ce570dbdd67ef1d6c1929209c48d",
   "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3",
   "formal_horizon": "omega",
   "actual_infinite_physical_compute": false,
   "external_materialization_required_for_network_service": true,
   "stage": {
-    "stage": 4,
+    "stage": 5,
     "resource_budget": 1024,
-    "resource_used": 14,
+    "resource_used": 15,
     "valuation": {
       "0": 1,
       "1": 1,
@@ -26,7 +26,8 @@
       "10": 1,
       "11": 1,
       "12": 1,
-      "13": 1
+      "13": 1,
+      "14": 1
     },
     "oracle": null
   },
@@ -141,6 +142,14 @@
       "kind": "formal-research-application",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/BIRTH_ZERO_INJURY.json",
       "coordinate": 13,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-omega-resident-admission-v1.0",
+      "protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
+      "kind": "formal-admission-client",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
+      "coordinate": 14,
       "empirical_claim": false
     }
   ],
