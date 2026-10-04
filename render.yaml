@@ -1,15 +1,12 @@
 services:
   - type: web
     name: utm-universe-render-peer
-    runtime: docker
-    plan: 0.5c-512mb
+    runtime: python
+    plan: free
     region: singapore
     branch: main
-    rootDir: utm_unified_domains/utm_universe
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    healthCheckPath: /health
-    numInstances: 1
+    buildCommand: python3 -m py_compile utm_unified_domains/utm_universe/server.py utm_unified_domains/utm_universe/compute_fabric.py
+    startCommand: cd utm_unified_domains/utm_universe && python3 server.py
     envVars:
       - key: WORLD_ID
         value: akashic-utm-main
@@ -20,9 +17,9 @@ services:
       - key: NODE_ID
         value: render-peer-1
       - key: AKASHIC_PATH
-        value: /data/akashic.jsonl
+        value: /tmp/akashic.jsonl
       - key: FABRIC_PATH
-        value: /data/compute-fabric.json
+        value: /tmp/compute-fabric.json
       - key: MAX_STEPS
         value: "2000"
       - key: FEDERATION_INTERVAL
@@ -31,7 +28,3 @@ services:
         value: https://utm-universe-production.up.railway.app,https://utm-universe-peer-production.up.railway.app
       - key: FEDERATION_TOKEN
         sync: false
-    disk:
-      name: utm-render-peer-data
-      mountPath: /data
-      sizeGB: 1
