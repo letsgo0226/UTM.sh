@@ -728,6 +728,11 @@
       "checkpoint continuation after restart",
       "modified runtime rejected before execution"
     ],
-    "live_verification": "pending deployment verification"
+    "live_verification": {
+      "discovery": "/.well-known/utm-seed.json",
+      "seed": "/utm/seed",
+      "expected_protocol": "UTM-SEED-ONE-LINER/1.1",
+      "scope": "Read each live node for its current deployment state; code availability and local verification are separate from live deployment."
+    }
   }
 }
