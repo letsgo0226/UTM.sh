@@ -266,6 +266,7 @@ def manifest(base=None):
             "protocol": "UTM-Federated-Compute-Fabric/1.0",
             "node_id": NODE_ID,
             "allowed_kinds": ["utm"],
+            "arbitrary_host_code_execution": False,
             "job_state_path": FABRIC_PATH,
             "takeover_supported": True,
             "federation_enabled": bool(FEDERATION_TOKEN and FEDERATION_PEERS),
