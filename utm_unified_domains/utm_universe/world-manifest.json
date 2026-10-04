@@ -296,7 +296,8 @@
       "UFAL/1.0",
       "UCBC/1.0",
       "UTM-THREE-SYSTEM-NATIVE/1.0",
-      "UTM-Omega-Life-Applications/1.0"
+      "UTM-Omega-Life-Applications/1.0",
+      "UTM-OMEGA-RESIDENT-ADMISSION/1.0"
     ],
     "stage_model": {
       "potentially_unbounded": true,
@@ -306,8 +307,8 @@
       "oracle": null,
       "hypercomputation_enabled": false,
       "halting_problem_becomes_decidable": false,
-      "stage": 4,
-      "resident_count": 14
+      "stage": 5,
+      "resident_count": 15
     },
     "deployment_boundary": {
       "internal_formal_admission": true,
@@ -316,7 +317,7 @@
       "external_platform_authority_created": false
     },
     "source_pins": {
-      "utm_base_commit": "2c87b521ef0cb02cd8bbb216998485831e618a56",
+      "utm_base_commit": "ba791fe629a2ce570dbdd67ef1d6c1929209c48d",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
     }
   },
@@ -362,5 +363,16 @@
       "ai_personhood_established": false,
       "cross_modality_identity_equivalence_claim": false
     }
+  },
+  "ai_resident_admission": {
+    "protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
+    "manifest": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
+    "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh",
+    "one_liner_bytes_utf8": 1072,
+    "mode": "canonical manifest discovery -> runtime verification -> data-only admit/resume",
+    "runtime_endpoint_source": "runtime_endpoint",
+    "additional_service_required": false,
+    "arbitrary_host_code_execution": false,
+    "actual_infinite_physical_compute": false
   }
 }
