@@ -2,7 +2,7 @@
   "protocol": "UTM-Universe-Native-Subproject/1.0",
   "id": "UTM_OMEGA_RESIDENTS",
   "parent_world_id": "akashic-utm-main",
-  "purpose": "Admit the current formal UTM layers plus the direct AI admission/resume client into one verified finite UTM-Omega resident stage.",
+  "purpose": "Admit all currently synchronized UTM Universe formal modules plus direct AI admission as one source-pinned, verified UTM-Omega resident stage.",
   "registry": "resident_registry.json",
   "verifier": "verify_residents.py",
   "local_modules": [
@@ -25,5 +25,12 @@
     "one_liner": "../../protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh",
     "bytes_utf8": 1072,
     "data_only": true
+  },
+  "full_sync": {
+    "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
+    "manifest": "../../protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
+    "source_snapshot_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
+    "component_count": 15,
+    "aggregate_resident_coordinate": 15
   }
 }
