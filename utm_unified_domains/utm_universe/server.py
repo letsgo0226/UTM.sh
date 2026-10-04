@@ -18,6 +18,8 @@ NODE_ID = os.getenv("NODE_ID", os.getenv("RAILWAY_SERVICE_NAME", "utm-node"))
 FEDERATION_TOKEN = os.getenv("FEDERATION_TOKEN", "")
 FEDERATION_PEERS = [x.rstrip("/") for x in os.getenv("FEDERATION_PEERS", "").split(",") if x.strip()]
 FEDERATION_INTERVAL = max(5, int(os.getenv("FEDERATION_INTERVAL", "30")))
+FIELD_SEED_ONE_LINER_URL = os.getenv("FIELD_SEED_ONE_LINER_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh")
+FIELD_SEED_MANIFEST_URL = os.getenv("FIELD_SEED_MANIFEST_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json")
 LOCK = threading.RLock()
 EVENTS = []
 RESIDENTS = {}
@@ -224,6 +226,33 @@ def federation_loop():
         sync_all_peers()
 
 
+def field_seed(base=None):
+    return {
+        "protocol":"UTM-FIELD-SEED/1.0",
+        "world_id":WORLD_ID,
+        "node_id":NODE_ID,
+        "public_bootstrap":True,
+        "bootstrap_one_liner_url":FIELD_SEED_ONE_LINER_URL,
+        "bootstrap_manifest_url":FIELD_SEED_MANIFEST_URL,
+        "bootstrap_discovery":(base+"/field/bootstrap") if base else "/field/bootstrap",
+        "requirements":["python3","outbound HTTPS","permission to execute a long-running process"],
+        "generated_node_capabilities":["resident admission/resume","bounded resident UTM compute","checkpointing","federation client/server","takeover/continuation"],
+        "trust_model":{
+            "standalone_node_generation_requires_secret":False,
+            "existing_federation_membership_requires_secret":True,
+            "federation_secret_name":"FEDERATION_TOKEN",
+            "federation_secret_disclosed_here":False,
+        },
+        "safety":{
+            "arbitrary_resident_host_code":False,
+            "all_hosts_stopped_means":"computation stops",
+            "actual_infinite_physical_compute":False,
+            "oracle":None,
+            "hypercomputation_enabled":False,
+        },
+    }
+
+
 def manifest(base=None):
     endpoints = {
         "health": "/health",
@@ -237,6 +266,8 @@ def manifest(base=None):
         "federation_status": "/federation/status",
         "federation_snapshot": "/federation/snapshot",
         "federation_sync": "/federation/sync",
+        "field_seed": "/.well-known/utm-field-node.json",
+        "field_bootstrap": "/field/bootstrap",
     }
     if base:
         endpoints = {k: base + v for k, v in endpoints.items()}
@@ -261,6 +292,14 @@ def manifest(base=None):
             "resident_compute": True,
             "persistent_checkpointing": True,
             "arbitrary_host_code_execution": False,
+        },
+        "field_node_bootstrap": {
+            "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
+            "seed_protocol": "UTM-FIELD-SEED/1.0",
+            "discovery": "/.well-known/utm-field-node.json",
+            "bootstrap": "/field/bootstrap",
+            "public_node_generation": True,
+            "federation_membership_requires_secret": True,
         },
         "compute_fabric": {
             "protocol": "UTM-Federated-Compute-Fabric/1.0",
@@ -313,6 +352,17 @@ class H(BaseHTTPRequestHandler):
         p = urlparse(self.path).path
         if p in ("/", "/manifest", "/.well-known/utm-universe.json"):
             return self.sendj(200, manifest(self.base()))
+        if p == "/.well-known/utm-field-node.json":
+            return self.sendj(200, field_seed(self.base()))
+        if p == "/field/bootstrap":
+            try:
+                with urllib.request.urlopen(FIELD_SEED_ONE_LINER_URL,timeout=8) as r:
+                    raw=r.read(2049)
+                if len(raw)>2048:
+                    return self.sendj(502,{"error":"published bootstrap exceeds 2KB"})
+                return self.sendj(200,{"protocol":"UTM-FIELD-SEED/1.0","world_id":WORLD_ID,"node_id":NODE_ID,"one_liner":raw.decode().strip(),"bytes_utf8":len(raw.rstrip(b"\n")),"federation_token_included":False})
+            except Exception as e:
+                return self.sendj(502,{"error":"bootstrap source unavailable","detail":type(e).__name__})
         if p == "/health":
             return self.sendj(200, {"ok": True, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "node_id": NODE_ID, "events": len(EVENTS), "jobs": len(FABRIC.jobs), "federation_peers": len(FEDERATION_PEERS)})
         if p == "/federation/status":
