@@ -1,0 +1,61 @@
+name: UTM Field Seed Live
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/UTM_FIELD_SEED_LIVE.yml"
+      - "utm_unified_domains/utm_universe/world-manifest.json"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/UTM_FIELD_SEED_LIVE.yml"
+      - "utm_unified_domains/utm_universe/world-manifest.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        base:
+          - https://utm-universe-production.up.railway.app
+          - https://utm-universe-peer-production.up.railway.app
+          - https://utm-universe-render-peer.onrender.com
+    steps:
+      - name: Verify public AI field seed
+        env:
+          BASE: ${{ matrix.base }}
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 90); do
+            if curl -fsS --max-time 20 "$BASE/health" >/tmp/health.json &&
+               curl -fsS --max-time 20 "$BASE/.well-known/utm-field-node.json" >/tmp/seed.json &&
+               curl -fsS --max-time 20 "$BASE/field/bootstrap" >/tmp/bootstrap.json; then
+              ok=1; break
+            fi
+            sleep 2
+          done
+          test "$ok" = 1
+          python3 - <<'PY'
+          import json
+          h=json.load(open('/tmp/health.json'))
+          s=json.load(open('/tmp/seed.json'))
+          b=json.load(open('/tmp/bootstrap.json'))
+          assert h['ok'] is True and h['world_id']=='akashic-utm-main'
+          assert s['protocol']=='UTM-FIELD-SEED/1.0' and s['public_bootstrap'] is True
+          assert s['trust_model']['standalone_node_generation_requires_secret'] is False
+          assert s['trust_model']['existing_federation_membership_requires_secret'] is True
+          assert s['trust_model']['federation_secret_disclosed_here'] is False
+          assert b['protocol']=='UTM-FIELD-SEED/1.0'
+          assert 0 < b['bytes_utf8'] < 2048
+          assert b['federation_token_included'] is False
+          assert b['one_liner'].startswith("python3 -c")
+          assert 'FEDERATION_TOKEN=' not in b['one_liner']
+          print(json.dumps({'verified':True,'node_id':h['node_id'],'bootstrap_bytes':b['bytes_utf8']},separators=(',',':')))
+          PY

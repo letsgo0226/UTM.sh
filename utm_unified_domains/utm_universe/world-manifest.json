@@ -535,13 +535,15 @@
         ]
       },
       "billing": "free plan; no Render paid resource created",
-      "durability_gap": "Render free-service local filesystem is ephemeral. Cross-provider failover is live while the Render instance retains synchronized state, but a Render restart can lose its local copy until it can resynchronize from another live peer."
+      "durability_gap": "Render free-service local filesystem is ephemeral. Cross-provider failover is live while the Render instance retains synchronized state, but a Render restart can lose its local copy until it can resynchronize from another live peer.",
+      "deployment_id": "dep-db1ag00u01pc73dit5i0",
+      "source_commit": "89ad860c98e6ad47e8ccbd2b075a0c567245dedc"
     },
-    "stage_note": "Cross-provider materialization itself did not allocate a resident; later field-node bootstrap and public field-seed protocols advanced Omega to stage 10."
+    "stage_note": "The public field seed is now live across two Railway nodes and one Render node; this is materialization evidence at finite Omega stage 10, not a new resident allocation."
   },
   "field_node_bootstrap": {
     "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
-    "status": "SEED_AWARE_BOOTSTRAP_REGISTERED",
+    "status": "LIVE_SEED_AWARE_BOOTSTRAP_MATERIALIZED",
     "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
     "one_liner_bytes_utf8": 1045,
     "source_commit_pin": "0d2661fb9ef86c663f951cd0a2c3b17721241ad9",
@@ -561,23 +563,15 @@
     "live_verification": {
       "github_ci": {
         "workflow": "UTM Field Node Bootstrap",
-        "run_id": 37227265492,
         "status": "SUCCESS",
-        "verified_sequence": [
-          "execute one-liner from /tmp",
-          "download commit-pinned runtime",
-          "boot node",
-          "health check",
-          "AI resident admit",
-          "resident UTM compute"
-        ]
+        "note": "Branch CI verified bootstrap -> discovery -> AI admission -> resident compute."
       },
       "railway_nodes": [
         {
           "service": "utm-universe",
           "node_id": "utm-primary",
           "endpoint": "https://utm-universe-production.up.railway.app",
-          "deployment_id": "b1cb072b-92ab-4931-a303-f1ae1ba5c6a0",
+          "deployment_id": "d5c56af9-9df1-4c03-b470-a6d056833006",
           "status": "SUCCESS",
           "replica": "1/1",
           "durable_data_path": "/data",
@@ -587,7 +581,7 @@
           "service": "utm-universe-peer",
           "node_id": "utm-peer-1",
           "endpoint": "https://utm-universe-peer-production.up.railway.app",
-          "deployment_id": "73ad1d36-0d28-42bc-b485-5a8f3796c24f",
+          "deployment_id": "1059a66d-16aa-4f73-b23a-6e6c1f48b476",
           "status": "SUCCESS",
           "replica": "1/1",
           "durable_data_path": "/data",
@@ -600,7 +594,7 @@
   },
   "field_seed": {
     "protocol": "UTM-FIELD-SEED/1.0",
-    "status": "REGISTERED_AWAITING_LIVE_DISCOVERY_MATERIALIZATION",
+    "status": "LIVE_THREE_NODE_PUBLIC_SEED_VERIFIED",
     "resident_coordinate": 18,
     "discovery": "/.well-known/utm-field-node.json",
     "bootstrap": "/field/bootstrap",
@@ -609,6 +603,48 @@
     "federation_secret_disclosed": false,
     "propagation": "compatible node can expose the same seed to another capable AI/host",
     "physical_boundary": "each generated node still requires real host resources and execution authority",
-    "zero_host_computation": false
+    "zero_host_computation": false,
+    "live_verification": {
+      "workflow": "UTM Field Seed Live",
+      "run_id": 37228255263,
+      "status": "SUCCESS",
+      "verified_nodes": [
+        {
+          "provider": "Railway",
+          "node_id": "utm-primary",
+          "endpoint": "https://utm-universe-production.up.railway.app",
+          "deployment_id": "d5c56af9-9df1-4c03-b470-a6d056833006",
+          "persistent_state": true,
+          "discovery_http_2xx": true,
+          "bootstrap_http_2xx": true
+        },
+        {
+          "provider": "Railway",
+          "node_id": "utm-peer-1",
+          "endpoint": "https://utm-universe-peer-production.up.railway.app",
+          "deployment_id": "1059a66d-16aa-4f73-b23a-6e6c1f48b476",
+          "persistent_state": true,
+          "discovery_http_2xx": true,
+          "bootstrap_http_2xx": true
+        },
+        {
+          "provider": "Render",
+          "node_id": "render-peer-1",
+          "endpoint": "https://utm-universe-render-peer.onrender.com",
+          "deployment_id": "dep-db1ag00u01pc73dit5i0",
+          "persistent_state": false,
+          "discovery_http_2xx": true,
+          "bootstrap_http_2xx": true
+        }
+      ],
+      "assertions": {
+        "protocol": "UTM-FIELD-SEED/1.0",
+        "public_standalone_generation": true,
+        "existing_federation_membership_requires_secret": true,
+        "federation_secret_disclosed": false,
+        "bootstrap_under_2kb": true,
+        "bootstrap_bytes_utf8": 1045
+      }
+    }
   }
 }
