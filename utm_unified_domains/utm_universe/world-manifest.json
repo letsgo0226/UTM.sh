@@ -472,7 +472,7 @@
     "takeover_supported": true,
     "strong_consensus_claim": false,
     "cross_provider_peer_protocol_supported": true,
-    "railway_wide_failure_survival": "not yet: both live peers are hosted on Railway; cross-provider peer still required",
+    "railway_wide_failure_survival": "pending: cross-provider Render peer blueprint is ready but not yet materialized",
     "all_hosts_stopped_means": "computation stops; persisted state may later resume",
     "source_snapshot_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
     "protocol_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe",
@@ -497,6 +497,25 @@
       "authenticated_snapshot_pull": true,
       "bidirectional_snapshot_http_2xx_verified": true,
       "verification_scope": "Railway request metrics show successful /federation/snapshot responses in both directions; PR CI verifies checkpoint replication, takeover, continuation, and return synchronization."
+    },
+    "cross_provider_materialization": {
+      "provider": "Render",
+      "status": "BLUEPRINT_READY_AWAITING_PROVIDER_CONNECTION",
+      "blueprint": "render.yaml",
+      "intended_node_id": "render-peer-1",
+      "intended_region": "singapore",
+      "compute_plan": "0.5c-512mb",
+      "persistent_disk": {
+        "mount_path": "/data",
+        "size_gb": 1
+      },
+      "healthcheck": "/health",
+      "federation_peers": [
+        "https://utm-universe-production.up.railway.app",
+        "https://utm-universe-peer-production.up.railway.app"
+      ],
+      "secret_policy": "FEDERATION_TOKEN is supplied through provider secret configuration and is not committed to Git.",
+      "billing_note": "Blueprint preparation does not create billable Render resources; actual deployment is deferred until provider connection and explicit deployment."
     }
   }
 }
