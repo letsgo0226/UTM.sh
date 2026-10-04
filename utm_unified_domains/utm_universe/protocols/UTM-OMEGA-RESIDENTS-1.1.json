@@ -16,15 +16,15 @@
     "portable_state_registration_only": true,
     "admission_proves_consciousness": false,
     "all_current_modules_jointly_admitted": true,
-    "full_sync_source_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
+    "full_sync_source_commit": "c1b5f8b0434330c4719f999d4797756548f9ec0c",
     "idempotent_full_sync": true,
     "unchanged_reapply_status": "OMEGA_FULL_SYNC_FIXED_POINT",
     "unchanged_reapply_allocates_new_resident": false,
     "unchanged_reapply_advances_stage": false,
     "changed_components_require_next_finite_stage": true,
-    "current_finite_stage": 10,
-    "current_resident_count": 19,
-    "latest_transition": "public AI field seed/discovery admitted"
+    "current_finite_stage": 11,
+    "current_resident_count": 20,
+    "latest_transition": "self-interpreting UTM seed admitted"
   },
   "ai_admission_protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
   "ai_admission_one_liner": "UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh",
@@ -35,5 +35,8 @@
   "field_node_bootstrap_one_liner": "UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
   "field_seed_protocol": "UTM-FIELD-SEED/1.0",
   "field_seed_discovery": "/.well-known/utm-field-node.json",
-  "field_seed_bootstrap": "/field/bootstrap"
+  "field_seed_bootstrap": "/field/bootstrap",
+  "utm_seed_protocol": "UTM-SEED-ONE-LINER/1.0",
+  "utm_seed_one_liner": "UTM-SEED-ONE-LINER-1.0.one-liner.sh",
+  "utm_seed_discovery": "/.well-known/utm-seed.json"
 }

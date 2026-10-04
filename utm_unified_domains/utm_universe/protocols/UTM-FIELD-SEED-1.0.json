@@ -29,5 +29,11 @@
     "actual_infinite_physical_compute": false,
     "oracle": null,
     "hypercomputation_enabled": false
+  },
+  "utm_seed": {
+    "protocol": "UTM-SEED-ONE-LINER/1.0",
+    "discovery": "/.well-known/utm-seed.json",
+    "bootstrap": "/utm/seed",
+    "relation": "The public field seed can advertise the self-interpreting UTM seed; federation membership remains secret-gated."
   }
 }

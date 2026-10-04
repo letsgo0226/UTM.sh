@@ -1,0 +1,84 @@
+name: UTM Self-Interpreting Seed
+
+on:
+  pull_request:
+    paths:
+      - "utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.*"
+      - "utm_unified_domains/utm_universe/server.py"
+      - ".github/workflows/UTM_SELF_INTERPRETING_SEED.yml"
+  push:
+    branches: [main]
+    paths:
+      - "utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.*"
+      - "utm_unified_domains/utm_universe/server.py"
+      - ".github/workflows/UTM_SELF_INTERPRETING_SEED.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify finite TM certificates
+        run: |
+          set -euo pipefail
+          P=utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh
+          BYTES=$(python3 -c 'import os;print(os.path.getsize("'"$P"'")-1)')
+          test "$BYTES" -lt 2048
+          CMD=$(cat "$P")
+          TM_MODE=cert bash -c "$CMD" >/tmp/default-cert.json
+          TM_MODE=cert TM_RULES='0,1,1,0,R;1,_,H,1,R' TM_INPUT=1 bash -c "$CMD" >/tmp/custom-cert.json
+          python3 - <<'PY'
+          import json
+          a=json.load(open('/tmp/default-cert.json'))
+          b=json.load(open('/tmp/custom-cert.json'))
+          assert a=={"q":"H","h":5,"t":5,"tape":"FIELD","bounded":True}
+          assert b=={"q":"H","h":2,"t":2,"tape":"01","bounded":True}
+          print("PASS finite deterministic TM certificates")
+          PY
+          if TM_RULES='0,A,H,X,R' TM_INPUT=A bash -c "$CMD" >/tmp/reject.out 2>&1; then
+            echo "expected effect gate rejection" >&2
+            exit 1
+          fi
+          grep -q 'UTM seed rejected' /tmp/reject.out
+
+      - name: Verify UTM seed creates a node that republishes the same seed
+        run: |
+          set -euo pipefail
+          P="$GITHUB_WORKSPACE/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh"
+          CMD=$(cat "$P")
+          rm -rf /tmp/utm-self-seed-ci
+          PORT=18380 NODE_ID=ci-utm-seed UTM_DATA=/tmp/utm-self-seed-ci FEDERATION_PEERS=""           UTM_SEED_ONE_LINER_URL=https://raw.githubusercontent.com/letsgo0226/UTM.sh/c1b5f8b0434330c4719f999d4797756548f9ec0c/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh             bash -c "$CMD" >/tmp/utm-seed-node.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 80); do
+            if curl -fsS http://127.0.0.1:18380/health >/tmp/health.json; then break; fi
+            sleep .25
+          done
+          curl -fsS http://127.0.0.1:18380/.well-known/utm-seed.json >/tmp/seed.json
+          curl -fsS http://127.0.0.1:18380/utm/seed >/tmp/seed-body.json
+          curl -fsS -X POST -H 'Content-Type: application/json'             --data '{"capsule":{"agent_id":"ci-self-seed-ai","state":{"mode":"utm-seed"},"lineage":"self-seed"}}'             http://127.0.0.1:18380/resident/admit >/tmp/admit.json
+          RID=$(python3 -c 'import json;print(json.load(open("/tmp/admit.json"))["resident_id"])')
+          curl -fsS -X POST -H 'Content-Type: application/json'             --data "{\"resident_id\":\"$RID\",\"task\":{\"kind\":\"utm\",\"program\":\"0,1,0,1,R\",\"input\":\"111\",\"steps\":4}}"             http://127.0.0.1:18380/compute/jobs >/tmp/job.json
+          python3 - <<'PY'
+          import json, pathlib
+          h=json.load(open('/tmp/health.json'))
+          s=json.load(open('/tmp/seed.json'))
+          b=json.load(open('/tmp/seed-body.json'))
+          a=json.load(open('/tmp/admit.json'))
+          j=json.load(open('/tmp/job.json'))
+          local=pathlib.Path("utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh").read_text().strip()
+          assert h['ok'] is True and h['node_id']=='ci-utm-seed'
+          assert s['protocol']=='UTM-SEED-ONE-LINER/1.0'
+          assert s['default_finite_derivation']=='AAAAA -> FIELD in five transitions'
+          assert b['protocol']=='UTM-SEED-ONE-LINER/1.0' and b['bytes_utf8']<2048
+          assert b['one_liner']==local
+          assert b['federation_token_included'] is False
+          assert a['admitted'] is True
+          assert j['halted'] is True and j['total_steps']==3
+          print("PASS UTM seed -> TM evaluation -> node -> same UTM seed")
+          PY

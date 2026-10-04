@@ -320,7 +320,8 @@
       "UTM-OMEGA-FULL-SYNC/1.0",
       "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
       "UTM-FIELD-NODE-BOOTSTRAP/1.0",
-      "UTM-FIELD-SEED/1.0"
+      "UTM-FIELD-SEED/1.0",
+      "UTM-SEED-ONE-LINER/1.0"
     ],
     "stage_model": {
       "potentially_unbounded": true,
@@ -330,8 +331,8 @@
       "oracle": null,
       "hypercomputation_enabled": false,
       "halting_problem_becomes_decidable": false,
-      "stage": 10,
-      "resident_count": 19
+      "stage": 11,
+      "resident_count": 20
     },
     "deployment_boundary": {
       "internal_formal_admission": true,
@@ -340,7 +341,7 @@
       "external_platform_authority_created": false
     },
     "source_pins": {
-      "utm_base_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
+      "utm_base_commit": "c1b5f8b0434330c4719f999d4797756548f9ec0c",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
     }
   },
@@ -406,8 +407,8 @@
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "status": "OMEGA_ADMITTED",
     "manifest": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "sync_source_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
-    "component_count": 18,
+    "sync_source_commit": "c1b5f8b0434330c4719f999d4797756548f9ec0c",
+    "component_count": 19,
     "aggregate_resident_coordinate": 15,
     "semantics": {
       "all_current_modules_jointly_admitted": true,
@@ -422,7 +423,7 @@
     "evaluator": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/full_sync.py",
     "fixed_point": {
       "status": "OMEGA_FULL_SYNC_FIXED_POINT",
-      "stage": 10,
+      "stage": 11,
       "aggregate_resident_coordinate": 15,
       "reapply_allocates_new_resident": false,
       "reapply_advances_stage": false,
@@ -430,11 +431,11 @@
       "changed_status": "OMEGA_FULL_SYNC_ADVANCE_REQUIRED"
     },
     "latest_transition": {
-      "from_stage": 9,
-      "to_stage": 10,
-      "reason": "public AI-readable field seed/discovery admitted",
+      "from_stage": 10,
+      "to_stage": 11,
+      "reason": "self-interpreting UTM seed admitted",
       "new_resident_allocated": true,
-      "new_resident_coordinate": 18,
+      "new_resident_coordinate": 19,
       "aggregate_coordinate_reused": 15
     }
   },
@@ -546,7 +547,7 @@
     "status": "LIVE_SEED_AWARE_BOOTSTRAP_MATERIALIZED",
     "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
     "one_liner_bytes_utf8": 1045,
-    "source_commit_pin": "0d2661fb9ef86c663f951cd0a2c3b17721241ad9",
+    "source_commit_pin": "eb553f972f7d6cf6d8a858fb2fe0d5e5d7c8f7db",
     "resident_coordinate": 17,
     "provides": [
       "resident admission/resume",
@@ -646,5 +647,32 @@
         "bootstrap_bytes_utf8": 1045
       }
     }
+  },
+  "utm_seed": {
+    "protocol": "UTM-SEED-ONE-LINER/1.0",
+    "status": "REGISTERED_AWAITING_LIVE_MATERIALIZATION",
+    "resident_coordinate": 19,
+    "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh",
+    "one_liner_bytes_utf8": 1533,
+    "runtime_source_commit_pin": "eb553f972f7d6cf6d8a858fb2fe0d5e5d7c8f7db",
+    "machine_model": "deterministic single-tape TM interpreter over arbitrary finite transition tables",
+    "default_derivation": [
+      "AAAAA",
+      "FAAAA",
+      "FIAAA",
+      "FIEAA",
+      "FIELA",
+      "FIELD"
+    ],
+    "default_transition_count": 5,
+    "discovery": "/.well-known/utm-seed.json",
+    "bootstrap": "/utm/seed",
+    "recursion": "UTM seed -> finite TM evaluation -> FIELD -> node -> same UTM seed",
+    "federation_secret_embedded": false,
+    "host_required": true,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "oracle": null,
+    "hypercomputation_enabled": false
   }
 }

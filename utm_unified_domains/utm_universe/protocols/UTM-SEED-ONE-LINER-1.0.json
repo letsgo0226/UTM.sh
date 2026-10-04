@@ -1,0 +1,46 @@
+{
+  "protocol": "UTM-SEED-ONE-LINER/1.0",
+  "world_id": "akashic-utm-main",
+  "purpose": "A sub-2KB portable seed whose own execution first performs deterministic single-tape Turing-machine transition semantics and only then materializes a compatible UTM field node when the finite derivation yields FIELD.",
+  "one_liner_path": "UTM-SEED-ONE-LINER-1.0.one-liner.sh",
+  "one_liner_utf8_bytes": 1533,
+  "runtime_source_commit_pin": "eb553f972f7d6cf6d8a858fb2fe0d5e5d7c8f7db",
+  "machine": {
+    "model": "deterministic single-tape Turing machine",
+    "rules_encoding": "q,read,next,write,L|R separated by semicolons",
+    "configurable_rules_env": "TM_RULES",
+    "configurable_input_env": "TM_INPUT",
+    "finite_step_limit_env": "TM_LIMIT",
+    "certificate_mode": "TM_MODE=cert",
+    "default_rules": "0,A,1,F,R;1,A,2,I,R;2,A,3,E,R;3,A,4,L,R;4,A,H,D,R",
+    "default_input": "AAAAA",
+    "default_result": "FIELD",
+    "default_transition_count": 5,
+    "universality_statement": "The fixed interpreter can simulate any finite deterministic single-tape TM supplied in the transition-table encoding; Python is the physical host implementation of the interpreter."
+  },
+  "node_generation": {
+    "effect_gate": "exact halted/output tape FIELD",
+    "fetched_runtime_files": [
+      "server.py",
+      "compute_fabric.py"
+    ],
+    "source_commit_pin": "eb553f972f7d6cf6d8a858fb2fe0d5e5d7c8f7db",
+    "node_role": "UTM field node",
+    "federation_membership_requires_secret": true,
+    "federation_secret_embedded": false
+  },
+  "recursion": {
+    "generated_node_exposes_discovery": "/.well-known/utm-seed.json",
+    "generated_node_exposes_seed": "/utm/seed",
+    "closure": "UTM seed -> TM evaluation -> FIELD -> node -> same UTM seed"
+  },
+  "boundaries": {
+    "host_required": true,
+    "arbitrary_resident_host_code": false,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "oracle": null,
+    "hypercomputation_enabled": false,
+    "halting_problem_becomes_decidable": false
+  }
+}
