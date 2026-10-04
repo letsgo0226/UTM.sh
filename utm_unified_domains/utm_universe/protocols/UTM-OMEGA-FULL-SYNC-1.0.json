@@ -4,7 +4,7 @@
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
   "purpose": "Bind every currently synchronized UTM Universe resident module into one source-pinned UTM-Omega finite stage with potentially-unbounded continuation semantics.",
-  "sync_source_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
+  "sync_source_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
   "component_count": 15,
   "components": [
     {
@@ -110,7 +110,7 @@
       "protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
       "coordinate": 14,
-      "source_blob_sha": "586f4a418310a3642d29bd5542e9cfd5dbb98764"
+      "source_blob_sha": "70b219e1bdf0f3bc6c42f92abd9bac4f0ff05e6e"
     }
   ],
   "execution_target": {
@@ -155,5 +155,15 @@
     "changed_reuses_aggregate_coordinate": true,
     "changed_requires_new_finite_stage": true,
     "duplicate_resident_allocation_forbidden": true
+  },
+  "latest_transition": {
+    "from_stage": 6,
+    "to_stage": 7,
+    "cause": "AI admission deployment binding changed from legacy/consolidated hosting context to the independently deployed UTM Universe runtime.",
+    "source_snapshot_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
+    "aggregate_coordinate_reused": 15,
+    "new_resident_allocated": false,
+    "changed_component_id": "utm-omega-resident-admission-v1.0",
+    "changed_component_blob_sha": "70b219e1bdf0f3bc6c42f92abd9bac4f0ff05e6e"
   }
 }
