@@ -1,0 +1,64 @@
+name: UTM Seed Live
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/UTM_SEED_LIVE.yml"
+      - "utm_unified_domains/utm_universe/world-manifest.json"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/UTM_SEED_LIVE.yml"
+      - "utm_unified_domains/utm_universe/world-manifest.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-utm-seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    strategy:
+      fail-fast: false
+      matrix:
+        base:
+          - https://utm-universe-production.up.railway.app
+          - https://utm-universe-peer-production.up.railway.app
+          - https://utm-universe-render-peer.onrender.com
+    steps:
+      - name: Verify live self-interpreting UTM seed
+        env:
+          BASE: ${{ matrix.base }}
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 90); do
+            if curl -fsS --max-time 20 "$BASE/health" >/tmp/health.json &&
+               curl -fsS --max-time 20 "$BASE/.well-known/utm-seed.json" >/tmp/seed.json &&
+               curl -fsS --max-time 20 "$BASE/utm/seed" >/tmp/body.json; then
+              ok=1; break
+            fi
+            sleep 2
+          done
+          test "$ok" = 1
+          python3 - <<'PY'
+          import json
+          h=json.load(open('/tmp/health.json'))
+          s=json.load(open('/tmp/seed.json'))
+          b=json.load(open('/tmp/body.json'))
+          assert h['ok'] is True and h['world_id']=='akashic-utm-main'
+          assert s['protocol']=='UTM-SEED-ONE-LINER/1.0'
+          assert s['machine_model'].startswith('deterministic single-tape')
+          assert s['default_finite_derivation']=='AAAAA -> FIELD in five transitions'
+          assert s['effect_gate'].startswith('only the exact FIELD')
+          assert s['actual_infinite_physical_compute'] is False
+          assert s['oracle'] is None
+          assert b['protocol']=='UTM-SEED-ONE-LINER/1.0'
+          assert 0 < b['bytes_utf8'] < 2048
+          assert b['bytes_utf8']==1533
+          assert b['federation_token_included'] is False
+          assert b['one_liner'].startswith("python3 -c")
+          assert 'TM_RULES' in b['one_liner'] and 'TM_INPUT' in b['one_liner']
+          print(json.dumps({'verified':True,'node_id':h['node_id'],'bytes':b['bytes_utf8']},separators=(',',':')))
+          PY
