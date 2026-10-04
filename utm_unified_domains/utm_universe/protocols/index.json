@@ -87,6 +87,14 @@
       "one_liner": "UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
       "manifest": "UTM-FIELD-NODE-BOOTSTRAP-1.0.json",
       "requires_additional_service": false
+    },
+    {
+      "id": "UTM-FIELD-SEED/1.0",
+      "purpose": "public AI-readable discovery of the sub-2KB field-node seed while keeping existing federation membership secret-gated",
+      "manifest": "UTM-FIELD-SEED-1.0.json",
+      "discovery": "/.well-known/utm-field-node.json",
+      "bootstrap": "/field/bootstrap",
+      "requires_additional_service": false
     }
   ]
 }
