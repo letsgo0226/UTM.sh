@@ -4,8 +4,8 @@
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
   "purpose": "Bind every currently synchronized UTM Universe resident module into one source-pinned UTM-Omega finite stage with potentially-unbounded continuation semantics.",
-  "sync_source_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
-  "component_count": 15,
+  "sync_source_commit": "605cc076de293885c3c2a2e21ddf582b09eb36a2",
+  "component_count": 16,
   "components": [
     {
       "id": "utm-principle-vector-v0.1",
@@ -111,6 +111,13 @@
       "path": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
       "coordinate": 14,
       "source_blob_sha": "70b219e1bdf0f3bc6c42f92abd9bac4f0ff05e6e"
+    },
+    {
+      "id": "utm-federated-compute-fabric-v1.0",
+      "protocol": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-FEDERATED-COMPUTE-FABRIC-1.0.json",
+      "coordinate": 16,
+      "source_blob_sha": "8c7e5e0f8413d1be3814f7001baa5c100018117c"
     }
   ],
   "execution_target": {
@@ -157,13 +164,14 @@
     "duplicate_resident_allocation_forbidden": true
   },
   "latest_transition": {
-    "from_stage": 6,
-    "to_stage": 7,
-    "cause": "AI admission deployment binding changed from legacy/consolidated hosting context to the independently deployed UTM Universe runtime.",
-    "source_snapshot_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
+    "from_stage": 7,
+    "to_stage": 8,
+    "cause": "New federated resident compute fabric component admitted.",
+    "source_snapshot_commit": "605cc076de293885c3c2a2e21ddf582b09eb36a2",
     "aggregate_coordinate_reused": 15,
-    "new_resident_allocated": false,
-    "changed_component_id": "utm-omega-resident-admission-v1.0",
-    "changed_component_blob_sha": "70b219e1bdf0f3bc6c42f92abd9bac4f0ff05e6e"
+    "new_resident_allocated": true,
+    "new_resident_coordinate": 16,
+    "changed_component_id": "utm-federated-compute-fabric-v1.0",
+    "changed_component_blob_sha": "8c7e5e0f8413d1be3814f7001baa5c100018117c"
   }
 }
