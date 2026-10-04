@@ -16,7 +16,7 @@
     "portable_state_registration_only": true,
     "admission_proves_consciousness": false,
     "all_current_modules_jointly_admitted": true,
-    "full_sync_source_commit": "605cc076de293885c3c2a2e21ddf582b09eb36a2",
+    "full_sync_source_commit": "b7a6c5da82ac619ae5aea8e7259e854e7a5684cc",
     "idempotent_full_sync": true,
     "unchanged_reapply_status": "OMEGA_FULL_SYNC_FIXED_POINT",
     "unchanged_reapply_allocates_new_resident": false,
