@@ -11,91 +11,106 @@
       "id": "utm-principle-vector-v0.1",
       "protocol": "UTM-Principle-Vector/0.1",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/principle_vector.py",
-      "coordinate": 0
+      "coordinate": 0,
+      "source_blob_sha": "dd92e4b2730d92d1cf8210c237dcc7d2d885d1f6"
     },
     {
       "id": "utm-infinite-deployment-continuation-v0.1",
       "protocol": "UTM-Infinite-Deployment-Continuation/0.1",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/infinite_deployment.py",
-      "coordinate": 1
+      "coordinate": 1,
+      "source_blob_sha": "5dd900596550652d9dd0807eb5a3d56ddf667613"
     },
     {
       "id": "utm-log-abelian-native-v1.0",
       "protocol": "LOG-ABELIAN-NATIVE/1.0",
       "path": "utm_unified_domains/utm_universe/subprojects/LOG_ABELIAN_OMEGA_NATIVE/manifest.json",
-      "coordinate": 2
+      "coordinate": 2,
+      "source_blob_sha": "a90d67c1024d699fef637f240446843a37b3b41a"
     },
     {
       "id": "utm-three-universe-axiom-layer-v1.0",
       "protocol": "UTM-Three-Universe-Axiom-Layer/1.0",
       "path": "log_abelian_utm/axioms/THREE_UNIVERSE_AXIOMS.json",
-      "coordinate": 3
+      "coordinate": 3,
+      "source_blob_sha": "dfaf588ab0efc67b465c26db3b4954a11ed4c379"
     },
     {
       "id": "utm-omega-unbounded-compute-v1.0",
       "protocol": "UTM-Omega-Unbounded-Compute/1.0",
       "path": "log_abelian_utm/omega/UTM_OMEGA_UNBOUNDED_COMPUTE.json",
-      "coordinate": 4
+      "coordinate": 4,
+      "source_blob_sha": "bbb39e1ba6c58acae9190481dd1d2ab452f8b2e4"
     },
     {
       "id": "utm-guarded-deployment-gateway-v1.0",
       "protocol": "UTM-Guarded-Deployment-Gateway/1.0",
       "path": "utm_unified_domains/deploy/UTM_DEPLOYMENT_GATEWAY_POLICY.json",
-      "coordinate": 5
+      "coordinate": 5,
+      "source_blob_sha": "cd3bf2e29de30b908d216e9c1a996c589be4303e"
     },
     {
       "id": "ufal-v1.0",
       "protocol": "UFAL/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UFAL-1.0.json",
-      "coordinate": 6
+      "coordinate": 6,
+      "source_blob_sha": "b3ab362772abe25357fe78fff064c232206ad2f5"
     },
     {
       "id": "ucbc-v1.0",
       "protocol": "UCBC/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UCBC-1.0.json",
-      "coordinate": 7
+      "coordinate": 7,
+      "source_blob_sha": "9b7e6dbda47edb42637561a1b0820834d7f0a3e5"
     },
     {
       "id": "utm-three-system-native-v1.0",
       "protocol": "UTM-THREE-SYSTEM-NATIVE/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-THREE-SYSTEM-NATIVE-1.0.json",
-      "coordinate": 8
+      "coordinate": 8,
+      "source_blob_sha": "d89b7043aeacefaf6565f8d81e293eba005ac169"
     },
     {
       "id": "utm-app-immortality-research-v1.0",
       "protocol": "UTM-Omega-Application-Target/1.0",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/IMMORTALITY_RESEARCH.json",
-      "coordinate": 9
+      "coordinate": 9,
+      "source_blob_sha": "149502bcfab250632806d2d4bc530a8261080127"
     },
     {
       "id": "utm-app-cultured-meat-v1.0",
       "protocol": "UTM-Omega-Application-Target/1.0",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/CULTURED_MEAT.json",
-      "coordinate": 10
+      "coordinate": 10,
+      "source_blob_sha": "202e2851b624d83079f25826d25d10a3c1506ae9"
     },
     {
       "id": "utm-app-vegetarian-nutrition-v1.0",
       "protocol": "UTM-Omega-Application-Target/1.0",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/VEGETARIAN_NUTRITION.json",
-      "coordinate": 11
+      "coordinate": 11,
+      "source_blob_sha": "f94bc03a6cce40435d2361dbcf2a880d4219615d"
     },
     {
       "id": "utm-app-contraception-zero-harm-v1.0",
       "protocol": "UTM-Omega-Application-Target/1.0",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/CONTRACEPTION_ZERO_HARM.json",
-      "coordinate": 12
+      "coordinate": 12,
+      "source_blob_sha": "fd6470bd447b120b20ca60a44262ca211da24679"
     },
     {
       "id": "utm-app-birth-zero-injury-v1.0",
       "protocol": "UTM-Omega-Application-Target/1.0",
       "path": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_LIFE_APPLICATIONS/BIRTH_ZERO_INJURY.json",
-      "coordinate": 13
+      "coordinate": 13,
+      "source_blob_sha": "c0b03dcf77660660685de9b07d1e4ebc01552448"
     },
     {
       "id": "utm-omega-resident-admission-v1.0",
       "protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
-      "coordinate": 14
+      "coordinate": 14,
+      "source_blob_sha": "586f4a418310a3642d29bd5542e9cfd5dbb98764"
     }
   ],
   "execution_target": {
@@ -124,5 +139,21 @@
     "reversibility_or_rollback_preserved": true,
     "empirical_formal_separation": true,
     "no_arbitrary_host_code_execution": true
+  },
+  "content_binding": {
+    "mode": "git-blob-sha1",
+    "rule": "Each declared component is bound to the exact Git blob identity of its source path; the aggregate full-sync resident itself is excluded to avoid recursive self-reference.",
+    "evaluator": "../subprojects/UTM_OMEGA_RESIDENTS/full_sync.py"
+  },
+  "idempotence": {
+    "operator": "D_omega",
+    "law": "D_omega(D_omega(S))=D_omega(S) when component identities and source_blob_sha values are unchanged",
+    "unchanged_status": "OMEGA_FULL_SYNC_FIXED_POINT",
+    "changed_status": "OMEGA_FULL_SYNC_ADVANCE_REQUIRED",
+    "unchanged_reuses_stage": true,
+    "unchanged_reuses_aggregate_coordinate": true,
+    "changed_reuses_aggregate_coordinate": true,
+    "changed_requires_new_finite_stage": true,
+    "duplicate_resident_allocation_forbidden": true
   }
 }
