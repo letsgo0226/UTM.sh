@@ -4,7 +4,7 @@
   "purpose": "Turn a Python-capable host into a UTM Universe resident-admission and federated compute node using one command.",
   "one_liner_path": "UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
   "one_liner_utf8_bytes": 1045,
-  "source_commit_pin": "f63a719ebb0254b1a21a5e792a01772fcb4ab0f2",
+  "source_commit_pin": "0d2661fb9ef86c663f951cd0a2c3b17721241ad9",
   "fetched_runtime_files": [
     "utm_unified_domains/utm_universe/server.py",
     "utm_unified_domains/utm_universe/compute_fabric.py"
@@ -50,5 +50,12 @@
     "meaning": "distributed computational topology of compatible UTM nodes exchanging resident/job checkpoints",
     "physical_field_claim": false,
     "zero_host_computation": false
+  },
+  "public_seed_discovery": {
+    "well_known": "/.well-known/utm-field-node.json",
+    "bootstrap": "/field/bootstrap",
+    "standalone_node_generation_public": true,
+    "federation_membership_requires_secret": true,
+    "federation_secret_disclosed": false
   }
 }
