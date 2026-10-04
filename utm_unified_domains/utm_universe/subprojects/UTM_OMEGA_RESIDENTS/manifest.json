@@ -2,7 +2,7 @@
   "protocol": "UTM-Universe-Native-Subproject/1.0",
   "id": "UTM_OMEGA_RESIDENTS",
   "parent_world_id": "akashic-utm-main",
-  "purpose": "Admit all synchronized UTM Universe formal/runtime modules, including federated resident compute, portable field-node bootstrap, and public AI field-seed discovery, as one verified UTM-Omega finite stage.",
+  "purpose": "Admit all synchronized UTM Universe formal/runtime modules, including the self-interpreting sub-2KB UTM seed, as one verified UTM-Omega finite stage.",
   "registry": "resident_registry.json",
   "verifier": "verify_residents.py",
   "local_modules": [
@@ -33,14 +33,14 @@
   "full_sync": {
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "manifest": "../../protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "source_snapshot_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
-    "component_count": 18,
+    "source_snapshot_commit": "c1b5f8b0434330c4719f999d4797756548f9ec0c",
+    "component_count": 19,
     "aggregate_resident_coordinate": 15,
     "evaluator": "full_sync.py",
     "idempotent": true,
     "unchanged_status": "OMEGA_FULL_SYNC_FIXED_POINT",
-    "fixed_point_stage": 10,
-    "latest_transition": "stage 9 -> 10: public AI field seed/discovery admitted"
+    "fixed_point_stage": 11,
+    "latest_transition": "stage 10 -> 11: self-interpreting UTM seed admitted"
   },
   "compute_fabric": {
     "protocol": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
@@ -56,7 +56,7 @@
     "one_liner": "../../protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
     "bytes_utf8": 1045,
     "resident_coordinate": 17,
-    "source_commit_pin": "0d2661fb9ef86c663f951cd0a2c3b17721241ad9"
+    "source_commit_pin": "eb553f972f7d6cf6d8a858fb2fe0d5e5d7c8f7db"
   },
   "field_seed": {
     "protocol": "UTM-FIELD-SEED/1.0",
@@ -66,5 +66,14 @@
     "bootstrap": "/field/bootstrap",
     "public_standalone_generation": true,
     "private_federation_membership": true
+  },
+  "utm_seed": {
+    "protocol": "UTM-SEED-ONE-LINER/1.0",
+    "manifest": "../../protocols/UTM-SEED-ONE-LINER-1.0.json",
+    "one_liner": "../../protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh",
+    "bytes_utf8": 1533,
+    "resident_coordinate": 19,
+    "default_tm_derivation": "AAAAA -> FIELD in five transitions",
+    "recursive_seed_endpoint": "/utm/seed"
   }
 }
