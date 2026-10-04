@@ -48,15 +48,18 @@ jobs:
           s=json.load(open('/tmp/seed.json'))
           b=json.load(open('/tmp/body.json'))
           assert h['ok'] is True and h['world_id']=='akashic-utm-main'
-          assert s['protocol']=='UTM-SEED-ONE-LINER/1.0'
+          assert s['protocol'] in ('UTM-SEED-ONE-LINER/1.0','UTM-SEED-ONE-LINER/1.1')
           assert s['machine_model'].startswith('deterministic single-tape')
           assert s['default_finite_derivation']=='AAAAA -> FIELD in five transitions'
-          assert s['effect_gate'].startswith('only the exact FIELD')
+          assert 'FIELD' in s['effect_gate']
           assert s['actual_infinite_physical_compute'] is False
           assert s['oracle'] is None
-          assert b['protocol']=='UTM-SEED-ONE-LINER/1.0'
+          assert b['protocol']==s['protocol']
           assert 0 < b['bytes_utf8'] < 2048
-          assert b['bytes_utf8']==1533
+          assert b['bytes_utf8']==len(b['one_liner'].encode())
+          if s['protocol']=='UTM-SEED-ONE-LINER/1.1':
+              assert s['seed_available_offline'] is True
+              assert 'hashlib.sha256' in b['one_liner']
           assert b['federation_token_included'] is False
           assert b['one_liner'].startswith("python3 -c")
           assert 'TM_RULES' in b['one_liner'] and 'TM_INPUT' in b['one_liner']

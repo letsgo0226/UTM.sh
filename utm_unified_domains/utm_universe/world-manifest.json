@@ -715,5 +715,19 @@
     },
     "railway_start_command": "UTM-SEED-ONE-LINER/1.0",
     "stage_note": "Live materialization evidence only; UTM-Omega remains at finite stage 11 with resident coordinate 19."
+  },
+  "verified_offline_seed": {
+    "protocol": "UTM-SEED-ONE-LINER/1.1",
+    "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.1.one-liner.sh",
+    "manifest": "utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.1.json",
+    "one_liner_utf8_bytes": 1969,
+    "runtime_source_commit": "814eeb65b49777dc3d1f85b0e1a25028601461ec",
+    "local_validation": [
+      "halt and FIELD gate",
+      "offline restart with outbound HTTP blocked",
+      "checkpoint continuation after restart",
+      "modified runtime rejected before execution"
+    ],
+    "live_verification": "pending deployment verification"
   }
 }

@@ -1,0 +1,54 @@
+{
+  "protocol": "UTM-SEED-ONE-LINER/1.1",
+  "world_id": "akashic-utm-main",
+  "one_liner_path": "UTM-SEED-ONE-LINER-1.1.one-liner.sh",
+  "one_liner_utf8_bytes": 1969,
+  "runtime_source_commit_pin": "814eeb65b49777dc3d1f85b0e1a25028601461ec",
+  "runtime_source_sha256": {
+    "server.py": "e5e37cb9a405dba3566c47a224442665f8e83500be2c9d59ba8c0b95d9b51955",
+    "compute_fabric.py": "aebb0d755726f764de52fa5d445c57c2ffbece5b9e0a8d34ef409f457a421c04"
+  },
+  "machine": {
+    "rules": "q,read,next,write,L|R separated by semicolons",
+    "input_env": "TM_INPUT",
+    "rules_env": "TM_RULES",
+    "step_limit_env": "TM_LIMIT",
+    "default_step_limit": 4096,
+    "maximum_step_limit": 1000000,
+    "certificate_mode": "TM_MODE=cert",
+    "default_result": "FIELD",
+    "default_transition_count": 5,
+    "halt_condition": "no transition for current state and read symbol",
+    "effect_gate": "halted and trimmed output exactly FIELD"
+  },
+  "source_cache": {
+    "directory": "${UTM_DATA:-/data-if-present-else-/tmp}/utm-runtime/814eeb65b49777dc3d1f85b0e1a25028601461ec",
+    "validation": "SHA-256 on every start, including offline starts",
+    "population": "verified HTTPS bytes, followed by an atomic local install",
+    "corrupt_source_action": "stop before executing server.py",
+    "offline_restart": "requires both cached source files and Python 3.10+",
+    "offline_package": "includes pinned source bytes and a cache installer; copy existing resident/job state separately"
+  },
+  "federation": {
+    "peers_env": "FEDERATION_PEERS",
+    "token_env": "FEDERATION_TOKEN",
+    "token_embedded": false,
+    "membership_requires_matching_secret": true,
+    "default_peers": "none; use explicit federation configuration"
+  },
+  "persistence": {
+    "data_env": "UTM_DATA",
+    "events_env": "AKASHIC_PATH",
+    "jobs_env": "FABRIC_PATH",
+    "durability": "depends on persistence of selected storage; /tmp is usually ephemeral"
+  },
+  "boundaries": {
+    "host_required": true,
+    "network_required_after_cache_fill": false,
+    "network_required_for_federation": true,
+    "arbitrary_resident_host_code": false,
+    "all_hosts_stopped": "computation stops",
+    "actual_infinite_physical_compute": false,
+    "entire_bootstrap_runs_inside_simulated_TM": false
+  }
+}

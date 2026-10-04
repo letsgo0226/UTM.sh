@@ -25,3 +25,5 @@ jobs:
         run: python3 -m py_compile utm_unified_domains/utm_universe/server.py utm_unified_domains/utm_universe/compute_fabric.py utm_unified_domains/utm_universe/test_federated_compute.py
       - name: Verify two-node checkpoint replication and takeover
         run: python3 utm_unified_domains/utm_universe/test_federated_compute.py
+      - name: Verify offline seed restart, halt gate, and tamper rejection
+        run: python3 -m unittest discover -s utm_unified_domains/utm_universe -p 'test_seed_bootstrap.py' -v

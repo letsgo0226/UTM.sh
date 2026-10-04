@@ -104,6 +104,15 @@
       "discovery": "/.well-known/utm-seed.json",
       "bootstrap": "/utm/seed",
       "requires_additional_service": false
+    },
+    {
+      "id": "UTM-SEED-ONE-LINER/1.1",
+      "purpose": "halt-gated sub-2KB seed with verified source caching, offline restart and local seed discovery",
+      "one_liner": "UTM-SEED-ONE-LINER-1.1.one-liner.sh",
+      "manifest": "UTM-SEED-ONE-LINER-1.1.json",
+      "discovery": "/.well-known/utm-seed.json",
+      "bootstrap": "/utm/seed",
+      "requires_additional_service": false
     }
   ]
 }

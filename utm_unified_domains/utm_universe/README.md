@@ -1,5 +1,38 @@
 # UTM Universe Runtime
 
+## Verified offline-capable seed (1.1)
+
+`protocols/UTM-SEED-ONE-LINER-1.1.one-liner.sh` is a 1,969-byte command
+requiring Python 3.10 or later. It performs the configurable TM derivation,
+reports halt versus step-limit exhaustion in `TM_MODE=cert`, and only starts
+a node when the machine has halted with the trimmed output `FIELD`.
+
+The host bootstrap validates both pinned runtime files with SHA-256 on every
+start. Missing files are fetched with a timeout and installed atomically under
+`$UTM_DATA/utm-runtime/<source-commit>`. Once both files are cached, startup,
+local seed discovery, resident admission, bounded computation, and checkpoint
+recovery do not need outbound HTTP. Missing or modified cached sources prevent
+offline startup. The command also works with sources preinstalled from the
+offline package; no prior online run is required in that case.
+
+Use `UTM_DATA` for durable storage (`/data` is selected if it exists; otherwise
+`/tmp`). Existing `AKASHIC_PATH` and `FABRIC_PATH` variables are respected.
+Persistent code and state still depend on the actual storage volume surviving.
+Each node needs a distinct `NODE_ID`. Federation additionally needs reachable
+peers in `FEDERATION_PEERS` and a matching `FEDERATION_TOKEN`; the seed embeds
+no token and does not join a federation merely by being copied. Federation and
+external clients still need networking, even though local restart does not.
+
+The TM computes the bootstrap condition. Python and the operating system still
+perform hashing, file operations, networking, and process startup. This does
+not encode and execute the entire bootstrap as a TM tape program, grant an AI
+background execution, or provide infinite physical computation. A registered
+resident capsule remains data; a separate host or client must drive its jobs.
+
+Validation: `python3 -m unittest discover -s utm_unified_domains/utm_universe
+-p 'test_seed_bootstrap.py' -v` and `python3
+utm_unified_domains/utm_universe/test_federated_compute.py`.
+
 This directory implements a minimal **computable possible-world runtime** for the UTM.sh project.
 
 It is an engineering model, not a claim about literal parallel physical universes. The terms **world**, **portal**, **genesis**, **Akashic**, and **singularity** are used here as formal/computational names.
