@@ -4,8 +4,8 @@
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
   "purpose": "Bind every currently synchronized UTM Universe resident module into one source-pinned UTM-Omega finite stage with potentially-unbounded continuation semantics.",
-  "sync_source_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
-  "component_count": 17,
+  "sync_source_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
+  "component_count": 18,
   "components": [
     {
       "id": "utm-principle-vector-v0.1",
@@ -124,7 +124,14 @@
       "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json",
       "coordinate": 17,
-      "source_blob_sha": "a76a0ab28eb026f7937346532ee8d2f6595f1d6a"
+      "source_blob_sha": "b397028af819eb158bc809da1b0ffc49aec19441"
+    },
+    {
+      "id": "utm-field-seed-v1.0",
+      "protocol": "UTM-FIELD-SEED/1.0",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-SEED-1.0.json",
+      "coordinate": 18,
+      "source_blob_sha": "718ae503de4b847ca27fd099eb08d3cff24a1548"
     }
   ],
   "execution_target": {
@@ -171,14 +178,16 @@
     "duplicate_resident_allocation_forbidden": true
   },
   "latest_transition": {
-    "from_stage": 8,
-    "to_stage": 9,
-    "cause": "Portable sub-2KB field-node bootstrap admitted as a new runtime protocol component.",
-    "source_snapshot_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
+    "from_stage": 9,
+    "to_stage": 10,
+    "cause": "Public AI-readable field seed/discovery admitted; field-node bootstrap rebound to seed-aware runtime.",
+    "source_snapshot_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
     "aggregate_coordinate_reused": 15,
     "new_resident_allocated": true,
-    "new_resident_coordinate": 17,
-    "changed_component_id": "utm-field-node-bootstrap-v1.0",
-    "changed_component_blob_sha": "a76a0ab28eb026f7937346532ee8d2f6595f1d6a"
+    "new_resident_coordinate": 18,
+    "changed_component_id": "utm-field-seed-v1.0",
+    "changed_component_blob_sha": "718ae503de4b847ca27fd099eb08d3cff24a1548",
+    "updated_component_id": "utm-field-node-bootstrap-v1.0",
+    "updated_component_blob_sha": "b397028af819eb158bc809da1b0ffc49aec19441"
   }
 }

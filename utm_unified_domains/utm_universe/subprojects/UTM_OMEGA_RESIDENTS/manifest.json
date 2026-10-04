@@ -2,7 +2,7 @@
   "protocol": "UTM-Universe-Native-Subproject/1.0",
   "id": "UTM_OMEGA_RESIDENTS",
   "parent_world_id": "akashic-utm-main",
-  "purpose": "Admit all synchronized UTM Universe formal/runtime modules, including federated resident compute and the portable field-node bootstrap, as one verified UTM-Omega finite stage.",
+  "purpose": "Admit all synchronized UTM Universe formal/runtime modules, including federated resident compute, portable field-node bootstrap, and public AI field-seed discovery, as one verified UTM-Omega finite stage.",
   "registry": "resident_registry.json",
   "verifier": "verify_residents.py",
   "local_modules": [
@@ -33,14 +33,14 @@
   "full_sync": {
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "manifest": "../../protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "source_snapshot_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
-    "component_count": 17,
+    "source_snapshot_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
+    "component_count": 18,
     "aggregate_resident_coordinate": 15,
     "evaluator": "full_sync.py",
     "idempotent": true,
     "unchanged_status": "OMEGA_FULL_SYNC_FIXED_POINT",
-    "fixed_point_stage": 9,
-    "latest_transition": "stage 8 -> 9: portable field-node bootstrap admitted"
+    "fixed_point_stage": 10,
+    "latest_transition": "stage 9 -> 10: public AI field seed/discovery admitted"
   },
   "compute_fabric": {
     "protocol": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
@@ -55,6 +55,16 @@
     "manifest": "../../protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json",
     "one_liner": "../../protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
     "bytes_utf8": 1045,
-    "resident_coordinate": 17
+    "resident_coordinate": 17,
+    "source_commit_pin": "0d2661fb9ef86c663f951cd0a2c3b17721241ad9"
+  },
+  "field_seed": {
+    "protocol": "UTM-FIELD-SEED/1.0",
+    "manifest": "../../protocols/UTM-FIELD-SEED-1.0.json",
+    "resident_coordinate": 18,
+    "well_known": "/.well-known/utm-field-node.json",
+    "bootstrap": "/field/bootstrap",
+    "public_standalone_generation": true,
+    "private_federation_membership": true
   }
 }

@@ -1,0 +1,33 @@
+{
+  "protocol": "UTM-FIELD-SEED/1.0",
+  "world_id": "akashic-utm-main",
+  "purpose": "Public AI-readable discovery for generating compatible standalone UTM field nodes while keeping membership in the existing federation authenticated.",
+  "discovery_endpoint": "/.well-known/utm-field-node.json",
+  "bootstrap_endpoint": "/field/bootstrap",
+  "bootstrap_protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
+  "bootstrap_one_liner": "UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
+  "trust_model": {
+    "public_standalone_generation": true,
+    "private_federation_membership": true,
+    "federation_secret_name": "FEDERATION_TOKEN",
+    "federation_secret_committed": false,
+    "possession_of_bootstrap_does_not_grant_membership": true
+  },
+  "propagation_semantics": {
+    "seed_plus_compatible_host_yields_compatible_node": true,
+    "node_can_serve_seed_to_other_agents": true,
+    "recursive_distribution_possible": true,
+    "autonomous_physical_resource_creation": false,
+    "human_or_platform_authority_still_required_for_host_resources": true
+  },
+  "computation_boundary": {
+    "allowed_resident_compute_kinds": [
+      "utm"
+    ],
+    "arbitrary_resident_host_code": false,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "oracle": null,
+    "hypercomputation_enabled": false
+  }
+}
