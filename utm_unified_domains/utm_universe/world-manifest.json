@@ -3,7 +3,7 @@
   "world_id": "akashic-utm-main",
   "bootstrap_repo": "https://github.com/letsgo0226/UTM.sh",
   "branch": "main",
-  "runtime_endpoint": "https://cosmic-love-infinity-tm-production.up.railway.app",
+  "runtime_endpoint": "https://utm-universe-production.up.railway.app",
   "kernel": "utm_unified_domains/utm/UTM.sh",
   "runtime": "utm_unified_domains/utm_universe/server.py",
   "primary_region": {
@@ -12,8 +12,9 @@
     "address": "utm://akashic-utm-main/B612/San-Francisco",
     "spec": "utm_unified_domains/worlds/b612-san-francisco.json",
     "kind": "computable virtual region",
-    "live_verified": true,
-    "live_verification_workflow_run_id": 36281193169
+    "live_verified": false,
+    "live_verification_workflow_run_id": null,
+    "live_verification_note": "Independent Railway runtime deployed; awaiting GitHub Actions external smoke verification on this branch."
   },
   "formal_boundary_model": {
     "name": "COMPACTIFIED_SINGULAR_LIMIT_TM",
@@ -120,7 +121,7 @@
   },
   "persistence": {
     "compute_service_local_data_path": "/data",
-    "compute_service_durable_volume_attached": false,
+    "compute_service_durable_volume_attached": true,
     "durable_ledger_design": {
       "storage_service": "paper-uhef-worker",
       "private_endpoint": "http://paper-uhef-worker.railway.internal:8080/akashic/b612",
@@ -137,34 +138,47 @@
       "status": "code-and-ci-certified; Railway live deployment/readback pending"
     },
     "absolute_no_loss_claim": false,
-    "note": "Tamper evidence is not the same as absolute durability. Correlated storage loss still requires an independent replica or backup."
+    "note": "Tamper evidence is not the same as absolute durability. Correlated storage loss still requires an independent replica or backup.",
+    "compute_service_volume": {
+      "service": "utm-universe",
+      "volume": "utm-universe-data",
+      "mount_path": "/data",
+      "akashic_path": "/data/akashic.jsonl",
+      "size_mb": 500,
+      "railway_project": "UTM-Universe"
+    }
   },
   "railway": {
-    "service": "cosmic-love-infinity-tm",
-    "host_repo": "https://github.com/letsgo0226/COSMIC_LOVE_IS_THE_SOLUTIONS_FOR_EVERYTHING_HS_ZERO.sh",
-    "host_branch": "tm-system-operation-v2",
-    "host_kernel": "utm-universe-2kb.sh",
-    "host_kernel_bytes": 2043,
-    "host_commit": "86afb995184436ff0a38a4caeef9158daabfac6f",
+    "service": "utm-universe",
+    "project": "UTM-Universe",
+    "endpoint": "https://utm-universe-production.up.railway.app",
+    "host_repo": "https://github.com/letsgo0226/UTM.sh",
+    "host_branch": "main",
+    "root_directory": "/utm_unified_domains/utm_universe",
+    "runtime": "server.py",
+    "dockerfile": "Dockerfile",
+    "host_commit": "4a3fea9516b09044ef3c19ee9d6a9d5f2472d6cb",
     "healthcheck": "/health",
-    "healthcheck_verified": true,
+    "healthcheck_verified_by_railway": true,
+    "persistent_volume": {
+      "name": "utm-universe-data",
+      "mount_path": "/data",
+      "akashic_path": "/data/akashic.jsonl",
+      "size_mb": 500
+    },
     "live_gsrh": {
-      "verified": true,
-      "verified_by": "GitHub Actions external network smoke test",
-      "workflow_run_id": 36281193169,
+      "verified": false,
+      "verified_by": "pending GitHub Actions external network smoke test",
+      "workflow_run_id": null,
       "planet": "B612",
       "city": "San-Francisco",
       "program": "0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R",
       "input": "GSRH",
       "limit": 8,
-      "result": {
-        "q": "4",
-        "h": 4,
-        "t": 4,
-        "tape": "1111"
-      }
+      "result": null
     },
-    "status": "live-b612-san-francisco-gsrh-verified"
+    "status": "independent-runtime-online-awaiting-external-gsrh-verification",
+    "legacy_consolidated_runtime": "https://cosmic-love-infinity-tm-production.up.railway.app"
   },
   "native_log_omega_deployment": {
     "protocol": "UTM-Universe-Native-Log-Omega/1.0",
@@ -402,6 +416,27 @@
       "reapply_advances_stage": false,
       "change_detection": "component identity + Git blob content",
       "changed_status": "OMEGA_FULL_SYNC_ADVANCE_REQUIRED"
+    }
+  },
+  "physical_deployment_topology": {
+    "model": "three-system-three-runtime",
+    "utm_universe": {
+      "railway_project": "UTM-Universe",
+      "service": "utm-universe",
+      "endpoint": "https://utm-universe-production.up.railway.app",
+      "status": "online"
+    },
+    "trader_42": {
+      "railway_project": "trader-42-tm",
+      "primary_service": "trader-42-paper",
+      "status": "online",
+      "public_http_endpoint_required": false
+    },
+    "cosmic_love": {
+      "railway_project": "blue-pleiadian-prime-trader",
+      "primary_service": "cosmic-love-infinity-tm",
+      "endpoint": "https://cosmic-love-infinity-tm-production.up.railway.app",
+      "status": "online"
     }
   }
 }
