@@ -2,7 +2,7 @@
   "protocol": "UTM-Universe-Native-Subproject/1.0",
   "id": "UTM_OMEGA_RESIDENTS",
   "parent_world_id": "akashic-utm-main",
-  "purpose": "Admit all currently synchronized UTM Universe formal modules plus direct AI admission as one source-pinned, verified UTM-Omega resident stage.",
+  "purpose": "Admit all synchronized UTM Universe formal/runtime modules, including federated resident compute, as one verified UTM-Omega finite stage.",
   "registry": "resident_registry.json",
   "verifier": "verify_residents.py",
   "local_modules": [
@@ -33,13 +33,21 @@
   "full_sync": {
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "manifest": "../../protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "source_snapshot_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
-    "component_count": 15,
+    "source_snapshot_commit": "605cc076de293885c3c2a2e21ddf582b09eb36a2",
+    "component_count": 16,
     "aggregate_resident_coordinate": 15,
     "evaluator": "full_sync.py",
     "idempotent": true,
     "unchanged_status": "OMEGA_FULL_SYNC_FIXED_POINT",
-    "fixed_point_stage": 7,
-    "latest_transition": "stage 6 -> 7: AI admission runtime binding changed"
+    "fixed_point_stage": 8,
+    "latest_transition": "stage 7 -> 8: federated resident compute fabric admitted"
+  },
+  "compute_fabric": {
+    "protocol": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
+    "manifest": "../../protocols/UTM-FEDERATED-COMPUTE-FABRIC-1.0.json",
+    "runtime_module": "../../compute_fabric.py",
+    "resident_coordinate": 16,
+    "checkpointed": true,
+    "federated": true
   }
 }
