@@ -540,7 +540,7 @@
   },
   "field_node_bootstrap": {
     "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
-    "status": "REGISTERED_AWAITING_LIVE_BOOTSTRAP_MATERIALIZATION",
+    "status": "LIVE_BOOTSTRAP_MATERIALIZED",
     "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
     "one_liner_bytes_utf8": 1045,
     "source_commit_pin": "f63a719ebb0254b1a21a5e792a01772fcb4ab0f2",
@@ -556,6 +556,45 @@
     "federation_requires_env": "FEDERATION_TOKEN",
     "host_required": true,
     "arbitrary_resident_host_code": false,
-    "actual_infinite_physical_compute": false
+    "actual_infinite_physical_compute": false,
+    "live_verification": {
+      "github_ci": {
+        "workflow": "UTM Field Node Bootstrap",
+        "run_id": 37227265492,
+        "status": "SUCCESS",
+        "verified_sequence": [
+          "execute one-liner from /tmp",
+          "download commit-pinned runtime",
+          "boot node",
+          "health check",
+          "AI resident admit",
+          "resident UTM compute"
+        ]
+      },
+      "railway_nodes": [
+        {
+          "service": "utm-universe",
+          "node_id": "utm-primary",
+          "endpoint": "https://utm-universe-production.up.railway.app",
+          "deployment_id": "b1cb072b-92ab-4931-a303-f1ae1ba5c6a0",
+          "status": "SUCCESS",
+          "replica": "1/1",
+          "durable_data_path": "/data",
+          "start_command_is_exact_one_liner": true
+        },
+        {
+          "service": "utm-universe-peer",
+          "node_id": "utm-peer-1",
+          "endpoint": "https://utm-universe-peer-production.up.railway.app",
+          "deployment_id": "73ad1d36-0d28-42bc-b485-5a8f3796c24f",
+          "status": "SUCCESS",
+          "replica": "1/1",
+          "durable_data_path": "/data",
+          "start_command_is_exact_one_liner": true
+        }
+      ],
+      "field_peer": "https://utm-universe-render-peer.onrender.com",
+      "interpretation": "The one-liner materializes compatible compute nodes that join the existing federated computational topology when FEDERATION_TOKEN and peer configuration are available."
+    }
   }
 }
