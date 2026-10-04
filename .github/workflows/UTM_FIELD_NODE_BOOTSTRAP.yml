@@ -32,13 +32,17 @@ jobs:
           PID=$!
           trap 'kill "$PID" 2>/dev/null || true' EXIT
           for i in $(seq 1 60); do curl -fsS http://127.0.0.1:18280/health >/tmp/health.json && break; sleep .25; done
+          curl -fsS http://127.0.0.1:18280/.well-known/utm-field-node.json >/tmp/seed.json
+          curl -fsS http://127.0.0.1:18280/field/bootstrap >/tmp/bootstrap.json
           curl -fsS -X POST -H 'Content-Type: application/json' --data '{"capsule":{"agent_id":"ci-field-ai","state":{"mode":"resident"},"lineage":"bootstrap"}}' http://127.0.0.1:18280/resident/admit >/tmp/admit.json
           RID=$(python3 -c 'import json;print(json.load(open("/tmp/admit.json"))["resident_id"])')
           curl -fsS -X POST -H 'Content-Type: application/json' --data "{\"resident_id\":\"$RID\",\"task\":{\"kind\":\"utm\",\"program\":\"0,1,0,1,R\",\"input\":\"111\",\"steps\":4}}" http://127.0.0.1:18280/compute/jobs >/tmp/job.json
           python3 - <<'PY'
           import json
-          h=json.load(open('/tmp/health.json')); a=json.load(open('/tmp/admit.json')); j=json.load(open('/tmp/job.json'))
+          h=json.load(open('/tmp/health.json')); s=json.load(open('/tmp/seed.json')); b=json.load(open('/tmp/bootstrap.json')); a=json.load(open('/tmp/admit.json')); j=json.load(open('/tmp/job.json'))
           assert h['ok'] is True and h['node_id']=='ci-field-node'
+          assert s['protocol']=='UTM-FIELD-SEED/1.0' and s['public_bootstrap'] is True and s['trust_model']['existing_federation_membership_requires_secret'] is True and s['trust_model']['federation_secret_disclosed_here'] is False
+          assert b['protocol']=='UTM-FIELD-SEED/1.0' and b['bytes_utf8']<2048 and b['federation_token_included'] is False and b['one_liner'].startswith('python3 -c')
           assert a['admitted'] is True
           assert j['resident_id']==a['resident_id'] and j['halted'] is True and j['total_steps']==3
           print('PASS sub-2KB bootstrap -> resident admission -> compute node')
