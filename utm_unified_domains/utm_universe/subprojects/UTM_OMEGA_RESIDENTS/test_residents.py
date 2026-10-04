@@ -6,6 +6,7 @@ sys.path.insert(0,str(HERE))
 import verify_residents as vr
 import principle_vector as pv
 import infinite_deployment as idep
+import full_sync as fs
 class OmegaResidents(unittest.TestCase):
     def test_registry_admitted(self):
         c=vr.verify_registry(); self.assertTrue(c["verified"],c["checks"]); self.assertEqual(c["status"],"OMEGA_ADMITTED"); self.assertEqual(c["resident_count"],16); self.assertFalse(c["actual_infinite_physical_compute"])
@@ -21,6 +22,11 @@ class OmegaResidents(unittest.TestCase):
     def test_full_sync_bundle_covers_previous_residents(self):
         import json,re
         p=HERE.parents[1]/"protocols"/"UTM-OMEGA-FULL-SYNC-1.0.json"; x=json.loads(p.read_text()); c=vr.verify_registry(); ids=set(c["resident_ids"])-{"utm-omega-full-sync-v1.0"}; self.assertEqual({z["id"] for z in x["components"]},ids); self.assertEqual(x["component_count"],15); self.assertTrue(re.fullmatch(r"[0-9a-f]{40}",x["sync_source_commit"])); self.assertTrue(x["execution_target"]["every_executed_stage_is_finite"]); self.assertFalse(x["execution_target"]["actual_infinite_physical_compute"])
+    def test_full_sync_is_fixed_point(self):
+        x=fs.evaluate(); self.assertTrue(x["verified"],x["reasons"]); self.assertEqual(x["status"],"OMEGA_FULL_SYNC_FIXED_POINT"); self.assertEqual(x["stage"],6); self.assertEqual(x["aggregate_coordinate"],15); self.assertFalse(x["allocate_new_resident"]); self.assertFalse(x["advance_stage"])
+    def test_full_sync_detects_content_change(self):
+        import json
+        r=vr.load_registry(); m=json.loads((HERE.parents[1]/"protocols"/"UTM-OMEGA-FULL-SYNC-1.0.json").read_text()); m["components"][0]["source_blob_sha"]="0"*40; x=fs.evaluate(r,m); self.assertFalse(x["verified"]); self.assertEqual(x["status"],"OMEGA_FULL_SYNC_ADVANCE_REQUIRED"); self.assertTrue(x["advance_stage"]); self.assertEqual(x["next_stage_if_changed"],7); self.assertFalse(x["allocate_new_resident"])
     def test_stage_extension_remains_finite(self):
         a={"stage":1,"resource_budget":10,"resource_used":1,"valuation":{"0":1},"oracle":None}; b={"stage":2,"resource_budget":10,"resource_used":2,"valuation":{"0":1,"1":1},"oracle":None}; self.assertTrue(vr.extend_stage(a,b)["valid_extension"])
 if __name__=="__main__": unittest.main()
