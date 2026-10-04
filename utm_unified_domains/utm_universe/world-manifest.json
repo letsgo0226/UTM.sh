@@ -459,7 +459,7 @@
   },
   "federated_compute_fabric": {
     "protocol": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
-    "status": "code-and-ci-pending-peer-materialization",
+    "status": "two-node-railway-federation-live",
     "runtime": "utm_unified_domains/utm_universe/server.py",
     "module": "utm_unified_domains/utm_universe/compute_fabric.py",
     "resident_compute": true,
@@ -472,9 +472,31 @@
     "takeover_supported": true,
     "strong_consensus_claim": false,
     "cross_provider_peer_protocol_supported": true,
-    "railway_wide_failure_survival": "requires at least one peer outside Railway",
+    "railway_wide_failure_survival": "not yet: both live peers are hosted on Railway; cross-provider peer still required",
     "all_hosts_stopped_means": "computation stops; persisted state may later resume",
     "source_snapshot_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
-    "protocol_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe"
+    "protocol_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe",
+    "live_materialization": {
+      "primary": {
+        "service": "utm-universe",
+        "endpoint": "https://utm-universe-production.up.railway.app",
+        "deployment_id": "83e15e1f-a94f-4c90-b763-c8ecde810f34",
+        "status": "SUCCESS",
+        "volume": "utm-universe-data",
+        "node_id": "utm-primary"
+      },
+      "peer": {
+        "service": "utm-universe-peer",
+        "endpoint": "https://utm-universe-peer-production.up.railway.app",
+        "deployment_id": "398827c2-2f90-47fb-ad56-d0f757b2f3e1",
+        "status": "SUCCESS",
+        "volume": "utm-universe-peer-data",
+        "node_id": "utm-peer-1"
+      },
+      "federation_interval_seconds": 30,
+      "authenticated_snapshot_pull": true,
+      "bidirectional_snapshot_http_2xx_verified": true,
+      "verification_scope": "Railway request metrics show successful /federation/snapshot responses in both directions; PR CI verifies checkpoint replication, takeover, continuation, and return synchronization."
+    }
   }
 }
