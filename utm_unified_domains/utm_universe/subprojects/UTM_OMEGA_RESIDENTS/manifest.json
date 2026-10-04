@@ -2,7 +2,7 @@
   "protocol": "UTM-Universe-Native-Subproject/1.0",
   "id": "UTM_OMEGA_RESIDENTS",
   "parent_world_id": "akashic-utm-main",
-  "purpose": "Admit the current Log-Abelian, Three-Universe, Principle-Vector, Infinite Deployment, Omega, deployment-gate, UFAL, UCBC, and three-system formal layers into one verified finite UTM-Omega resident stage.",
+  "purpose": "Admit the current formal UTM layers plus the direct AI admission/resume client into one verified finite UTM-Omega resident stage.",
   "registry": "resident_registry.json",
   "verifier": "verify_residents.py",
   "local_modules": [
@@ -18,5 +18,12 @@
     "hypercomputation_enabled": false
   },
   "additional_deployment_required": false,
-  "physical_host_required_for_execution": true
+  "physical_host_required_for_execution": true,
+  "admission_client": {
+    "protocol": "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
+    "manifest": "../../protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
+    "one_liner": "../../protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh",
+    "bytes_utf8": 1072,
+    "data_only": true
+  }
 }
