@@ -146,7 +146,7 @@ jobs:
           m=json.load(open('cert-live-manifest.json'))
           protocol=m.get('protocol','')
           assert protocol.startswith('UTM-Universe/1.') and m.get('world_id')=='akashic-utm-main', m
-          assert m.get('planet')=='B612' and m.get('city')=='San-Francisco', m
+          assert m.get('planet_id',m.get('planet'))=='B612' and m.get('region_id',m.get('city'))=='San-Francisco', m
           r=json.load(open('cert-live-gsrh.json'))
           assert (r.get('q'),r.get('h'),r.get('t'),r.get('tape'))==('4',4,4,'1111'), r
           print('PASS live consolidated Railway B612/San-Francisco GSRH runtime', protocol)
