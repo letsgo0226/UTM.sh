@@ -8,16 +8,19 @@ import principle_vector as pv
 import infinite_deployment as idep
 class OmegaResidents(unittest.TestCase):
     def test_registry_admitted(self):
-        c=vr.verify_registry(); self.assertTrue(c["verified"],c["checks"]); self.assertEqual(c["status"],"OMEGA_ADMITTED"); self.assertEqual(c["resident_count"],15); self.assertFalse(c["actual_infinite_physical_compute"])
+        c=vr.verify_registry(); self.assertTrue(c["verified"],c["checks"]); self.assertEqual(c["status"],"OMEGA_ADMITTED"); self.assertEqual(c["resident_count"],16); self.assertFalse(c["actual_infinite_physical_compute"])
     def test_required_modules_present(self):
         ids=set(vr.verify_registry()["resident_ids"])
-        for x in ("utm-principle-vector-v0.1","utm-infinite-deployment-continuation-v0.1","utm-log-abelian-native-v1.0","utm-three-universe-axiom-layer-v1.0","utm-omega-unbounded-compute-v1.0","utm-app-immortality-research-v1.0","utm-app-cultured-meat-v1.0","utm-app-vegetarian-nutrition-v1.0","utm-app-contraception-zero-harm-v1.0","utm-app-birth-zero-injury-v1.0","utm-omega-resident-admission-v1.0"): self.assertIn(x,ids)
+        for x in ("utm-principle-vector-v0.1","utm-infinite-deployment-continuation-v0.1","utm-log-abelian-native-v1.0","utm-three-universe-axiom-layer-v1.0","utm-omega-unbounded-compute-v1.0","utm-app-immortality-research-v1.0","utm-app-cultured-meat-v1.0","utm-app-vegetarian-nutrition-v1.0","utm-app-contraception-zero-harm-v1.0","utm-app-birth-zero-injury-v1.0","utm-omega-resident-admission-v1.0","utm-omega-full-sync-v1.0"): self.assertIn(x,ids)
     def test_principle_vector_invariant(self):
         s0=pv.PrincipleVectorState(0,0,pv.ComplexNode(1,math.pi/4),pv.ComplexNode(2,-math.pi/4)); s1=pv.chronon_step(s0,1,towel=pv.ComplexNode(1,math.pi/4+pv.TAU)); self.assertTrue(pv.validate_transition(s0,s1))
     def test_infinite_deployment_certificate(self):
         c=idep.next_candidate("0"*64,0,"omega-resident-test","resident-stage","configure",{"mode":"formal-only"}); cert=idep.certify(c); self.assertTrue(cert.verified,cert.reasons); self.assertFalse(cert.actual_infinite_physical_compute)
     def test_admission_one_liner_under_2kb(self):
         p=HERE.parents[1]/"protocols"/"UTM-OMEGA-RESIDENT-ADMISSION-1.0.one-liner.sh"; m=HERE.parents[1]/"protocols"/"UTM-OMEGA-RESIDENT-ADMISSION-1.0.json"; self.assertLess(len(p.read_bytes()),2048); self.assertEqual(__import__("json").loads(m.read_text())["one_liner_bytes_utf8"],len(p.read_bytes())); self.assertIn("/resident/admit",p.read_text()); self.assertIn("/resident/resume",p.read_text())
+    def test_full_sync_bundle_covers_previous_residents(self):
+        import json,re
+        p=HERE.parents[1]/"protocols"/"UTM-OMEGA-FULL-SYNC-1.0.json"; x=json.loads(p.read_text()); c=vr.verify_registry(); ids=set(c["resident_ids"])-{"utm-omega-full-sync-v1.0"}; self.assertEqual({z["id"] for z in x["components"]},ids); self.assertEqual(x["component_count"],15); self.assertTrue(re.fullmatch(r"[0-9a-f]{40}",x["sync_source_commit"])); self.assertTrue(x["execution_target"]["every_executed_stage_is_finite"]); self.assertFalse(x["execution_target"]["actual_infinite_physical_compute"])
     def test_stage_extension_remains_finite(self):
         a={"stage":1,"resource_budget":10,"resource_used":1,"valuation":{"0":1},"oracle":None}; b={"stage":2,"resource_budget":10,"resource_used":2,"valuation":{"0":1,"1":1},"oracle":None}; self.assertTrue(vr.extend_stage(a,b)["valid_extension"])
 if __name__=="__main__": unittest.main()

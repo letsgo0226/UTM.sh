@@ -297,7 +297,8 @@
       "UCBC/1.0",
       "UTM-THREE-SYSTEM-NATIVE/1.0",
       "UTM-Omega-Life-Applications/1.0",
-      "UTM-OMEGA-RESIDENT-ADMISSION/1.0"
+      "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
+      "UTM-OMEGA-FULL-SYNC/1.0"
     ],
     "stage_model": {
       "potentially_unbounded": true,
@@ -307,8 +308,8 @@
       "oracle": null,
       "hypercomputation_enabled": false,
       "halting_problem_becomes_decidable": false,
-      "stage": 5,
-      "resident_count": 15
+      "stage": 6,
+      "resident_count": 16
     },
     "deployment_boundary": {
       "internal_formal_admission": true,
@@ -317,7 +318,7 @@
       "external_platform_authority_created": false
     },
     "source_pins": {
-      "utm_base_commit": "ba791fe629a2ce570dbdd67ef1d6c1929209c48d",
+      "utm_base_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
     }
   },
@@ -374,5 +375,22 @@
     "additional_service_required": false,
     "arbitrary_host_code_execution": false,
     "actual_infinite_physical_compute": false
+  },
+  "omega_full_sync_deployment": {
+    "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
+    "status": "OMEGA_ADMITTED",
+    "manifest": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
+    "sync_source_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
+    "component_count": 15,
+    "aggregate_resident_coordinate": 15,
+    "semantics": {
+      "all_current_modules_jointly_admitted": true,
+      "potentially_unbounded": true,
+      "every_executed_stage_is_finite": true,
+      "actual_infinite_physical_compute": false,
+      "oracle": null,
+      "hypercomputation_enabled": false,
+      "additional_service_required": false
+    }
   }
 }
