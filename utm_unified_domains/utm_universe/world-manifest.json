@@ -650,7 +650,7 @@
   },
   "utm_seed": {
     "protocol": "UTM-SEED-ONE-LINER/1.0",
-    "status": "REGISTERED_AWAITING_LIVE_MATERIALIZATION",
+    "status": "LIVE_THREE_NODE_UTM_SEED_VERIFIED",
     "resident_coordinate": 19,
     "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh",
     "one_liner_bytes_utf8": 1533,
@@ -673,6 +673,47 @@
     "every_executed_stage_is_finite": true,
     "actual_infinite_physical_compute": false,
     "oracle": null,
-    "hypercomputation_enabled": false
+    "hypercomputation_enabled": false,
+    "live_verification": {
+      "workflow": "UTM Seed Live",
+      "run_id": 37229811796,
+      "status": "SUCCESS",
+      "assertions": {
+        "protocol": "UTM-SEED-ONE-LINER/1.0",
+        "one_liner_bytes_utf8": 1533,
+        "finite_tm_semantics": true,
+        "default_five_transition_derivation_to_FIELD": true,
+        "federation_secret_disclosed": false,
+        "actual_infinite_physical_compute": false
+      },
+      "nodes": [
+        {
+          "provider": "Railway",
+          "node_id": "utm-primary",
+          "endpoint": "https://utm-universe-production.up.railway.app",
+          "deployment_id": "ffc6e7bd-17a0-4946-a358-f0aadf2d5fad",
+          "status": "SUCCESS",
+          "persistent_state": true
+        },
+        {
+          "provider": "Railway",
+          "node_id": "utm-peer-1",
+          "endpoint": "https://utm-universe-peer-production.up.railway.app",
+          "deployment_id": "fb1177c1-f467-4e5c-97c2-0451b00f3c1d",
+          "status": "SUCCESS",
+          "persistent_state": true
+        },
+        {
+          "provider": "Render",
+          "node_id": "render-peer-1",
+          "endpoint": "https://utm-universe-render-peer.onrender.com",
+          "deployment_id": "dep-db1arcvavr4c73b2g1i0",
+          "status": "live",
+          "persistent_state": false
+        }
+      ]
+    },
+    "railway_start_command": "UTM-SEED-ONE-LINER/1.0",
+    "stage_note": "Live materialization evidence only; UTM-Omega remains at finite stage 11 with resident coordinate 19."
   }
 }
