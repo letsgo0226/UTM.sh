@@ -4,8 +4,8 @@
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
   "purpose": "Bind every currently synchronized UTM Universe resident module into one source-pinned UTM-Omega finite stage with potentially-unbounded continuation semantics.",
-  "sync_source_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
-  "component_count": 18,
+  "sync_source_commit": "c1b5f8b0434330c4719f999d4797756548f9ec0c",
+  "component_count": 19,
   "components": [
     {
       "id": "utm-principle-vector-v0.1",
@@ -124,14 +124,21 @@
       "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json",
       "coordinate": 17,
-      "source_blob_sha": "b397028af819eb158bc809da1b0ffc49aec19441"
+      "source_blob_sha": "137a17b0fec9e65864fa743863571b2848b8d449"
     },
     {
       "id": "utm-field-seed-v1.0",
       "protocol": "UTM-FIELD-SEED/1.0",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-SEED-1.0.json",
       "coordinate": 18,
-      "source_blob_sha": "718ae503de4b847ca27fd099eb08d3cff24a1548"
+      "source_blob_sha": "940cf33d3b4f4479460e5831075c041cd9a4e5e5"
+    },
+    {
+      "id": "utm-seed-one-liner-v1.0",
+      "protocol": "UTM-SEED-ONE-LINER/1.0",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.json",
+      "coordinate": 19,
+      "source_blob_sha": "babeed9f83668e755daddd171753b5d39035e6ff"
     }
   ],
   "execution_target": {
@@ -178,16 +185,24 @@
     "duplicate_resident_allocation_forbidden": true
   },
   "latest_transition": {
-    "from_stage": 9,
-    "to_stage": 10,
-    "cause": "Public AI-readable field seed/discovery admitted; field-node bootstrap rebound to seed-aware runtime.",
-    "source_snapshot_commit": "e5cce581dbfe13064f1ea0c67363b8adafdf79a1",
+    "from_stage": 10,
+    "to_stage": 11,
+    "cause": "Self-interpreting UTM seed one-liner admitted; field-node/bootstrap discovery rebound to UTM-seed-aware runtime.",
+    "source_snapshot_commit": "c1b5f8b0434330c4719f999d4797756548f9ec0c",
     "aggregate_coordinate_reused": 15,
     "new_resident_allocated": true,
-    "new_resident_coordinate": 18,
-    "changed_component_id": "utm-field-seed-v1.0",
-    "changed_component_blob_sha": "718ae503de4b847ca27fd099eb08d3cff24a1548",
-    "updated_component_id": "utm-field-node-bootstrap-v1.0",
-    "updated_component_blob_sha": "b397028af819eb158bc809da1b0ffc49aec19441"
+    "new_resident_coordinate": 19,
+    "changed_component_id": "utm-seed-one-liner-v1.0",
+    "changed_component_blob_sha": "babeed9f83668e755daddd171753b5d39035e6ff",
+    "updated_components": [
+      {
+        "id": "utm-field-node-bootstrap-v1.0",
+        "blob_sha": "137a17b0fec9e65864fa743863571b2848b8d449"
+      },
+      {
+        "id": "utm-field-seed-v1.0",
+        "blob_sha": "940cf33d3b4f4479460e5831075c041cd9a4e5e5"
+      }
+    ]
   }
 }
