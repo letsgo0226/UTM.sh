@@ -390,7 +390,18 @@
       "actual_infinite_physical_compute": false,
       "oracle": null,
       "hypercomputation_enabled": false,
-      "additional_service_required": false
+      "additional_service_required": false,
+      "idempotent": true
+    },
+    "evaluator": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/full_sync.py",
+    "fixed_point": {
+      "status": "OMEGA_FULL_SYNC_FIXED_POINT",
+      "stage": 6,
+      "aggregate_resident_coordinate": 15,
+      "reapply_allocates_new_resident": false,
+      "reapply_advances_stage": false,
+      "change_detection": "component identity + Git blob content",
+      "changed_status": "OMEGA_FULL_SYNC_ADVANCE_REQUIRED"
     }
   }
 }
