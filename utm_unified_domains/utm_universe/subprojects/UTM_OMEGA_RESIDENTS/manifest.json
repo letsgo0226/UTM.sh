@@ -33,7 +33,7 @@
   "full_sync": {
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "manifest": "../../protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "source_snapshot_commit": "b7a6c5da82ac619ae5aea8e7259e854e7a5684cc",
+    "source_snapshot_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
     "component_count": 16,
     "aggregate_resident_coordinate": 15,
     "evaluator": "full_sync.py",
