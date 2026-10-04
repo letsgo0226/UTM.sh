@@ -132,7 +132,7 @@ jobs:
       - name: Verify live consolidated Railway runtime
         if: github.event_name != 'schedule'
         env:
-          RUNTIME: https://cosmic-love-infinity-tm-production.up.railway.app
+          RUNTIME: https://utm-universe-production.up.railway.app
         run: |
           set -euo pipefail
           curl --retry 8 --retry-delay 2 --retry-all-errors -fsS "$RUNTIME/health" | tee cert-live-health.json
