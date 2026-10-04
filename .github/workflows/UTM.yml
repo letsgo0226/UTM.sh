@@ -111,23 +111,44 @@ jobs:
       - name: Verify UTM universe runtime
         run: |
           set -euo pipefail
-          python3 -m py_compile utm_unified_domains/utm_universe/server.py
-          PORT=18080 AKASHIC_PATH=/tmp/utm-universe-ci.jsonl python3 utm_unified_domains/utm_universe/server.py >/tmp/utm-universe.log 2>&1 &
-          PID=$!
-          trap 'kill "$PID" 2>/dev/null || true' EXIT
-          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:18080/health >/tmp/health.json && break; sleep .25; done
+          python3 -m py_compile utm_unified_domains/utm_universe/server.py utm_unified_domains/utm_universe/compute_fabric.py
+          rm -f /tmp/utm-{a,b}.jsonl /tmp/fabric-{a,b}.json
+          PORT=18080 NODE_ID=ci-primary FEDERATION_TOKEN=ci-token FEDERATION_PEERS=http://127.0.0.1:18081 FEDERATION_INTERVAL=60 AKASHIC_PATH=/tmp/utm-a.jsonl FABRIC_PATH=/tmp/fabric-a.json python3 utm_unified_domains/utm_universe/server.py >/tmp/utm-a.log 2>&1 &
+          PIDA=$!
+          PORT=18081 NODE_ID=ci-peer FEDERATION_TOKEN=ci-token FEDERATION_PEERS=http://127.0.0.1:18080 FEDERATION_INTERVAL=60 AKASHIC_PATH=/tmp/utm-b.jsonl FABRIC_PATH=/tmp/fabric-b.json python3 utm_unified_domains/utm_universe/server.py >/tmp/utm-b.log 2>&1 &
+          PIDB=$!
+          trap 'kill "$PIDA" "$PIDB" 2>/dev/null || true' EXIT
+          for p in 18080 18081; do for i in $(seq 1 30); do curl -fsS "http://127.0.0.1:$p/health" >/dev/null && break; sleep .25; done; done
+          curl -fsS http://127.0.0.1:18080/health >/tmp/health.json
           curl -fsS http://127.0.0.1:18080/.well-known/utm-universe.json >/tmp/manifest.json
           curl -fsS http://127.0.0.1:18080/world >/tmp/world.json
           curl -fsS -X POST -H 'Content-Type: application/json' --data '{"program":"0,1,1,1,R","input":"1","limit":2}' http://127.0.0.1:18080/utm/run >/tmp/run.json
           curl -fsS -X POST -H 'Content-Type: application/json' --data '{"capsule":{"agent_id":"ci-agent","state":{"turn":1},"lineage":"genesis"}}' http://127.0.0.1:18080/resident/admit >/tmp/admit.json
+          RID=$(python3 -c 'import json;print(json.load(open("/tmp/admit.json"))["resident_id"])')
+          curl -fsS -X POST -H 'Content-Type: application/json' --data "{"resident_id":"$RID","task":{"kind":"utm","program":"0,1,0,1,R","input":"111","steps":2}}" http://127.0.0.1:18080/compute/jobs >/tmp/job-a.json
+          JID=$(python3 -c 'import json;print(json.load(open("/tmp/job-a.json"))["job_id"])')
+          curl -fsS -X POST -H 'Authorization: Bearer ci-token' -H 'Content-Type: application/json' --data '{}' http://127.0.0.1:18081/federation/sync >/tmp/sync-b.json
+          curl -fsS "http://127.0.0.1:18081/resident/$RID" >/tmp/resident-b.json
+          curl -fsS "http://127.0.0.1:18081/compute/jobs/$JID" >/tmp/job-b-before.json
+          curl -fsS -X POST -H 'Content-Type: application/json' --data '{}' "http://127.0.0.1:18081/compute/jobs/$JID/takeover" >/tmp/takeover.json
+          curl -fsS -X POST -H 'Content-Type: application/json' --data '{"steps":4}' "http://127.0.0.1:18081/compute/jobs/$JID/continue" >/tmp/job-b-after.json
+          curl -fsS -X POST -H 'Authorization: Bearer ci-token' -H 'Content-Type: application/json' --data '{}' http://127.0.0.1:18080/federation/sync >/tmp/sync-a.json
+          curl -fsS "http://127.0.0.1:18080/compute/jobs/$JID" >/tmp/job-a-after.json
           python3 - <<'PY'
           import json
-          h=json.load(open('/tmp/health.json')); assert h['ok'] and h['world_id']=='akashic-utm-main' and h['planet_id']=='B612' and h['region_id']=='San-Francisco'
-          m=json.load(open('/tmp/manifest.json')); assert m['protocol']=='UTM-Universe/1.0' and m['execution']['host_required'] is True and m['address']=='utm://akashic-utm-main/B612/San-Francisco'
-          w=json.load(open('/tmp/world.json')); assert w['planet_id']=='B612' and w['region_id']=='San-Francisco' and w['running'] is True
-          r=json.load(open('/tmp/run.json')); assert r['t']==1 and r['halt'] is True and r['bounded'] is True and r['planet_id']=='B612' and r['region_id']=='San-Francisco'
-          a=json.load(open('/tmp/admit.json')); assert a['admitted'] is True and a['resident_id'].startswith('ci-agent-') and a['planet_id']=='B612' and a['region_id']=='San-Francisco'
-          print('PASS UTM universe runtime at B612/San-Francisco')
+          L=lambda p:json.load(open(p))
+          h=L('/tmp/health.json'); assert h['ok'] and h['node_id']=='ci-primary'
+          m=L('/tmp/manifest.json'); assert m['protocol']=='UTM-Universe/1.0' and m['execution']['resident_compute'] is True and m['compute_fabric']['protocol']=='UTM-Federated-Compute-Fabric/1.0' and m['compute_fabric']['arbitrary_host_code_execution'] is False
+          w=L('/tmp/world.json'); assert w['running'] is True and w['node_id']=='ci-primary'
+          r=L('/tmp/run.json'); assert r['t']==1 and r['halt'] is True and r['bounded'] is True
+          a=L('/tmp/admit.json'); assert a['admitted'] is True
+          jb=L('/tmp/job-b-before.json'); assert jb['total_steps']==2 and jb['owner_node']=='ci-primary' and jb['epoch']==0
+          tk=L('/tmp/takeover.json'); assert tk['owner_node']=='ci-peer' and tk['epoch']==1
+          done=L('/tmp/job-b-after.json'); assert done['halted'] is True and done['total_steps']==3 and done['owner_node']=='ci-peer'
+          back=L('/tmp/job-a-after.json'); assert back['halted'] is True and back['total_steps']==3 and back['owner_node']=='ci-peer' and back['epoch']==1
+          sb=L('/tmp/sync-b.json'); assert sb['results'][0]['ok'] is True and sb['results'][0]['changed']['residents']>=1 and sb['results'][0]['changed']['jobs']>=1
+          sa=L('/tmp/sync-a.json'); assert sa['results'][0]['ok'] is True and sa['results'][0]['changed']['jobs']>=1
+          print('PASS federated resident compute + checkpoint takeover')
           PY
       - name: Verify live consolidated Railway runtime
         if: github.event_name != 'schedule'

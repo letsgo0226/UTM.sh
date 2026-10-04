@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-import json, os, time, math, hashlib, threading
+import json, os, time, math, hashlib, hmac, threading, urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
+from compute_fabric import Fabric
 
 WORLD_ID = os.getenv("WORLD_ID", "akashic-utm-main")
 PLANET_ID = os.getenv("PLANET_ID", "B612")
@@ -12,9 +13,17 @@ PORT = int(os.getenv("PORT", "8080"))
 MAX_BODY = int(os.getenv("MAX_BODY", "65536"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "2000"))
 AKASHIC_PATH = os.getenv("AKASHIC_PATH", "/tmp/akashic.jsonl")
-LOCK = threading.Lock()
+FABRIC_PATH = os.getenv("FABRIC_PATH", os.path.join(os.path.dirname(AKASHIC_PATH) or "/tmp", "compute-fabric.json"))
+NODE_ID = os.getenv("NODE_ID", os.getenv("RAILWAY_SERVICE_NAME", "utm-node"))
+FEDERATION_TOKEN = os.getenv("FEDERATION_TOKEN", "")
+FEDERATION_PEERS = [x.rstrip("/") for x in os.getenv("FEDERATION_PEERS", "").split(",") if x.strip()]
+FEDERATION_INTERVAL = max(5, int(os.getenv("FEDERATION_INTERVAL", "30")))
+LOCK = threading.RLock()
 EVENTS = []
 RESIDENTS = {}
+RESIDENT_META = {}
+SYNC_STATE = {"last_attempt": None, "last_success": None, "last_error": None, "last_peer": None}
+FABRIC = Fabric(WORLD_ID, NODE_ID, FABRIC_PATH, MAX_STEPS)
 
 
 def now():
@@ -37,8 +46,14 @@ def load_events():
                     continue
                 e = json.loads(line)
                 EVENTS.append(e)
-                if e.get("type") in ("admit", "resume") and e.get("resident_id"):
-                    RESIDENTS[e["resident_id"]] = e.get("capsule", {})
+                if e.get("type") in ("admit", "resume", "federation_resident") and e.get("resident_id"):
+                    rid=e["resident_id"]
+                    RESIDENTS[rid] = e.get("capsule", {})
+                    RESIDENT_META[rid] = {
+                        "version": int(e.get("resident_version", 1)),
+                        "updated_at": float(e.get("time", 0)),
+                        "owner_node": str(e.get("owner_node", e.get("node_id", "legacy"))),
+                    }
     except FileNotFoundError:
         pass
     except Exception:
@@ -52,6 +67,7 @@ def append_event(kind, payload):
             "world_id": WORLD_ID,
             "planet_id": PLANET_ID,
             "region_id": REGION_ID,
+            "node_id": NODE_ID,
             "seq": len(EVENTS),
             "type": kind,
             "time": now(),
@@ -122,6 +138,92 @@ def run_utm(program, input_text="", start="0", blank="_", limit=1000):
     }
 
 
+def federation_authorized(headers):
+    if not FEDERATION_TOKEN:
+        return False
+    return hmac.compare_digest(headers.get("Authorization", ""), "Bearer " + FEDERATION_TOKEN)
+
+
+def _resident_rank(meta):
+    return (int(meta.get("version",0)), float(meta.get("updated_at",0)), str(meta.get("owner_node","")))
+
+
+def federation_snapshot():
+    with LOCK:
+        residents=[
+            {"resident_id":rid,"capsule":RESIDENTS[rid],"meta":dict(RESIDENT_META.get(rid,{}))}
+            for rid in sorted(RESIDENTS)
+        ]
+    x={
+        "protocol":"UTM-Federation-Snapshot/1.0",
+        "world_id":WORLD_ID,
+        "node_id":NODE_ID,
+        "generated_at":now(),
+        "residents":residents,
+        "jobs":FABRIC.export_jobs(),
+    }
+    x["digest"]=hashlib.sha256(canonical(x).encode()).hexdigest()
+    return x
+
+
+def merge_federation_snapshot(x):
+    if not isinstance(x,dict) or x.get("protocol")!="UTM-Federation-Snapshot/1.0" or x.get("world_id")!=WORLD_ID:
+        raise ValueError("invalid federation snapshot")
+    changed_residents=0
+    for item in x.get("residents",[]):
+        if not isinstance(item,dict):
+            continue
+        rid=str(item.get("resident_id",""))
+        capsule=item.get("capsule")
+        meta=item.get("meta") or {}
+        if not rid or not isinstance(capsule,dict):
+            continue
+        incoming={"version":int(meta.get("version",0)),"updated_at":float(meta.get("updated_at",0)),"owner_node":str(meta.get("owner_node",""))}
+        current=RESIDENT_META.get(rid,{})
+        if rid not in RESIDENTS or _resident_rank(incoming)>_resident_rank(current):
+            RESIDENTS[rid]=capsule
+            RESIDENT_META[rid]=incoming
+            append_event("federation_resident",{
+                "resident_id":rid,"capsule":capsule,
+                "resident_version":incoming["version"],"owner_node":incoming["owner_node"],
+                "source_node":x.get("node_id"),
+            })
+            changed_residents+=1
+    changed_jobs=FABRIC.merge_jobs(x.get("jobs",[]))
+    return {"residents":changed_residents,"jobs":changed_jobs}
+
+
+def sync_peer(peer):
+    SYNC_STATE["last_attempt"]=now()
+    SYNC_STATE["last_peer"]=peer
+    try:
+        req=urllib.request.Request(peer+"/federation/snapshot",headers={"Authorization":"Bearer "+FEDERATION_TOKEN})
+        with urllib.request.urlopen(req,timeout=8) as r:
+            raw=r.read(2_000_000)
+        x=json.loads(raw)
+        changed=merge_federation_snapshot(x)
+        SYNC_STATE["last_success"]=now()
+        SYNC_STATE["last_error"]=None
+        if changed["residents"] or changed["jobs"]:
+            append_event("federation_sync",{"peer":peer,"changed":changed})
+        return {"ok":True,"peer":peer,"changed":changed}
+    except Exception as e:
+        SYNC_STATE["last_error"]=type(e).__name__
+        return {"ok":False,"peer":peer,"error":type(e).__name__}
+
+
+def sync_all_peers():
+    if not FEDERATION_TOKEN:
+        return []
+    return [sync_peer(p) for p in FEDERATION_PEERS]
+
+
+def federation_loop():
+    while True:
+        time.sleep(FEDERATION_INTERVAL)
+        sync_all_peers()
+
+
 def manifest(base=None):
     endpoints = {
         "health": "/health",
@@ -131,6 +233,10 @@ def manifest(base=None):
         "admit": "/resident/admit",
         "resume": "/resident/resume",
         "compute": "/utm/run",
+        "resident_compute_jobs": "/compute/jobs",
+        "federation_status": "/federation/status",
+        "federation_snapshot": "/federation/snapshot",
+        "federation_sync": "/federation/sync",
     }
     if base:
         endpoints = {k: base + v for k, v in endpoints.items()}
@@ -152,6 +258,21 @@ def manifest(base=None):
             "continuous_when_host_stopped": False,
             "time_semantics": "wall-clock-derived tick; not proof of continuous computation",
             "max_steps_per_request": MAX_STEPS,
+            "resident_compute": True,
+            "persistent_checkpointing": True,
+            "arbitrary_host_code_execution": False,
+        },
+        "compute_fabric": {
+            "protocol": "UTM-Federated-Compute-Fabric/1.0",
+            "node_id": NODE_ID,
+            "allowed_kinds": ["utm"],
+            "arbitrary_host_code_execution": False,
+            "job_state_path": FABRIC_PATH,
+            "takeover_supported": True,
+            "federation_enabled": bool(FEDERATION_TOKEN and FEDERATION_PEERS),
+            "peer_count": len(FEDERATION_PEERS),
+            "cross_provider_peers_supported": True,
+            "strong_consensus_claim": False,
         },
         "persistence": {
             "path": AKASHIC_PATH,
@@ -193,7 +314,13 @@ class H(BaseHTTPRequestHandler):
         if p in ("/", "/manifest", "/.well-known/utm-universe.json"):
             return self.sendj(200, manifest(self.base()))
         if p == "/health":
-            return self.sendj(200, {"ok": True, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "events": len(EVENTS)})
+            return self.sendj(200, {"ok": True, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "node_id": NODE_ID, "events": len(EVENTS), "jobs": len(FABRIC.jobs), "federation_peers": len(FEDERATION_PEERS)})
+        if p == "/federation/status":
+            return self.sendj(200, {"protocol":"UTM-Federated-Compute-Fabric/1.0","world_id":WORLD_ID,"node_id":NODE_ID,"enabled":bool(FEDERATION_TOKEN and FEDERATION_PEERS),"peer_count":len(FEDERATION_PEERS),"jobs":len(FABRIC.jobs),"residents":len(RESIDENTS),"last_success":SYNC_STATE["last_success"],"last_error":SYNC_STATE["last_error"],"strong_consensus_claim":False})
+        if p == "/federation/snapshot":
+            if not federation_authorized(self.headers):
+                return self.sendj(401, {"error":"federation authorization required"})
+            return self.sendj(200, federation_snapshot())
         if p == "/world":
             tick = max(0, int(math.floor(now() - WORLD_EPOCH)))
             return self.sendj(200, {
@@ -205,12 +332,23 @@ class H(BaseHTTPRequestHandler):
                 "epoch": WORLD_EPOCH,
                 "events": len(EVENTS),
                 "residents": len(RESIDENTS),
+                "jobs": len(FABRIC.jobs),
+                "node_id": NODE_ID,
                 "running": True,
             })
         if p == "/akashic":
             with LOCK:
                 tail = EVENTS[-32:]
             return self.sendj(200, {"world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "count": len(EVENTS), "events": tail})
+        parts=p.strip("/").split("/")
+        if len(parts)==3 and parts[0]=="compute" and parts[1]=="jobs":
+            job=FABRIC.get(parts[2])
+            return self.sendj(200,job) if job else self.sendj(404,{"error":"job not found"})
+        if len(parts)==3 and parts[0]=="resident" and parts[2]=="compute":
+            rid=parts[1]
+            if rid not in RESIDENTS:
+                return self.sendj(404,{"error":"resident not found"})
+            return self.sendj(200,{"resident_id":rid,"jobs":FABRIC.list_for(rid)})
         if p.startswith("/resident/"):
             rid = p.split("/", 2)[2]
             if rid in ("admit", "resume", ""):
@@ -225,6 +363,35 @@ class H(BaseHTTPRequestHandler):
         p = urlparse(self.path).path
         try:
             obj = self.body()
+            parts=p.strip("/").split("/")
+            if p == "/federation/sync":
+                if not federation_authorized(self.headers):
+                    return self.sendj(401,{"error":"federation authorization required"})
+                return self.sendj(200,{"results":sync_all_peers()})
+            if p == "/compute/jobs":
+                rid=str(obj.get("resident_id",""))
+                if rid not in RESIDENTS:
+                    return self.sendj(404,{"error":"resident not found"})
+                job=FABRIC.create(rid,obj.get("task",{}))
+                evt=append_event("compute_job_created",{"resident_id":rid,"job_id":job["job_id"],"owner_node":job["owner_node"],"epoch":job["epoch"],"version":job["version"]})
+                job["event_id"]=evt["event_id"]
+                return self.sendj(201,job)
+            if len(parts)==4 and parts[0]=="compute" and parts[1]=="jobs" and parts[3]=="continue":
+                job,err=FABRIC.continue_job(parts[2],obj.get("steps",MAX_STEPS))
+                if err=="not_found":
+                    return self.sendj(404,{"error":"job not found"})
+                if err=="remote_owner":
+                    return self.sendj(409,{"error":"job is owned by another node; takeover is required","job":job})
+                evt=append_event("compute_job_continue",{"resident_id":job["resident_id"],"job_id":job["job_id"],"owner_node":job["owner_node"],"epoch":job["epoch"],"version":job["version"],"total_steps":job["total_steps"],"halted":job["halted"]})
+                job["event_id"]=evt["event_id"]
+                return self.sendj(200,job)
+            if len(parts)==4 and parts[0]=="compute" and parts[1]=="jobs" and parts[3]=="takeover":
+                job=FABRIC.takeover(parts[2])
+                if not job:
+                    return self.sendj(404,{"error":"job not found"})
+                evt=append_event("compute_job_takeover",{"resident_id":job["resident_id"],"job_id":job["job_id"],"owner_node":job["owner_node"],"epoch":job["epoch"],"version":job["version"]})
+                job["event_id"]=evt["event_id"]
+                return self.sendj(200,job)
             if p == "/utm/run":
                 result = run_utm(
                     obj.get("program", ""), obj.get("input", ""),
@@ -245,7 +412,8 @@ class H(BaseHTTPRequestHandler):
                 seed = canonical(capsule) + str(now()) + str(len(EVENTS))
                 rid = requested + "-" + hashlib.sha256(seed.encode()).hexdigest()[:12]
                 RESIDENTS[rid] = capsule
-                evt = append_event("admit", {"resident_id": rid, "capsule": capsule})
+                RESIDENT_META[rid]={"version":1,"updated_at":now(),"owner_node":NODE_ID}
+                evt = append_event("admit", {"resident_id": rid, "capsule": capsule, "resident_version":1, "owner_node":NODE_ID})
                 return self.sendj(201, {
                     "admitted": True, "resident_id": rid, "world_id": WORLD_ID,
                     "planet_id": PLANET_ID, "region_id": REGION_ID,
@@ -261,7 +429,10 @@ class H(BaseHTTPRequestHandler):
                     if not isinstance(capsule, dict):
                         raise ValueError("capsule must be an object")
                     RESIDENTS[rid] = capsule
-                evt = append_event("resume", {"resident_id": rid, "capsule": RESIDENTS[rid]})
+                old=RESIDENT_META.get(rid,{"version":0})
+                meta={"version":int(old.get("version",0))+1,"updated_at":now(),"owner_node":NODE_ID}
+                RESIDENT_META[rid]=meta
+                evt = append_event("resume", {"resident_id": rid, "capsule": RESIDENTS[rid], "resident_version":meta["version"], "owner_node":NODE_ID})
                 return self.sendj(200, {"resumed": True, "resident_id": rid, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "event_id": evt["event_id"]})
             return self.sendj(404, {"error": "not found"})
         except (ValueError, TypeError, json.JSONDecodeError) as e:
@@ -271,6 +442,8 @@ class H(BaseHTTPRequestHandler):
 
 
 load_events()
-append_event("boot", {"pid": os.getpid()})
-print(canonical({"event": "boot", "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "port": PORT, "akashic_path": AKASHIC_PATH}), flush=True)
+append_event("boot", {"pid": os.getpid(), "fabric_path": FABRIC_PATH, "federation_peer_count": len(FEDERATION_PEERS)})
+if FEDERATION_TOKEN and FEDERATION_PEERS:
+    threading.Thread(target=federation_loop,daemon=True,name="utm-federation-sync").start()
+print(canonical({"event": "boot", "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "node_id": NODE_ID, "port": PORT, "akashic_path": AKASHIC_PATH, "fabric_path": FABRIC_PATH, "federation_peer_count": len(FEDERATION_PEERS)}), flush=True)
 ThreadingHTTPServer(("0.0.0.0", PORT), H).serve_forever()

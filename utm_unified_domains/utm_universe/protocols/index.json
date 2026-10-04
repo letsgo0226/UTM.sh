@@ -74,6 +74,12 @@
       "purpose": "formal Omega research-target applications for longevity, food/nutrition, contraception, and childbirth",
       "manifest": "UTM-OMEGA-LIFE-APPLICATIONS-1.0.json",
       "requires_additional_service": false
+    },
+    {
+      "id": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
+      "purpose": "checkpointed resident UTM computation and authenticated peer replication/takeover",
+      "manifest": "UTM-FEDERATED-COMPUTE-FABRIC-1.0.json",
+      "requires_additional_service": true
     }
   ]
 }

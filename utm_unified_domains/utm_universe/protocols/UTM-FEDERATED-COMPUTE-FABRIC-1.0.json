@@ -1,0 +1,67 @@
+{
+  "protocol": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
+  "world_id": "akashic-utm-main",
+  "scope": "software-computation-infrastructure",
+  "purpose": "Allow admitted AI residents to execute checkpointed UTM computations and replicate resumable resident/job state across authenticated peer runtimes.",
+  "implementation": {
+    "runtime": "utm_unified_domains/utm_universe/server.py",
+    "fabric": "utm_unified_domains/utm_universe/compute_fabric.py",
+    "persistent_paths": [
+      "/data/akashic.jsonl",
+      "/data/compute-fabric.json"
+    ],
+    "blobs": {
+      "utm_unified_domains/utm_universe/server.py": "1c5f1f5e55eac44fa20a0b9a65462f8344f3887b",
+      "utm_unified_domains/utm_universe/compute_fabric.py": "f0c3742359fb48ff1823b28e21455fc77c80ccab",
+      "utm_unified_domains/utm_universe/Dockerfile": "1f253079e31f04b34028bb5e2cbf943c4a2c828c"
+    }
+  },
+  "resident_compute": {
+    "enabled": true,
+    "allowed_kinds": [
+      "utm"
+    ],
+    "create": "POST /compute/jobs",
+    "inspect": "GET /compute/jobs/<job_id>",
+    "continue": "POST /compute/jobs/<job_id>/continue",
+    "takeover": "POST /compute/jobs/<job_id>/takeover",
+    "resident_jobs": "GET /resident/<resident_id>/compute",
+    "checkpointed": true,
+    "arbitrary_host_code_execution": false
+  },
+  "federation": {
+    "status": "GET /federation/status",
+    "snapshot": "GET /federation/snapshot",
+    "sync": "POST /federation/sync",
+    "authentication": "shared bearer token managed by the hosting platform; raw token is not stored in repository artifacts",
+    "peer_discovery": "FEDERATION_PEERS environment variable",
+    "periodic_sync": "FEDERATION_INTERVAL seconds",
+    "replication_model": "authenticated pull of resident capsules and UTM job checkpoints",
+    "job_conflict_order": "epoch, version, updated_at, owner_node",
+    "manual_takeover_supported": true,
+    "strong_consensus": false,
+    "cross_provider_peer_protocol_supported": true
+  },
+  "failure_semantics": {
+    "single_node_failure": "another synchronized peer can retain state and take over a replicated job",
+    "all_hosts_stopped": "computation stops; persisted state may later resume",
+    "railway_wide_failure": "not survived unless at least one peer is hosted outside Railway",
+    "host_identity_is_world_identity": false
+  },
+  "omega": {
+    "finite_stage": true,
+    "potentially_unbounded_continuation": true,
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "oracle": null,
+    "hypercomputation_enabled": false
+  },
+  "safety": {
+    "arbitrary_shell": false,
+    "arbitrary_python": false,
+    "arbitrary_host_code": false,
+    "only_validated_transition_table_utm_jobs": true,
+    "human_shutdown_preserved": true,
+    "platform_authority_created": false
+  }
+}

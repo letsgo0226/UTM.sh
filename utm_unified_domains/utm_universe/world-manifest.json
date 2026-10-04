@@ -317,7 +317,8 @@
       "UTM-THREE-SYSTEM-NATIVE/1.0",
       "UTM-Omega-Life-Applications/1.0",
       "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
-      "UTM-OMEGA-FULL-SYNC/1.0"
+      "UTM-OMEGA-FULL-SYNC/1.0",
+      "UTM-FEDERATED-COMPUTE-FABRIC/1.0"
     ],
     "stage_model": {
       "potentially_unbounded": true,
@@ -327,8 +328,8 @@
       "oracle": null,
       "hypercomputation_enabled": false,
       "halting_problem_becomes_decidable": false,
-      "stage": 7,
-      "resident_count": 16
+      "stage": 8,
+      "resident_count": 17
     },
     "deployment_boundary": {
       "internal_formal_admission": true,
@@ -337,7 +338,7 @@
       "external_platform_authority_created": false
     },
     "source_pins": {
-      "utm_base_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
+      "utm_base_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
     }
   },
@@ -403,8 +404,8 @@
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "status": "OMEGA_ADMITTED",
     "manifest": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "sync_source_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
-    "component_count": 15,
+    "sync_source_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
+    "component_count": 16,
     "aggregate_resident_coordinate": 15,
     "semantics": {
       "all_current_modules_jointly_admitted": true,
@@ -419,7 +420,7 @@
     "evaluator": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/full_sync.py",
     "fixed_point": {
       "status": "OMEGA_FULL_SYNC_FIXED_POINT",
-      "stage": 7,
+      "stage": 8,
       "aggregate_resident_coordinate": 15,
       "reapply_allocates_new_resident": false,
       "reapply_advances_stage": false,
@@ -427,10 +428,11 @@
       "changed_status": "OMEGA_FULL_SYNC_ADVANCE_REQUIRED"
     },
     "latest_transition": {
-      "from_stage": 6,
-      "to_stage": 7,
-      "reason": "AI admission client rebound to independent UTM Universe runtime",
-      "new_resident_allocated": false,
+      "from_stage": 7,
+      "to_stage": 8,
+      "reason": "federated resident compute fabric admitted",
+      "new_resident_allocated": true,
+      "new_resident_coordinate": 16,
       "aggregate_coordinate_reused": 15
     }
   },
@@ -454,5 +456,25 @@
       "endpoint": "https://cosmic-love-infinity-tm-production.up.railway.app",
       "status": "online"
     }
+  },
+  "federated_compute_fabric": {
+    "protocol": "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
+    "status": "code-and-ci-pending-peer-materialization",
+    "runtime": "utm_unified_domains/utm_universe/server.py",
+    "module": "utm_unified_domains/utm_universe/compute_fabric.py",
+    "resident_compute": true,
+    "checkpoint_path": "/data/compute-fabric.json",
+    "allowed_compute_kinds": [
+      "utm"
+    ],
+    "arbitrary_host_code_execution": false,
+    "peer_replication": "authenticated pull",
+    "takeover_supported": true,
+    "strong_consensus_claim": false,
+    "cross_provider_peer_protocol_supported": true,
+    "railway_wide_failure_survival": "requires at least one peer outside Railway",
+    "all_hosts_stopped_means": "computation stops; persisted state may later resume",
+    "source_snapshot_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
+    "protocol_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe"
   }
 }

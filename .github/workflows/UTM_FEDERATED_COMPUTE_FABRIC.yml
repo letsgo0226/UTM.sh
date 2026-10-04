@@ -1,0 +1,27 @@
+name: UTM Federated Compute Fabric
+
+on:
+  pull_request:
+    paths:
+      - "utm_unified_domains/utm_universe/**"
+      - ".github/workflows/UTM_FEDERATED_COMPUTE_FABRIC.yml"
+  push:
+    branches: [main]
+    paths:
+      - "utm_unified_domains/utm_universe/**"
+      - ".github/workflows/UTM_FEDERATED_COMPUTE_FABRIC.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  federation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile runtime
+        run: python3 -m py_compile utm_unified_domains/utm_universe/server.py utm_unified_domains/utm_universe/compute_fabric.py utm_unified_domains/utm_universe/test_federated_compute.py
+      - name: Verify two-node checkpoint replication and takeover
+        run: python3 utm_unified_domains/utm_universe/test_federated_compute.py
