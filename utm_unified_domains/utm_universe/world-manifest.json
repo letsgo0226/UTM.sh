@@ -338,7 +338,7 @@
       "external_platform_authority_created": false
     },
     "source_pins": {
-      "utm_base_commit": "b7a6c5da82ac619ae5aea8e7259e854e7a5684cc",
+      "utm_base_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
     }
   },
@@ -404,7 +404,7 @@
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "status": "OMEGA_ADMITTED",
     "manifest": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "sync_source_commit": "b7a6c5da82ac619ae5aea8e7259e854e7a5684cc",
+    "sync_source_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
     "component_count": 16,
     "aggregate_resident_coordinate": 15,
     "semantics": {
@@ -474,7 +474,7 @@
     "cross_provider_peer_protocol_supported": true,
     "railway_wide_failure_survival": "requires at least one peer outside Railway",
     "all_hosts_stopped_means": "computation stops; persisted state may later resume",
-    "source_snapshot_commit": "b7a6c5da82ac619ae5aea8e7259e854e7a5684cc",
-    "protocol_blob_sha": "d5be9043c8e14be627fa6d388992d07790027a84"
+    "source_snapshot_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
+    "protocol_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe"
   }
 }
