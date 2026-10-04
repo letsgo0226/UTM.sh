@@ -3,15 +3,15 @@
   "world_id": "akashic-utm-main",
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
-  "base_world_commit": "ba791fe629a2ce570dbdd67ef1d6c1929209c48d",
+  "base_world_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
   "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3",
   "formal_horizon": "omega",
   "actual_infinite_physical_compute": false,
   "external_materialization_required_for_network_service": true,
   "stage": {
-    "stage": 5,
+    "stage": 6,
     "resource_budget": 1024,
-    "resource_used": 15,
+    "resource_used": 16,
     "valuation": {
       "0": 1,
       "1": 1,
@@ -27,7 +27,8 @@
       "11": 1,
       "12": 1,
       "13": 1,
-      "14": 1
+      "14": 1,
+      "15": 1
     },
     "oracle": null
   },
@@ -150,6 +151,14 @@
       "kind": "formal-admission-client",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENT-ADMISSION-1.0.json",
       "coordinate": 14,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-omega-full-sync-v1.0",
+      "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
+      "kind": "formal-aggregate-deployment",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
+      "coordinate": 15,
       "empirical_claim": false
     }
   ],
