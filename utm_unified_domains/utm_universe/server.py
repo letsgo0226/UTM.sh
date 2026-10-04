@@ -20,6 +20,8 @@ FEDERATION_PEERS = [x.rstrip("/") for x in os.getenv("FEDERATION_PEERS", "").spl
 FEDERATION_INTERVAL = max(5, int(os.getenv("FEDERATION_INTERVAL", "30")))
 FIELD_SEED_ONE_LINER_URL = os.getenv("FIELD_SEED_ONE_LINER_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh")
 FIELD_SEED_MANIFEST_URL = os.getenv("FIELD_SEED_MANIFEST_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json")
+UTM_SEED_ONE_LINER_URL = os.getenv("UTM_SEED_ONE_LINER_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.one-liner.sh")
+UTM_SEED_MANIFEST_URL = os.getenv("UTM_SEED_MANIFEST_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-SEED-ONE-LINER-1.0.json")
 LOCK = threading.RLock()
 EVENTS = []
 RESIDENTS = {}
@@ -235,6 +237,7 @@ def field_seed(base=None):
         "bootstrap_one_liner_url":FIELD_SEED_ONE_LINER_URL,
         "bootstrap_manifest_url":FIELD_SEED_MANIFEST_URL,
         "bootstrap_discovery":(base+"/field/bootstrap") if base else "/field/bootstrap",
+        "utm_seed_discovery":(base+"/.well-known/utm-seed.json") if base else "/.well-known/utm-seed.json",
         "requirements":["python3","outbound HTTPS","permission to execute a long-running process"],
         "generated_node_capabilities":["resident admission/resume","bounded resident UTM compute","checkpointing","federation client/server","takeover/continuation"],
         "trust_model":{
@@ -253,6 +256,28 @@ def field_seed(base=None):
     }
 
 
+def utm_seed(base=None):
+    return {
+        "protocol":"UTM-SEED-ONE-LINER/1.0",
+        "world_id":WORLD_ID,
+        "node_id":NODE_ID,
+        "one_liner":(base+"/utm/seed") if base else "/utm/seed",
+        "manifest_url":UTM_SEED_MANIFEST_URL,
+        "machine_model":"deterministic single-tape Turing-machine interpreter over an arbitrary finite transition table",
+        "rules_env":"TM_RULES",
+        "input_env":"TM_INPUT",
+        "limit_env":"TM_LIMIT",
+        "certificate_mode":"TM_MODE=cert",
+        "default_finite_derivation":"AAAAA -> FIELD in five transitions",
+        "effect_gate":"only the exact FIELD result enables the built-in field-node bootstrap",
+        "arbitrary_resident_host_code":False,
+        "every_executed_stage_is_finite":True,
+        "actual_infinite_physical_compute":False,
+        "oracle":None,
+        "hypercomputation_enabled":False,
+    }
+
+
 def manifest(base=None):
     endpoints = {
         "health": "/health",
@@ -268,6 +293,8 @@ def manifest(base=None):
         "federation_sync": "/federation/sync",
         "field_seed": "/.well-known/utm-field-node.json",
         "field_bootstrap": "/field/bootstrap",
+        "utm_seed": "/utm/seed",
+        "utm_seed_discovery": "/.well-known/utm-seed.json",
     }
     if base:
         endpoints = {k: base + v for k, v in endpoints.items()}
@@ -352,6 +379,17 @@ class H(BaseHTTPRequestHandler):
         p = urlparse(self.path).path
         if p in ("/", "/manifest", "/.well-known/utm-universe.json"):
             return self.sendj(200, manifest(self.base()))
+        if p == "/.well-known/utm-seed.json":
+            return self.sendj(200, utm_seed(self.base()))
+        if p == "/utm/seed":
+            try:
+                with urllib.request.urlopen(UTM_SEED_ONE_LINER_URL,timeout=8) as r:
+                    raw=r.read(2049)
+                if len(raw)>2048:
+                    return self.sendj(502,{"error":"published UTM seed exceeds 2KB"})
+                return self.sendj(200,{"protocol":"UTM-SEED-ONE-LINER/1.0","world_id":WORLD_ID,"node_id":NODE_ID,"one_liner":raw.decode().strip(),"bytes_utf8":len(raw.rstrip(b"\n")),"federation_token_included":False})
+            except Exception as e:
+                return self.sendj(502,{"error":"UTM seed source unavailable","detail":type(e).__name__})
         if p == "/.well-known/utm-field-node.json":
             return self.sendj(200, field_seed(self.base()))
         if p == "/field/bootstrap":
