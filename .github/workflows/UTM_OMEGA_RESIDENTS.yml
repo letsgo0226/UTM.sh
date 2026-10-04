@@ -24,9 +24,12 @@ jobs:
           python3 -m py_compile \
             utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/principle_vector.py \
             utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/infinite_deployment.py \
+            utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/full_sync.py \
             utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/verify_residents.py
       - name: Verify UTM-Omega resident stage
         run: python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/verify_residents.py
+      - name: Verify idempotent Omega Full-Sync
+        run: python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/full_sync.py
       - name: Resident integration tests
         run: python3 utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/test_residents.py
       - name: JSON manifests parse
@@ -38,6 +41,7 @@ jobs:
             'utm_unified_domains/utm_universe/world-manifest.json',
             'utm_unified_domains/utm_universe/protocols/index.json',
             'utm_unified_domains/utm_universe/protocols/UTM-OMEGA-RESIDENTS-1.1.json',
+            'utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json',
             'utm_unified_domains/utm_universe/subprojects/index.json',
             'utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/manifest.json',
             'utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/resident_registry.json',
