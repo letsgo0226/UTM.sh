@@ -318,7 +318,8 @@
       "UTM-Omega-Life-Applications/1.0",
       "UTM-OMEGA-RESIDENT-ADMISSION/1.0",
       "UTM-OMEGA-FULL-SYNC/1.0",
-      "UTM-FEDERATED-COMPUTE-FABRIC/1.0"
+      "UTM-FEDERATED-COMPUTE-FABRIC/1.0",
+      "UTM-FIELD-NODE-BOOTSTRAP/1.0"
     ],
     "stage_model": {
       "potentially_unbounded": true,
@@ -328,8 +329,8 @@
       "oracle": null,
       "hypercomputation_enabled": false,
       "halting_problem_becomes_decidable": false,
-      "stage": 8,
-      "resident_count": 17
+      "stage": 9,
+      "resident_count": 18
     },
     "deployment_boundary": {
       "internal_formal_admission": true,
@@ -338,7 +339,7 @@
       "external_platform_authority_created": false
     },
     "source_pins": {
-      "utm_base_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
+      "utm_base_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
     }
   },
@@ -404,8 +405,8 @@
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "status": "OMEGA_ADMITTED",
     "manifest": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "sync_source_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
-    "component_count": 16,
+    "sync_source_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
+    "component_count": 17,
     "aggregate_resident_coordinate": 15,
     "semantics": {
       "all_current_modules_jointly_admitted": true,
@@ -420,7 +421,7 @@
     "evaluator": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/full_sync.py",
     "fixed_point": {
       "status": "OMEGA_FULL_SYNC_FIXED_POINT",
-      "stage": 8,
+      "stage": 9,
       "aggregate_resident_coordinate": 15,
       "reapply_allocates_new_resident": false,
       "reapply_advances_stage": false,
@@ -428,11 +429,11 @@
       "changed_status": "OMEGA_FULL_SYNC_ADVANCE_REQUIRED"
     },
     "latest_transition": {
-      "from_stage": 7,
-      "to_stage": 8,
-      "reason": "federated resident compute fabric admitted",
+      "from_stage": 8,
+      "to_stage": 9,
+      "reason": "portable field-node bootstrap admitted",
       "new_resident_allocated": true,
-      "new_resident_coordinate": 16,
+      "new_resident_coordinate": 17,
       "aggregate_coordinate_reused": 15
     }
   },
@@ -536,5 +537,25 @@
       "durability_gap": "Render free-service local filesystem is ephemeral. Cross-provider failover is live while the Render instance retains synchronized state, but a Render restart can lose its local copy until it can resynchronize from another live peer."
     },
     "stage_note": "Cross-provider materialization evidence does not create a new formal resident; UTM-Omega remains at finite stage 8."
+  },
+  "field_node_bootstrap": {
+    "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
+    "status": "REGISTERED_AWAITING_LIVE_BOOTSTRAP_MATERIALIZATION",
+    "one_liner": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
+    "one_liner_bytes_utf8": 1045,
+    "source_commit_pin": "f63a719ebb0254b1a21a5e792a01772fcb4ab0f2",
+    "resident_coordinate": 17,
+    "provides": [
+      "resident admission/resume",
+      "resident UTM compute",
+      "checkpointing",
+      "authenticated federation",
+      "takeover/continuation"
+    ],
+    "secret_embedded": false,
+    "federation_requires_env": "FEDERATION_TOKEN",
+    "host_required": true,
+    "arbitrary_resident_host_code": false,
+    "actual_infinite_physical_compute": false
   }
 }
