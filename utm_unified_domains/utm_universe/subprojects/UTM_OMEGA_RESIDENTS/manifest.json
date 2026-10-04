@@ -7,7 +7,8 @@
   "verifier": "verify_residents.py",
   "local_modules": [
     "principle_vector.py",
-    "infinite_deployment.py"
+    "infinite_deployment.py",
+    "full_sync.py"
   ],
   "omega_semantics": {
     "potentially_unbounded": true,
@@ -31,6 +32,10 @@
     "manifest": "../../protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
     "source_snapshot_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
     "component_count": 15,
-    "aggregate_resident_coordinate": 15
+    "aggregate_resident_coordinate": 15,
+    "evaluator": "full_sync.py",
+    "idempotent": true,
+    "unchanged_status": "OMEGA_FULL_SYNC_FIXED_POINT",
+    "fixed_point_stage": 6
   }
 }
