@@ -3,15 +3,15 @@
   "world_id": "akashic-utm-main",
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
-  "base_world_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
+  "base_world_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
   "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3",
   "formal_horizon": "omega",
   "actual_infinite_physical_compute": false,
   "external_materialization_required_for_network_service": true,
   "stage": {
-    "stage": 8,
+    "stage": 9,
     "resource_budget": 1024,
-    "resource_used": 17,
+    "resource_used": 18,
     "valuation": {
       "0": 1,
       "1": 1,
@@ -29,14 +29,15 @@
       "13": 1,
       "14": 1,
       "15": 1,
-      "16": 1
+      "16": 1,
+      "17": 1
     },
     "oracle": null,
     "transition": {
-      "from_stage": 7,
-      "reason": "admit federated resident compute fabric as a new formal/runtime protocol component",
+      "from_stage": 8,
+      "reason": "admit portable sub-2KB field-node bootstrap as a new runtime protocol component",
       "new_residents": 1,
-      "new_coordinate": 16,
+      "new_coordinate": 17,
       "aggregate_coordinate_reused": 15
     }
   },
@@ -175,6 +176,14 @@
       "kind": "compute-infrastructure-protocol",
       "path": "utm_unified_domains/utm_universe/protocols/UTM-FEDERATED-COMPUTE-FABRIC-1.0.json",
       "coordinate": 16,
+      "empirical_claim": false
+    },
+    {
+      "id": "utm-field-node-bootstrap-v1.0",
+      "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
+      "kind": "portable-node-bootstrap",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json",
+      "coordinate": 17,
       "empirical_claim": false
     }
   ],

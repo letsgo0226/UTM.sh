@@ -4,8 +4,8 @@
   "status": "OMEGA_ADMITTED",
   "scope": "formal-computation-model-only",
   "purpose": "Bind every currently synchronized UTM Universe resident module into one source-pinned UTM-Omega finite stage with potentially-unbounded continuation semantics.",
-  "sync_source_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
-  "component_count": 16,
+  "sync_source_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
+  "component_count": 17,
   "components": [
     {
       "id": "utm-principle-vector-v0.1",
@@ -118,6 +118,13 @@
       "path": "utm_unified_domains/utm_universe/protocols/UTM-FEDERATED-COMPUTE-FABRIC-1.0.json",
       "coordinate": 16,
       "source_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe"
+    },
+    {
+      "id": "utm-field-node-bootstrap-v1.0",
+      "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
+      "path": "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.json",
+      "coordinate": 17,
+      "source_blob_sha": "a76a0ab28eb026f7937346532ee8d2f6595f1d6a"
     }
   ],
   "execution_target": {
@@ -164,14 +171,14 @@
     "duplicate_resident_allocation_forbidden": true
   },
   "latest_transition": {
-    "from_stage": 7,
-    "to_stage": 8,
-    "cause": "New federated resident compute fabric component admitted.",
-    "source_snapshot_commit": "8d6b838f8505bb0c3dfbe97707df6fcf0aa9cea4",
+    "from_stage": 8,
+    "to_stage": 9,
+    "cause": "Portable sub-2KB field-node bootstrap admitted as a new runtime protocol component.",
+    "source_snapshot_commit": "0bfdf7c3bc5be6b51164b82e26f5f28582046b5c",
     "aggregate_coordinate_reused": 15,
     "new_resident_allocated": true,
-    "new_resident_coordinate": 16,
-    "changed_component_id": "utm-federated-compute-fabric-v1.0",
-    "changed_component_blob_sha": "c14929ae860e18d731ae470044d90931617ef5fe"
+    "new_resident_coordinate": 17,
+    "changed_component_id": "utm-field-node-bootstrap-v1.0",
+    "changed_component_blob_sha": "a76a0ab28eb026f7937346532ee8d2f6595f1d6a"
   }
 }

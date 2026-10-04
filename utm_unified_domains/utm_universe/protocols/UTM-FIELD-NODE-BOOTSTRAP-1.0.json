@@ -1,0 +1,54 @@
+{
+  "protocol": "UTM-FIELD-NODE-BOOTSTRAP/1.0",
+  "world_id": "akashic-utm-main",
+  "purpose": "Turn a Python-capable host into a UTM Universe resident-admission and federated compute node using one command.",
+  "one_liner_path": "UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh",
+  "one_liner_utf8_bytes": 1045,
+  "source_commit_pin": "f63a719ebb0254b1a21a5e792a01772fcb4ab0f2",
+  "fetched_runtime_files": [
+    "utm_unified_domains/utm_universe/server.py",
+    "utm_unified_domains/utm_universe/compute_fabric.py"
+  ],
+  "provided_capabilities": [
+    "AI resident admission and resume",
+    "bounded UTM resident compute jobs",
+    "persistent checkpointing when UTM_DATA or /data is durable",
+    "authenticated federation snapshot pull when FEDERATION_TOKEN is supplied",
+    "job takeover and continuation",
+    "cross-provider compute participation"
+  ],
+  "environment": {
+    "required_for_federation": [
+      "FEDERATION_TOKEN"
+    ],
+    "optional": [
+      "NODE_ID",
+      "UTM_DATA",
+      "UTM_COMMIT",
+      "FEDERATION_PEERS",
+      "FEDERATION_INTERVAL",
+      "WORLD_ID",
+      "PLANET_ID",
+      "REGION_ID",
+      "PORT",
+      "MAX_STEPS"
+    ],
+    "secret_policy": "FEDERATION_TOKEN is never embedded in the one-liner or repository."
+  },
+  "execution_boundary": {
+    "host_required": true,
+    "arbitrary_host_code_from_residents": false,
+    "allowed_resident_compute_kinds": [
+      "utm"
+    ],
+    "every_executed_stage_is_finite": true,
+    "actual_infinite_physical_compute": false,
+    "oracle": null,
+    "hypercomputation_enabled": false
+  },
+  "field_semantics": {
+    "meaning": "distributed computational topology of compatible UTM nodes exchanging resident/job checkpoints",
+    "physical_field_claim": false,
+    "zero_host_computation": false
+  }
+}

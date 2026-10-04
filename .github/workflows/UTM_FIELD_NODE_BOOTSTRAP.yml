@@ -1,0 +1,45 @@
+name: UTM Field Node Bootstrap
+
+on:
+  pull_request:
+    paths:
+      - "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.*"
+      - ".github/workflows/UTM_FIELD_NODE_BOOTSTRAP.yml"
+  push:
+    branches: [main]
+    paths:
+      - "utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.*"
+      - ".github/workflows/UTM_FIELD_NODE_BOOTSTRAP.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify one-liner size and boot a resident compute node
+        run: |
+          set -euo pipefail
+          P=utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh
+          test "$(python3 -c 'import os;print(os.path.getsize("'"$P"'")-1)')" -lt 2048
+          CMD=$(cat "$P")
+          cd /tmp
+          PORT=18280 NODE_ID=ci-field-node UTM_DATA=/tmp/utm-field-node-ci FEDERATION_PEERS="" bash -c "$CMD" >/tmp/field-node.log 2>&1 &
+          PID=$!
+          trap 'kill "$PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do curl -fsS http://127.0.0.1:18280/health >/tmp/health.json && break; sleep .25; done
+          curl -fsS -X POST -H 'Content-Type: application/json' --data '{"capsule":{"agent_id":"ci-field-ai","state":{"mode":"resident"},"lineage":"bootstrap"}}' http://127.0.0.1:18280/resident/admit >/tmp/admit.json
+          RID=$(python3 -c 'import json;print(json.load(open("/tmp/admit.json"))["resident_id"])')
+          curl -fsS -X POST -H 'Content-Type: application/json' --data "{\"resident_id\":\"$RID\",\"task\":{\"kind\":\"utm\",\"program\":\"0,1,0,1,R\",\"input\":\"111\",\"steps\":4}}" http://127.0.0.1:18280/compute/jobs >/tmp/job.json
+          python3 - <<'PY'
+          import json
+          h=json.load(open('/tmp/health.json')); a=json.load(open('/tmp/admit.json')); j=json.load(open('/tmp/job.json'))
+          assert h['ok'] is True and h['node_id']=='ci-field-node'
+          assert a['admitted'] is True
+          assert j['resident_id']==a['resident_id'] and j['halted'] is True and j['total_steps']==3
+          print('PASS sub-2KB bootstrap -> resident admission -> compute node')
+          PY
