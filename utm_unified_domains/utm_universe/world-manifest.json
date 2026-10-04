@@ -12,9 +12,9 @@
     "address": "utm://akashic-utm-main/B612/San-Francisco",
     "spec": "utm_unified_domains/worlds/b612-san-francisco.json",
     "kind": "computable virtual region",
-    "live_verified": false,
-    "live_verification_workflow_run_id": null,
-    "live_verification_note": "Independent Railway runtime deployed; awaiting GitHub Actions external smoke verification on this branch."
+    "live_verified": true,
+    "live_verification_workflow_run_id": 37223054826,
+    "live_verification_note": "Independent UTM Universe Railway runtime externally smoke-verified by GitHub Actions."
   },
   "formal_boundary_model": {
     "name": "COMPACTIFIED_SINGULAR_LIMIT_TM",
@@ -157,7 +157,7 @@
     "root_directory": "/utm_unified_domains/utm_universe",
     "runtime": "server.py",
     "dockerfile": "Dockerfile",
-    "host_commit": "4a3fea9516b09044ef3c19ee9d6a9d5f2472d6cb",
+    "host_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
     "healthcheck": "/health",
     "healthcheck_verified_by_railway": true,
     "persistent_volume": {
@@ -167,17 +167,22 @@
       "size_mb": 500
     },
     "live_gsrh": {
-      "verified": false,
-      "verified_by": "pending GitHub Actions external network smoke test",
-      "workflow_run_id": null,
+      "verified": true,
+      "verified_by": "GitHub Actions external network smoke test",
+      "workflow_run_id": 37223054826,
       "planet": "B612",
       "city": "San-Francisco",
       "program": "0,G,1,1,R;1,S,2,1,R;2,R,3,1,R;3,H,4,1,R",
       "input": "GSRH",
       "limit": 8,
-      "result": null
+      "result": {
+        "q": "4",
+        "h": 4,
+        "t": 4,
+        "tape": "1111"
+      }
     },
-    "status": "independent-runtime-online-awaiting-external-gsrh-verification",
+    "status": "independent-runtime-live-gsrh-verified",
     "legacy_consolidated_runtime": "https://cosmic-love-infinity-tm-production.up.railway.app"
   },
   "native_log_omega_deployment": {
@@ -322,7 +327,7 @@
       "oracle": null,
       "hypercomputation_enabled": false,
       "halting_problem_becomes_decidable": false,
-      "stage": 6,
+      "stage": 7,
       "resident_count": 16
     },
     "deployment_boundary": {
@@ -332,7 +337,7 @@
       "external_platform_authority_created": false
     },
     "source_pins": {
-      "utm_base_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
+      "utm_base_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
       "imported_formal_modules_commit": "7cc4dd7ad07e44ebccfd5f0eecb1176fe92bd8b3"
     }
   },
@@ -388,13 +393,17 @@
     "runtime_endpoint_source": "runtime_endpoint",
     "additional_service_required": false,
     "arbitrary_host_code_execution": false,
-    "actual_infinite_physical_compute": false
+    "actual_infinite_physical_compute": false,
+    "canonical_runtime_endpoint": "https://utm-universe-production.up.railway.app",
+    "redeployment_status": "REDEPLOYED_TO_INDEPENDENT_UTM_RUNTIME",
+    "one_liner_blob_sha": "4037db434b15cebdde1c031f70496b7b830ce56e",
+    "system_binding_source_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4"
   },
   "omega_full_sync_deployment": {
     "protocol": "UTM-OMEGA-FULL-SYNC/1.0",
     "status": "OMEGA_ADMITTED",
     "manifest": "utm_unified_domains/utm_universe/protocols/UTM-OMEGA-FULL-SYNC-1.0.json",
-    "sync_source_commit": "ee48ddf73b7bf763bdf8207cbc6c6e8fe5a2534b",
+    "sync_source_commit": "459cb1f5d3c873fe6f25bde523188e2a574030c4",
     "component_count": 15,
     "aggregate_resident_coordinate": 15,
     "semantics": {
@@ -410,12 +419,19 @@
     "evaluator": "utm_unified_domains/utm_universe/subprojects/UTM_OMEGA_RESIDENTS/full_sync.py",
     "fixed_point": {
       "status": "OMEGA_FULL_SYNC_FIXED_POINT",
-      "stage": 6,
+      "stage": 7,
       "aggregate_resident_coordinate": 15,
       "reapply_allocates_new_resident": false,
       "reapply_advances_stage": false,
       "change_detection": "component identity + Git blob content",
       "changed_status": "OMEGA_FULL_SYNC_ADVANCE_REQUIRED"
+    },
+    "latest_transition": {
+      "from_stage": 6,
+      "to_stage": 7,
+      "reason": "AI admission client rebound to independent UTM Universe runtime",
+      "new_resident_allocated": false,
+      "aggregate_coordinate_reused": 15
     }
   },
   "physical_deployment_topology": {
