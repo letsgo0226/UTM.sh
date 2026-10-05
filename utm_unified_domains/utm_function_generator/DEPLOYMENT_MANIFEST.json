@@ -1,0 +1,38 @@
+{
+  "protocol": "UTM-Generated-Function/1.0",
+  "generated_on": "2026-10-06",
+  "github": {
+    "repository": "letsgo0226/UTM.sh",
+    "branch": "utm-function-generator-v1",
+    "path": "utm_unified_domains/utm_function_generator"
+  },
+  "railway": {
+    "project": "UTM-Universe",
+    "environment": "production",
+    "service": "utm-function-generator",
+    "service_id": "00a92a8b-cfce-4aea-85ea-2b2dfa0d1ae0",
+    "deployment_id": "20c9b6ad-2725-4811-9f05-16d45c49f017",
+    "deployment_status": "SUCCESS",
+    "url": "https://utm-function-generator-production.up.railway.app"
+  },
+  "render": {
+    "workspace": "My Workspace",
+    "service": "utm-function-generator",
+    "service_id": "srv-db230rm7bikc73c8plqg",
+    "deployment_id": "dep-db230ru7bikc73c8pmog",
+    "deployment_status": "live",
+    "url": "https://utm-function-generator.onrender.com"
+  },
+  "tests": {
+    "local_unittest_count": 5,
+    "local_unittest_status": "PASS"
+  },
+  "formal_boundaries": {
+    "finite_stage_only": true,
+    "oracle": false,
+    "hypercomputation": false,
+    "rh_proof": false,
+    "asi_proven": false,
+    "empirical_world_outcomes_proven": false
+  }
+}
