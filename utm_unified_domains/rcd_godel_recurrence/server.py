@@ -1,6 +1,7 @@
-import json,os,subprocess
+import json,os,subprocess,sys
 from http.server import BaseHTTPRequestHandler,HTTPServer
 
+hasattr(sys,"set_int_max_str_digits") and sys.set_int_max_str_digits(0)
 K=os.path.join(os.path.dirname(os.path.abspath(__file__)),"RCD_GODEL_RECURRENCE_2K_oneline.sh")
 class H(BaseHTTPRequestHandler):
     def sendj(self,c,o):
