@@ -1,4 +1,4 @@
-import json,os,urllib.request,functools,sys
+import json,os,urllib.request,functools,sys,threading,time
 from http.server import BaseHTTPRequestHandler,HTTPServer
 hasattr(sys,"set_int_max_str_digits") and sys.set_int_max_str_digits(0)
 PEERS=[x.rstrip("/") for x in os.getenv("RCD_RECURRENCE_PEERS","").split(",") if x.strip()]
@@ -31,6 +31,19 @@ def step(parent,inp):
     while q:a=A[q%4]+a;q//=4
     return {**core,"consensus_godel":g,"atgc":a or "A","gc":sum(c in "GC" for c in(a or "A"))}
 
+def selftest_result():
+    a={"limit":8,"machines":[{"rules":"0,A,H,A,S","input":"A"},{"rules":"0,A,0,A,R;0,_,0,_,R","input":"A"}],"sentences":[1,2,3],"proved":[1,-2]}
+    c0=step(None,a);b=dict(a);b["proved"]=[1,-2,3];c1=step(c0,b)
+    link=c1["parent_consensus_godel"]==c0["consensus_godel"] and c1.get("shared",{}).get("parent_godel")==c0["consensus_godel"]
+    return {"ok":c0["unanimous"] and c1["unanimous"] and link,"layer0":c0["layer"],"layer1":c1["layer"],"unanimous0":c0["unanimous"],"unanimous1":c1["unanimous"],"parent_link":link,"step0_godel_digits":len(str(c0["consensus_godel"])),"step1_godel_digits":len(str(c1["consensus_godel"])),"step1_boundary":c1.get("shared",{}).get("boundary"),"claims":c1["claims"]}
+
+def startup_probe():
+    try:
+        time.sleep(1)
+        print("RCD_STARTUP_SELFTEST "+J(selftest_result()),flush=True)
+    except Exception as x:
+        print("RCD_STARTUP_SELFTEST_ERROR "+type(x).__name__+":"+str(x),flush=True)
+
 class H(BaseHTTPRequestHandler):
     def sendj(self,c,o):
         b=J(o).encode();self.send_response(c);self.send_header("Content-Type","application/json");self.send_header("Content-Length",str(len(b)));self.end_headers();self.wfile.write(b)
@@ -39,14 +52,12 @@ class H(BaseHTTPRequestHandler):
         self.sendj(404,{"error":"not-found"})
     def do_POST(self):
         try:
-            if self.path=="/selftest":
-                a={"limit":8,"machines":[{"rules":"0,A,H,A,S","input":"A"},{"rules":"0,A,0,A,R;0,_,0,_,R","input":"A"}],"sentences":[1,2,3],"proved":[1,-2]}
-                c0=step(None,a);b=dict(a);b["proved"]=[1,-2,3];c1=step(c0,b)
-                link=c1["parent_consensus_godel"]==c0["consensus_godel"] and c1.get("shared",{}).get("parent_godel")==c0["consensus_godel"]
-                return self.sendj(200,{"ok":c0["unanimous"] and c1["unanimous"] and link,"layer0":c0["layer"],"layer1":c1["layer"],"unanimous0":c0["unanimous"],"unanimous1":c1["unanimous"],"parent_link":link,"step0_godel_digits":len(str(c0["consensus_godel"])),"step1_godel_digits":len(str(c1["consensus_godel"])),"step1_boundary":c1.get("shared",{}).get("boundary"),"claims":c1["claims"]})
+            if self.path=="/selftest":return self.sendj(200,selftest_result())
             if self.path!="/step":return self.sendj(404,{"error":"not-found"})
             n=int(self.headers.get("Content-Length","0"));d=json.loads(self.rfile.read(n) or b"{}")
             return self.sendj(200,step(d.get("parent"),d.get("input",{})))
         except Exception as x:self.sendj(502,{"error":type(x).__name__,"detail":str(x)})
     def log_message(self,*a):pass
+
+threading.Thread(target=startup_probe,daemon=True).start()
 HTTPServer(("0.0.0.0",int(os.getenv("PORT","8080"))),H).serve_forever()
