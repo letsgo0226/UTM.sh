@@ -1,7 +1,7 @@
 import json,os,subprocess
 from http.server import BaseHTTPRequestHandler,HTTPServer
 
-K="/app/RCD_GODEL_RECURRENCE_2K_oneline.sh"
+K=os.path.join(os.path.dirname(os.path.abspath(__file__)),"RCD_GODEL_RECURRENCE_2K_oneline.sh")
 class H(BaseHTTPRequestHandler):
     def sendj(self,c,o):
         b=json.dumps(o,separators=(",",":")).encode();self.send_response(c);self.send_header("Content-Type","application/json");self.send_header("Content-Length",str(len(b)));self.end_headers();self.wfile.write(b)
