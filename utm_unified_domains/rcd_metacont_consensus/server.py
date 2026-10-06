@@ -1,6 +1,7 @@
-import json,os,urllib.request,functools
+import json,os,urllib.request,functools,sys
 from http.server import BaseHTTPRequestHandler,HTTPServer
 
+hasattr(sys,"set_int_max_str_digits") and sys.set_int_max_str_digits(0)
 PEERS=[x.rstrip("/") for x in os.getenv("RCD_PEERS","").split(",") if x.strip()]
 J=lambda x:json.dumps(x,sort_keys=True,separators=(",",":"))
 E=lambda s:functools.reduce(lambda n,b:n*257+b+1,s.encode(),1)
