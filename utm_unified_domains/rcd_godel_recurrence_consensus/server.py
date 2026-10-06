@@ -5,6 +5,12 @@ PEERS=[x.rstrip("/") for x in os.getenv("RCD_RECURRENCE_PEERS","").split(",") if
 J=lambda x:json.dumps(x,sort_keys=True,separators=(",",":"))
 E=lambda s:functools.reduce(lambda n,b:n*257+b+1,s.encode(),1)
 
+def a4(n):
+    b=bin(n)[2:]
+    if len(b)&1:b="0"+b
+    m={"00":"A","01":"T","10":"G","11":"C"}
+    return "".join(m[b[i:i+2]] for i in range(0,len(b),2)) or "A"
+
 def call(url,data):
     b=J(data).encode();r=urllib.request.Request(url+"/run",data=b,headers={"Content-Type":"application/json"},method="POST")
     with urllib.request.urlopen(r,timeout=20) as x:return json.loads(x.read())
@@ -27,9 +33,8 @@ def step(parent,inp):
     core={"protocol":"RCD-Godel-Recurrence-Consensus/1.0","layer":layer,"parent_consensus_godel":pg,"unanimous":ok,"peer_count":3,"peer_godels":[x.get("godel") for x in rs],"claims":{"global_halting_decider":0,"global_arithmetic_complete":0,"resolves_boundary":0}}
     if ok:
         x=rs[0];core["shared"]={"godel":x.get("godel"),"gc":x.get("gc"),"boundary":x.get("state",{}).get("boundary"),"lift_required":x.get("lift_required"),"parent_godel":x.get("state",{}).get("parent_godel")}
-    g=E(J(core));q=g;a="";A="ATGC"
-    while q:a=A[q%4]+a;q//=4
-    return {**core,"consensus_godel":g,"atgc":a or "A","gc":sum(c in "GC" for c in(a or "A"))}
+    g=E(J(core));a=a4(g)
+    return {**core,"consensus_godel":g,"atgc":a,"gc":sum(c in "GC" for c in a)}
 
 def selftest_result():
     a={"limit":8,"machines":[{"rules":"0,A,H,A,S","input":"A"},{"rules":"0,A,0,A,R;0,_,0,_,R","input":"A"}],"sentences":[1,2,3],"proved":[1,-2]}
