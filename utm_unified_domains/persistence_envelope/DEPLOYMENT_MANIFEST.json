@@ -1,0 +1,76 @@
+{
+  "protocol": "UTM-Persistence-Envelope/1.0",
+  "generated_on": "2026-10-06",
+  "github": {
+    "repository": "letsgo0226/UTM.sh",
+    "branch": "utm-persistence-envelope-v1",
+    "path": "utm_unified_domains/persistence_envelope",
+    "commit": "eb2f2fbf4f1525a3892e7a98925a19fcd52be834"
+  },
+  "railway": {
+    "project": "UTM-Universe",
+    "environment": "production",
+    "authoritative_service": {
+      "name": "utm-persistence-envelope",
+      "service_id": "c7013b56-c320-4a3f-9a55-e80508cca758",
+      "deployment_id": "5565e212-3f79-453f-9c5c-f8c0d695dc5a",
+      "status": "SUCCESS",
+      "url": "https://utm-persistence-envelope-production.up.railway.app"
+    },
+    "covered_services": [
+      "utm-universe",
+      "utm-universe-peer",
+      "riemann-proof-utm",
+      "utm-function-generator",
+      "utm-scholar-loop"
+    ],
+    "non_authoritative_duplicate": {
+      "name": "utm-persistence-envelope-ycT3",
+      "service_id": "2a4755c3-9ecc-4edb-bc3f-558b5592718a",
+      "deployment_id": "ea80121f-856f-491a-b1d2-9210d22590d6",
+      "status": "SUCCESS",
+      "note": "Created during deployment orchestration; left intact because deletion requires separate explicit confirmation."
+    }
+  },
+  "render": {
+    "workspace": "My Workspace",
+    "service": "utm-persistence-envelope",
+    "service_id": "srv-db258a3bc2fs73f9qd6g",
+    "deployment_id": "dep-db258ajbc2fs73f9qfng",
+    "status": "live",
+    "url": "https://utm-persistence-envelope.onrender.com",
+    "covered_services": [
+      "utm-universe-render-peer",
+      "riemann-proof-utm",
+      "utm-function-generator",
+      "utm-single-function"
+    ]
+  },
+  "tests": {
+    "count": 10,
+    "railway": "PASS",
+    "render": "PASS"
+  },
+  "persistence_condition": "P_fleet=max(node residuals,handoff residuals)=0",
+  "adapters": [
+    "utm-universe",
+    "riemann-proof-utm",
+    "utm-single-function",
+    "utm-scholar-loop",
+    "dropbox-exact-search",
+    "source-runtime"
+  ],
+  "formal_boundaries": {
+    "finite_verification_only": true,
+    "future_fault_free_guarantee": false,
+    "consciousness_continuity_proven": false,
+    "oracle": false,
+    "hypercomputation": false,
+    "rh_proof": false,
+    "asi_proven": false,
+    "physical_identity_claim": false
+  },
+  "dropbox_archive": {
+    "status": "pending-explicit-path-confirmation"
+  }
+}
