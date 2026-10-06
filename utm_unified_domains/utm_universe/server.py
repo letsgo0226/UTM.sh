@@ -17,6 +17,7 @@ AKASHIC_PATH = os.getenv("AKASHIC_PATH", "/tmp/akashic.jsonl")
 FABRIC_PATH = os.getenv("FABRIC_PATH", os.path.join(os.path.dirname(AKASHIC_PATH) or "/tmp", "compute-fabric.json"))
 NODE_ID = os.getenv("NODE_ID", os.getenv("RAILWAY_SERVICE_NAME", "utm-node"))
 FEDERATION_TOKEN = os.getenv("FEDERATION_TOKEN", "")
+UTM_ACCESS_TOKEN = os.getenv("UTM_ACCESS_TOKEN", FEDERATION_TOKEN)
 FEDERATION_PEERS = [x.rstrip("/") for x in os.getenv("FEDERATION_PEERS", "").split(",") if x.strip()]
 FEDERATION_INTERVAL = max(5, int(os.getenv("FEDERATION_INTERVAL", "30")))
 FIELD_SEED_ONE_LINER_URL = os.getenv("FIELD_SEED_ONE_LINER_URL", "https://raw.githubusercontent.com/letsgo0226/UTM.sh/main/utm_unified_domains/utm_universe/protocols/UTM-FIELD-NODE-BOOTSTRAP-1.0.one-liner.sh")
@@ -148,6 +149,19 @@ def federation_authorized(headers):
     if not FEDERATION_TOKEN:
         return False
     return hmac.compare_digest(headers.get("Authorization", ""), "Bearer " + FEDERATION_TOKEN)
+
+
+def node_authorized(headers):
+    if not UTM_ACCESS_TOKEN:
+        return False
+    supplied = headers.get("Authorization", "").encode("utf-8")
+    return hmac.compare_digest(supplied, ("Bearer " + UTM_ACCESS_TOKEN).encode("utf-8"))
+
+
+def private_route(path, method):
+    return (path == "/akashic" or path == "/resident" or path.startswith("/resident/")
+            or path == "/compute/jobs" or path.startswith("/compute/jobs/")
+            or (method == "POST" and path == "/utm/run"))
 
 
 def _resident_rank(meta):
@@ -322,6 +336,10 @@ def manifest(base=None):
         "planet_id": PLANET_ID,
         "region_id": REGION_ID,
         "address": WORLD_ADDRESS,
+        "access_control": {"scheme": "Bearer", "scope": "node administrator",
+            "private_routes": ["/akashic", "/resident/*", "/compute/jobs/*", "POST /utm/run"],
+            "token_env": "UTM_ACCESS_TOKEN", "fallback_env": "FEDERATION_TOKEN",
+            "fail_closed_without_token": True, "per_resident_ownership": False},
         "world_spec": "utm_unified_domains/worlds/b612-san-francisco.json",
         "kernel": "transition-table UTM compatible with utm_unified_domains/utm/UTM.sh",
         "world_model": "computable possible-world runtime",
@@ -395,6 +413,8 @@ class H(BaseHTTPRequestHandler):
 
     def do_GET(self):
         p = urlparse(self.path).path
+        if private_route(p, self.command) and not node_authorized(self.headers):
+            return self.sendj(401, {"error": "node authorization required"})
         if p in ("/", "/manifest", "/.well-known/utm-universe.json"):
             return self.sendj(200, manifest(self.base()))
         if p == "/.well-known/utm-seed.json":
@@ -419,7 +439,7 @@ class H(BaseHTTPRequestHandler):
             except Exception as e:
                 return self.sendj(502,{"error":"bootstrap source unavailable","detail":type(e).__name__})
         if p == "/health":
-            return self.sendj(200, {"ok": True, "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "node_id": NODE_ID, "events": len(EVENTS), "jobs": len(FABRIC.jobs), "federation_peers": len(FEDERATION_PEERS)})
+            return self.sendj(200, {"ok": True, "access_control": "node-bearer-v1", "runtime_commit": os.getenv("UTM_RUNTIME_COMMIT"), "world_id": WORLD_ID, "planet_id": PLANET_ID, "region_id": REGION_ID, "node_id": NODE_ID, "events": len(EVENTS), "jobs": len(FABRIC.jobs), "federation_peers": len(FEDERATION_PEERS)})
         if p == "/federation/status":
             return self.sendj(200, {"protocol":"UTM-Federated-Compute-Fabric/1.0","world_id":WORLD_ID,"node_id":NODE_ID,"enabled":bool(FEDERATION_TOKEN and FEDERATION_PEERS),"peer_count":len(FEDERATION_PEERS),"jobs":len(FABRIC.jobs),"residents":len(RESIDENTS),"last_success":SYNC_STATE["last_success"],"last_error":SYNC_STATE["last_error"],"strong_consensus_claim":False})
         if p == "/federation/snapshot":
@@ -466,6 +486,8 @@ class H(BaseHTTPRequestHandler):
 
     def do_POST(self):
         p = urlparse(self.path).path
+        if private_route(p, self.command) and not node_authorized(self.headers):
+            return self.sendj(401, {"error": "node authorization required"})
         try:
             obj = self.body()
             parts=p.strip("/").split("/")
