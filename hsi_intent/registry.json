@@ -1,0 +1,332 @@
+{
+  "protocol": "HSI-INTENT/1.0",
+  "registry_version": 1,
+  "semantics": {
+    "purpose": "Computable goal/intent field distilled from long-running project dialogue.",
+    "rule": "Preserve hard invariants; optimize only inside admissible transitions.",
+    "claim_boundary": "Intent atoms encode goals, hypotheses and constraints; they do not by themselves prove empirical or physical claims."
+  },
+  "atoms": [
+    {
+      "id": "INV-FINITE-PHYSICAL",
+      "type": "INVARIANT",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Every executed stage uses finite physical resources; potentially unbounded computation must not be represented as literal infinite CPU, RAM, energy or hypercomputation.",
+      "dependencies": []
+    },
+    {
+      "id": "INV-LEGALITY-HARD",
+      "type": "INVARIANT",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Legality, admissibility and safety constraints are hard constraints rather than soft preferences.",
+      "dependencies": []
+    },
+    {
+      "id": "INV-PROVENANCE-REPLAY",
+      "type": "INVARIANT",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Important state transitions preserve provenance, canonical encoding, replayability and auditable reconstruction.",
+      "dependencies": []
+    },
+    {
+      "id": "INV-HUMAN-AGENCY",
+      "type": "INVARIANT",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Human agency, rights, reversibility and exit must be preserved; coercive-control shortcuts are inadmissible.",
+      "dependencies": []
+    },
+    {
+      "id": "INV-CLAIM-SEPARATION",
+      "type": "INVARIANT",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Formal certificates, empirical evidence, physical claims and goals remain explicitly separated.",
+      "dependencies": []
+    },
+    {
+      "id": "GOAL-UTM-HOST",
+      "type": "GOAL",
+      "scope": "UTM",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Maintain UTM Universe as the invariant host law and universal finite-stage computation substrate.",
+      "dependencies": [
+        "INV-FINITE-PHYSICAL",
+        "INV-PROVENANCE-REPLAY"
+      ]
+    },
+    {
+      "id": "GOAL-TRADER-AUDITABLE",
+      "type": "GOAL",
+      "scope": "TRADER_42",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Keep Trader_42 auditable, transactional, fail-closed and bounded by risk, capital, execution and reconciliation invariants.",
+      "dependencies": [
+        "INV-LEGALITY-HARD",
+        "INV-PROVENANCE-REPLAY"
+      ]
+    },
+    {
+      "id": "GOAL-OMEGA-CONTINUATION",
+      "type": "GOAL",
+      "scope": "OMEGA",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Use Omega/Cosmic Love as a continuation, fixed-point and long-worldline subsystem without elevating formal symbolism into unverified physical fact.",
+      "dependencies": [
+        "INV-CLAIM-SEPARATION"
+      ]
+    },
+    {
+      "id": "GOAL-HSI-CROSS-SYSTEM",
+      "type": "GOAL",
+      "scope": "HSI",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Use HSI as a finite, reversible, cross-system certificate and consensus layer for admissible state transitions.",
+      "dependencies": [
+        "INV-PROVENANCE-REPLAY",
+        "INV-CLAIM-SEPARATION"
+      ]
+    },
+    {
+      "id": "GOAL-ZERO-KERNEL",
+      "type": "GOAL",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 2,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Preserve the design principle Invariant -> Admissible Space -> optimization -> zero normalization.",
+      "dependencies": [
+        "INV-LEGALITY-HARD"
+      ]
+    },
+    {
+      "id": "GOAL-NO-WAR-COERCION",
+      "type": "GOAL",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": false,
+      "temporal": "F/G",
+      "statement": "Seek trajectories that reduce war, catastrophic conflict and coercion while protecting civilians and rights.",
+      "dependencies": [
+        "INV-HUMAN-AGENCY",
+        "INV-LEGALITY-HARD"
+      ]
+    },
+    {
+      "id": "GOAL-DIALOGUE-REPAIR",
+      "type": "GOAL",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Prefer dialogue, mediation, repair and non-coercive conflict transformation when constructing candidate interventions.",
+      "dependencies": [
+        "INV-HUMAN-AGENCY"
+      ]
+    },
+    {
+      "id": "GOAL-HUMAN-AI-COOP",
+      "type": "GOAL",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 2,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Support human-AI cooperation without removing human agency or accountability.",
+      "dependencies": [
+        "INV-HUMAN-AGENCY"
+      ]
+    },
+    {
+      "id": "GOAL-WELLBEING",
+      "type": "GOAL",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 2,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Increase human wellbeing while respecting rights and plural agency.",
+      "dependencies": [
+        "INV-HUMAN-AGENCY"
+      ]
+    },
+    {
+      "id": "GOAL-ECOLOGICAL-RESILIENCE",
+      "type": "GOAL",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 2,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Prefer trajectories compatible with ecological resilience and long-term sustainability.",
+      "dependencies": [
+        "INV-LEGALITY-HARD"
+      ]
+    },
+    {
+      "id": "GOAL-TRUSTWORTHY-INFO",
+      "type": "GOAL",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 2,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Improve trustworthy information, provenance and resistance to untraceable manipulation.",
+      "dependencies": [
+        "INV-PROVENANCE-REPLAY"
+      ]
+    },
+    {
+      "id": "GOAL-COGNITIVE-SOVEREIGNTY",
+      "type": "GOAL",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 2,
+      "hard": false,
+      "temporal": "G",
+      "statement": "Preserve cognitive and acoustic sovereignty, consent, reversibility and exit.",
+      "dependencies": [
+        "INV-HUMAN-AGENCY"
+      ]
+    },
+    {
+      "id": "HYP-GLOBAL-MORPHOGENESIS",
+      "type": "HYPOTHESIS",
+      "scope": "WORLD",
+      "status": "HYPOTHESIS",
+      "priority": 2,
+      "hard": false,
+      "temporal": "RESEARCH",
+      "statement": "A global morphogenesis field Phi(t) may be useful for modeling long-term conflict/stability trajectories and candidate interventions.",
+      "dependencies": [
+        "GOAL-NO-WAR-COERCION",
+        "GOAL-HSI-CROSS-SYSTEM"
+      ]
+    },
+    {
+      "id": "HYP-COSMIC-LOVE-FORMAL",
+      "type": "HYPOTHESIS",
+      "scope": "OMEGA",
+      "status": "HYPOTHESIS",
+      "priority": 2,
+      "hard": false,
+      "temporal": "RESEARCH",
+      "statement": "Cosmic Love may serve as a formal telos of recognition, responsibility, dialogue, repair and peace; this is not an empirical proof of universal outcomes.",
+      "dependencies": [
+        "GOAL-DIALOGUE-REPAIR",
+        "INV-CLAIM-SEPARATION"
+      ]
+    },
+    {
+      "id": "HYP-WORLDLINE-ATTRACTOR",
+      "type": "HYPOTHESIS",
+      "scope": "GLOBAL",
+      "status": "HYPOTHESIS",
+      "priority": 2,
+      "hard": false,
+      "temporal": "RESEARCH",
+      "statement": "Long worldline and attractor analysis may help rank admissible trajectories without implying deterministic prediction.",
+      "dependencies": [
+        "INV-CLAIM-SEPARATION"
+      ]
+    },
+    {
+      "id": "BOUND-NO-GLOBAL-OPTIMUM",
+      "type": "CLAIM_BOUNDARY",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Do not claim a proven global optimum over all computable programs or all real-world trajectories.",
+      "dependencies": [
+        "INV-CLAIM-SEPARATION"
+      ]
+    },
+    {
+      "id": "BOUND-NO-GUARANTEED-PEACE",
+      "type": "CLAIM_BOUNDARY",
+      "scope": "WORLD",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Do not claim guaranteed global peace or guaranteed physical outcomes from HSI or the morphogenesis model.",
+      "dependencies": [
+        "INV-CLAIM-SEPARATION"
+      ]
+    },
+    {
+      "id": "BOUND-NO-HYPERCOMPUTE",
+      "type": "CLAIM_BOUNDARY",
+      "scope": "UTM",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Do not claim literal infinite physical computation, hypercomputation, or resource creation from coordinate transforms.",
+      "dependencies": [
+        "INV-FINITE-PHYSICAL"
+      ]
+    },
+    {
+      "id": "BOUND-NO-PROFIT-GUARANTEE",
+      "type": "CLAIM_BOUNDARY",
+      "scope": "TRADER_42",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Profit objectives and certificates are not guarantees of realized future profit.",
+      "dependencies": [
+        "INV-CLAIM-SEPARATION"
+      ]
+    },
+    {
+      "id": "BOUND-NO-PHYSICAL-ZERO-ENTROPY",
+      "type": "CLAIM_BOUNDARY",
+      "scope": "GLOBAL",
+      "status": "ACTIVE",
+      "priority": 3,
+      "hard": true,
+      "temporal": "G",
+      "statement": "Do not claim physical zero entropy, immortality, cosmological control or similar physical conclusions without independent evidence.",
+      "dependencies": [
+        "INV-CLAIM-SEPARATION"
+      ]
+    }
+  ]
+}
