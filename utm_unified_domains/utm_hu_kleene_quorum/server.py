@@ -19,7 +19,7 @@ def call(url,data):
         b=J(data).encode()
         r=urllib.request.Request(url+"/run",data=b,headers={"Content-Type":"application/json"},method="POST")
         with urllib.request.urlopen(r,timeout=12) as x:return {"ok":1,"peer":url,"value":json.loads(x.read())}
-    except Exception as e:return {"ok":0,"peer":url,"error":type(e).__name__+":"+str(e)}
+    except urllib.error.HTTPError as e:\n        try: body=e.read().decode()[:2000]\n        except: body=""\n        return {"ok":0,"peer":url,"error":"HTTPError:"+str(e),"body":body}\n    except Exception as e:return {"ok":0,"peer":url,"error":type(e).__name__+":"+str(e)}
 
 def semantic(v):
     st=v.get("state",{})
@@ -64,7 +64,7 @@ def solve(parent,inp):
         core["peer_program_indexes"]=[z["program_index"] for z in ds]
         core["peer_self_source_godels"]=[z["self_source_godel"] for z in ds]
     else:
-        core["diagnostics"]=[{"peer":x["peer"],"ok":x["ok"],"error":x.get("error"),"semantic":semantic(x["value"]) if x["ok"] else None} for x in raw]
+        core["diagnostics"]=[{"peer":x["peer"],"ok":x["ok"],"error":x.get("error"),"body":x.get("body"),"semantic":semantic(x["value"]) if x["ok"] else None} for x in raw]
         core["peer_program_indexes"]=[]
         core["peer_self_source_godels"]=[]
     g=cert_code(core);a=a4(g)
@@ -76,7 +76,7 @@ def selftest_result():
     stable=len(c0.get("peer_program_indexes",[]))==len(c1.get("peer_program_indexes",[])) and c0.get("peer_program_indexes")==c1.get("peer_program_indexes")
     link=c1["parent_consensus_godel"]==c0["consensus_godel"] and c1.get("shared",{}).get("parent_link")
     identities=[x.get("identity") for x in c1.get("shared",{}).get("peer_descriptors",[])]
-    return {"status":"complete","ok":c0["accepted"] and c1["accepted"] and stable and link,"layer0":0,"layer1":1,"healthy0":c0["healthy_peers"],"healthy1":c1["healthy_peers"],"degraded0":c0["degraded"],"degraded1":c1["degraded"],"program_indexes_stable":stable,"parent_link":bool(link),"identities":identities,"boundary0":c0.get("shared",{}).get("boundary"),"boundary1":c1.get("shared",{}).get("boundary"),"claims":c1["claims"]}
+    return {"status":"complete","ok":c0["accepted"] and c1["accepted"] and stable and link,"layer0":0,"layer1":1,"healthy0":c0["healthy_peers"],"healthy1":c1["healthy_peers"],"degraded0":c0["degraded"],"degraded1":c1["degraded"],"program_indexes_stable":stable,"parent_link":bool(link),"identities":identities,"boundary0":c0.get("shared",{}).get("boundary"),"boundary1":c1.get("shared",{}).get("boundary"),"diagnostics0":c0.get("diagnostics"),"diagnostics1":c1.get("diagnostics"),"parent_digits":len(str(c0.get("consensus_godel",0))),"claims":c1["claims"]}
 
 def startup_probe():
     global PROOF
