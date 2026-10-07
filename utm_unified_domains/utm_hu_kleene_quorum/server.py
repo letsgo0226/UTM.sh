@@ -18,7 +18,7 @@ def call(url,data):
     try:
         b=J(data).encode()
         r=urllib.request.Request(url+"/run",data=b,headers={"Content-Type":"application/json"},method="POST")
-        with urllib.request.urlopen(r,timeout=12) as x:
+        with urllib.request.urlopen(r,timeout=45) as x:
             return {"ok":1,"peer":url,"value":json.loads(x.read())}
     except urllib.error.HTTPError as e:
         try:
@@ -202,8 +202,7 @@ class H(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            if self.path=="/selftest":
-                return self.sendj(200,selftest_result())
+            if self.path=="/proof":\n                return self.sendj(200 if PROOF.get("status")=="complete" else 202,PROOF)\n            if self.path=="/selftest":\n                z=selftest_result();print("HU_KLEENE_FEDERATED_SELFTEST "+J(z),flush=True);return self.sendj(200,z)
             if self.path!="/solve":
                 return self.sendj(404,{"error":"not-found"})
             n=int(self.headers.get("Content-Length","0"))
