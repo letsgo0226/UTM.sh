@@ -34,7 +34,7 @@ def solve(parent,inp):
         d["parent_godel"]=int(parent["consensus_godel"])
     rs=[call(p,d) for p in PEERS]
     ok=len({J(x) for x in rs})==1
-    core={"protocol":"UTM-HU-Consensus/1.0","layer":int(d.get("layer",0)),"parent_consensus_godel":int(d.get("parent_godel",0)),"unanimous":ok,"peer_count":3,"peer_godels":[x.get("godel") for x in rs],"claims":{"global_halting_decider":0,"global_arithmetic_complete":0,"self_awareness":0}}
+    core={"protocol":"UTM-HU-Consensus/1.0","layer":int(d.get("layer",0)),"parent_consensus_godel":int(d.get("parent_godel",0)),"unanimous":ok,"peer_count":3,"claims":{"global_halting_decider":0,"global_arithmetic_complete":0,"self_awareness":0}}
     if ok:
         x=rs[0]
         core["shared"]={"godel":x.get("godel"),"self_godel":x.get("state",{}).get("self_godel"),"results":x.get("state",{}).get("yuu",{}).get("results"),"boundary":x.get("state",{}).get("hee",{}).get("boundary"),"lift_required":x.get("lift_required"),"parent_godel":x.get("state",{}).get("parent_godel")}
