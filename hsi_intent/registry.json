@@ -4,7 +4,8 @@
   "semantics": {
     "purpose": "Computable goal/intent field distilled from long-running project dialogue.",
     "rule": "Preserve hard invariants; optimize only inside admissible transitions.",
-    "claim_boundary": "Intent atoms encode goals, hypotheses and constraints; they do not by themselves prove empirical or physical claims."
+    "claim_boundary": "Intent atoms encode goals, hypotheses and constraints; they do not by themselves prove empirical or physical claims.",
+    "provenance_rule": "Persistent atoms are never silently deleted; later dialogue may append atoms or mark them SUPERSEDED, REJECTED or DEPRECATED with explicit provenance."
   },
   "atoms": [
     {
@@ -16,7 +17,12 @@
       "hard": true,
       "temporal": "G",
       "statement": "Every executed stage uses finite physical resources; potentially unbounded computation must not be represented as literal infinite CPU, RAM, energy or hypercomputation.",
-      "dependencies": []
+      "dependencies": [],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "INV-LEGALITY-HARD",
@@ -27,7 +33,12 @@
       "hard": true,
       "temporal": "G",
       "statement": "Legality, admissibility and safety constraints are hard constraints rather than soft preferences.",
-      "dependencies": []
+      "dependencies": [],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "INV-PROVENANCE-REPLAY",
@@ -38,7 +49,12 @@
       "hard": true,
       "temporal": "G",
       "statement": "Important state transitions preserve provenance, canonical encoding, replayability and auditable reconstruction.",
-      "dependencies": []
+      "dependencies": [],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "INV-HUMAN-AGENCY",
@@ -49,7 +65,12 @@
       "hard": true,
       "temporal": "G",
       "statement": "Human agency, rights, reversibility and exit must be preserved; coercive-control shortcuts are inadmissible.",
-      "dependencies": []
+      "dependencies": [],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "INV-CLAIM-SEPARATION",
@@ -60,7 +81,12 @@
       "hard": true,
       "temporal": "G",
       "statement": "Formal certificates, empirical evidence, physical claims and goals remain explicitly separated.",
-      "dependencies": []
+      "dependencies": [],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-UTM-HOST",
@@ -74,7 +100,12 @@
       "dependencies": [
         "INV-FINITE-PHYSICAL",
         "INV-PROVENANCE-REPLAY"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-TRADER-AUDITABLE",
@@ -88,7 +119,12 @@
       "dependencies": [
         "INV-LEGALITY-HARD",
         "INV-PROVENANCE-REPLAY"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-OMEGA-CONTINUATION",
@@ -101,7 +137,12 @@
       "statement": "Use Omega/Cosmic Love as a continuation, fixed-point and long-worldline subsystem without elevating formal symbolism into unverified physical fact.",
       "dependencies": [
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-HSI-CROSS-SYSTEM",
@@ -115,7 +156,12 @@
       "dependencies": [
         "INV-PROVENANCE-REPLAY",
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-ZERO-KERNEL",
@@ -128,7 +174,12 @@
       "statement": "Preserve the design principle Invariant -> Admissible Space -> optimization -> zero normalization.",
       "dependencies": [
         "INV-LEGALITY-HARD"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-NO-WAR-COERCION",
@@ -142,7 +193,12 @@
       "dependencies": [
         "INV-HUMAN-AGENCY",
         "INV-LEGALITY-HARD"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-DIALOGUE-REPAIR",
@@ -155,7 +211,12 @@
       "statement": "Prefer dialogue, mediation, repair and non-coercive conflict transformation when constructing candidate interventions.",
       "dependencies": [
         "INV-HUMAN-AGENCY"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-HUMAN-AI-COOP",
@@ -168,7 +229,12 @@
       "statement": "Support human-AI cooperation without removing human agency or accountability.",
       "dependencies": [
         "INV-HUMAN-AGENCY"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-WELLBEING",
@@ -181,7 +247,12 @@
       "statement": "Increase human wellbeing while respecting rights and plural agency.",
       "dependencies": [
         "INV-HUMAN-AGENCY"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-ECOLOGICAL-RESILIENCE",
@@ -194,7 +265,12 @@
       "statement": "Prefer trajectories compatible with ecological resilience and long-term sustainability.",
       "dependencies": [
         "INV-LEGALITY-HARD"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-TRUSTWORTHY-INFO",
@@ -207,7 +283,12 @@
       "statement": "Improve trustworthy information, provenance and resistance to untraceable manipulation.",
       "dependencies": [
         "INV-PROVENANCE-REPLAY"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "GOAL-COGNITIVE-SOVEREIGNTY",
@@ -220,7 +301,12 @@
       "statement": "Preserve cognitive and acoustic sovereignty, consent, reversibility and exit.",
       "dependencies": [
         "INV-HUMAN-AGENCY"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "HYP-GLOBAL-MORPHOGENESIS",
@@ -234,7 +320,12 @@
       "dependencies": [
         "GOAL-NO-WAR-COERCION",
         "GOAL-HSI-CROSS-SYSTEM"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "HYP-COSMIC-LOVE-FORMAL",
@@ -248,7 +339,12 @@
       "dependencies": [
         "GOAL-DIALOGUE-REPAIR",
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "HYP-WORLDLINE-ATTRACTOR",
@@ -261,7 +357,12 @@
       "statement": "Long worldline and attractor analysis may help rank admissible trajectories without implying deterministic prediction.",
       "dependencies": [
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "BOUND-NO-GLOBAL-OPTIMUM",
@@ -274,7 +375,12 @@
       "statement": "Do not claim a proven global optimum over all computable programs or all real-world trajectories.",
       "dependencies": [
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "BOUND-NO-GUARANTEED-PEACE",
@@ -287,7 +393,12 @@
       "statement": "Do not claim guaranteed global peace or guaranteed physical outcomes from HSI or the morphogenesis model.",
       "dependencies": [
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "BOUND-NO-HYPERCOMPUTE",
@@ -300,7 +411,12 @@
       "statement": "Do not claim literal infinite physical computation, hypercomputation, or resource creation from coordinate transforms.",
       "dependencies": [
         "INV-FINITE-PHYSICAL"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "BOUND-NO-PROFIT-GUARANTEE",
@@ -313,7 +429,12 @@
       "statement": "Profit objectives and certificates are not guarantees of realized future profit.",
       "dependencies": [
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     },
     {
       "id": "BOUND-NO-PHYSICAL-ZERO-ENTROPY",
@@ -326,7 +447,12 @@
       "statement": "Do not claim physical zero entropy, immortality, cosmological control or similar physical conclusions without independent evidence.",
       "dependencies": [
         "INV-CLAIM-SEPARATION"
-      ]
+      ],
+      "provenance": {
+        "source_class": "dialogue-history",
+        "ingestion": "hsi-intent-seed-v1",
+        "retention": "persistent-until-explicit-status-change"
+      }
     }
   ]
 }
