@@ -143,6 +143,7 @@ def certify(req):
             "critical_gc": critical,
         },
         "claims": {k: 0 for k in FORBIDDEN_CLAIMS},
+        "subject_uid": str(req.get("subject_uid", "")),
         "scope": "finite certificate / invariant gate only",
         "body_bytes": raw_size,
     }
