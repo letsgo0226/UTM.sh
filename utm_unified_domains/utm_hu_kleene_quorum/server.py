@@ -202,7 +202,10 @@ class H(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            if self.path=="/proof":\n                return self.sendj(200 if PROOF.get("status")=="complete" else 202,PROOF)\n            if self.path=="/selftest":\n                z=selftest_result();print("HU_KLEENE_FEDERATED_SELFTEST "+J(z),flush=True);return self.sendj(200,z)
+            if self.path=="/proof":
+                return self.sendj(200 if PROOF.get("status")=="complete" else 202,PROOF)
+            if self.path=="/selftest":
+                z=selftest_result();print("HU_KLEENE_FEDERATED_SELFTEST "+J(z),flush=True);return self.sendj(200,z)
             if self.path!="/solve":
                 return self.sendj(404,{"error":"not-found"})
             n=int(self.headers.get("Content-Length","0"))
