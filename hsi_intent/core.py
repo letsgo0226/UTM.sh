@@ -34,6 +34,7 @@ def validate_registry(registry):
         if not isinstance(a.get("hard"),bool): errors.append(f"hard:{aid}")
         if int(a.get("priority",0)) not in {1,2,3}: errors.append(f"priority:{aid}")
         if not str(a.get("statement","")).strip(): errors.append(f"statement:{aid}")
+        if not isinstance(a.get("provenance"),dict) or not a.get("provenance",{}).get("source_class"): errors.append(f"provenance:{aid}")
     for a in atoms:
         for dep in a.get("dependencies",[]):
             if dep not in ids: errors.append(f"dependency:{a.get('id')}->{dep}")
