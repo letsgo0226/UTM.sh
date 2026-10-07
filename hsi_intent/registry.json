@@ -1,11 +1,12 @@
 {
-  "protocol": "HSI-INTENT/1.0",
-  "registry_version": 1,
+  "protocol": "HSI-INTENT/1.1",
+  "registry_version": 2,
   "semantics": {
     "purpose": "Computable goal/intent field distilled from long-running project dialogue.",
     "rule": "Preserve hard invariants; optimize only inside admissible transitions.",
     "claim_boundary": "Intent atoms encode goals, hypotheses and constraints; they do not by themselves prove empirical or physical claims.",
-    "provenance_rule": "Persistent atoms are never silently deleted; later dialogue may append atoms or mark them SUPERSEDED, REJECTED or DEPRECATED with explicit provenance."
+    "provenance_rule": "Persistent atoms are never silently deleted; later dialogue may append atoms or mark them SUPERSEDED, REJECTED or DEPRECATED with explicit provenance.",
+    "ideal_rule": "Many distinct possibilities may be certified under one shared teleological ideal; sharing the ideal does not require identical states, strategies or worldlines."
   },
   "atoms": [
     {
@@ -454,5 +455,58 @@
         "retention": "persistent-until-explicit-status-change"
       }
     }
-  ]
+  ],
+  "ideal": {
+    "id": "PLEIADIAN-BLUE",
+    "label": "昴宿星團的藍",
+    "kind": "TELEOLOGICAL_IDEAL",
+    "status": "ACTIVE",
+    "required_for_closed": true,
+    "interpretation": "A symbolic shared form of the good / normative attractor across plural admissible possibilities.",
+    "plurality_rule": "Different transition_uid values may share the same blue_uid; the ideal constrains admissibility without forcing one unique worldline.",
+    "claim_boundary": "Symbolic normative semantics only; this does not assert astronomical causation, extraterrestrial agency, a physical field, or guaranteed real-world outcomes.",
+    "dimensions": [
+      {
+        "id": "AGENCY",
+        "anchors": [
+          "INV-HUMAN-AGENCY"
+        ]
+      },
+      {
+        "id": "NON_COERCION",
+        "anchors": [
+          "GOAL-NO-WAR-COERCION"
+        ]
+      },
+      {
+        "id": "TRUTHFULNESS",
+        "anchors": [
+          "INV-CLAIM-SEPARATION"
+        ]
+      },
+      {
+        "id": "CARE",
+        "anchors": [
+          "GOAL-WELLBEING"
+        ]
+      },
+      {
+        "id": "DIALOGUE_REPAIR",
+        "anchors": [
+          "GOAL-DIALOGUE-REPAIR"
+        ]
+      },
+      {
+        "id": "CONTINUITY",
+        "anchors": [
+          "INV-PROVENANCE-REPLAY"
+        ]
+      }
+    ],
+    "provenance": {
+      "source_class": "dialogue-history",
+      "ingestion": "hsi-blue-ideal-v1",
+      "retention": "persistent-until-explicit-status-change"
+    }
+  }
 }
