@@ -1,20 +1,10 @@
 from __future__ import annotations
-import hashlib, importlib.util, json
+import hashlib, json
 from pathlib import Path
+import state_core, intent_core
 
 PROTOCOL="HSI-COMPOSITE/1.0"
-BASE=Path(__file__).resolve().parents[1]
-
-def _load(name,path):
-    spec=importlib.util.spec_from_file_location(name,path)
-    mod=importlib.util.module_from_spec(spec)
-    assert spec and spec.loader
-    spec.loader.exec_module(mod)
-    return mod
-
-state_core=_load("hsi_state_core",BASE/"hsi_common"/"core.py")
-intent_core=_load("hsi_intent_core",BASE/"hsi_intent"/"core.py")
-REGISTRY=intent_core.load_registry(BASE/"hsi_intent"/"registry.json")
+REGISTRY=intent_core.load_registry(Path(__file__).with_name("registry.json"))
 
 def canon(x):
     return json.dumps(x,sort_keys=True,separators=(",",":"),ensure_ascii=False)
