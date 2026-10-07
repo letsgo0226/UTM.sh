@@ -23,7 +23,7 @@ def call(url,data):
 
 def semantic(v):
     st=v.get("state",{})
-    return {"layer":int(st.get("layer",0)),"parent_godel":int(st.get("parent_godel",0)),"hee":st.get("hee"),"yuu":st.get("yuu")}
+    return {"layer":int(st.get("layer",0)),"hee":st.get("hee"),"yuu":st.get("yuu")}
 
 def descriptor(x):
     v=x["value"];st=v.get("state",{})
