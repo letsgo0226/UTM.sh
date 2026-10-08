@@ -1,0 +1,49 @@
+name: hsi_blue_native
+
+on:
+  push:
+    branches: [hsi-three-system-v1]
+    paths:
+      - "hsi-blue.sh"
+      - "hsi_blue_native.py"
+      - "hsi_common/core.py"
+      - ".github/workflows/hsi_blue_native.yml"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax
+        run: |
+          set -eu
+          sh -n hsi-blue.sh
+          python3 -m py_compile hsi_blue_native.py hsi_common/core.py
+      - name: Blue native closure
+        run: |
+          set -eu
+          rm -rf /tmp/hsi-blue
+          HSI_OUT=/tmp/hsi-blue PYTHONPATH=hsi_common python3 hsi_blue_native.py "finite runtime context"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("/tmp/hsi-blue")
+          r=json.loads((p/"request.json").read_text())
+          c=json.loads((p/"certificate.json").read_text())
+          b=json.loads((p/"blue-care.json").read_text())
+          m=json.loads((p/"manifest.json").read_text())
+          assert r["system"]=="UTM"
+          assert r["status"]=="UNRESOLVED"
+          assert c["closed"]==1 and m["closed"]==1
+          assert c["protocol"]=="HSI-3SYS/1.0"
+          assert b["protocol"]=="HSI-PLEIADIAN-BLUE-CARE/1.0"
+          assert b["semantic_non_coercion"] is True
+          assert b["unresolved_is_valid"] is True
+          assert b["forced_totalization"] is False
+          assert b["ontological_non_exclusion"] is True
+          assert b["human_invocation"] is True
+          assert c["claims"]["halting_decider"]==0
+          assert c["claims"]["rh_proof"]==0
+          assert c["claims"]["profit_guarantee"]==0
+          PY
