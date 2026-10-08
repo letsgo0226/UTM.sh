@@ -63,7 +63,17 @@ def main():
         "forced_totalization":False,
         "ontological_non_exclusion":True,
         "human_invocation":True,
-        "domain":SYSTEM
+        "domain":SYSTEM,
+        "search_operator":{
+            "protocol":"HSI-SEARCH/1.0",
+            "role":"finite-evidence-expansion",
+            "search_expands_evidence_only":True,
+            "absence_of_retrieval_is_not_nonexistence":True,
+            "unresolved_is_valid":True,
+            "forced_totalization":False,
+            "may_authorize_domain_action":False,
+            "may_decide_nonhalting":False
+        }
     }
     if SYSTEM=="TRADER_42":
         care["trading_safety"]={
