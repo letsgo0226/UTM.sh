@@ -50,6 +50,13 @@ jobs:
           assert s["unresolved_is_valid"] is True
           assert s["forced_totalization"] is False
           assert s["may_authorize_domain_action"] is False
+          so=b["solve_operator"]
+          assert so["protocol"]=="HSI-SOLVE/1.0"
+          assert so["solver_may_claim_universal_solution"] is False
+          assert so["unresolved_is_valid"] is True
+          assert so["verification_closure_is_not_problem_totality"] is True
+          assert so["may_authorize_domain_action"] is False
+          assert so["may_decide_nonhalting"] is False
           assert s["may_decide_nonhalting"] is False
           assert c["claims"]["halting_decider"]==0
           assert c["claims"]["rh_proof"]==0
