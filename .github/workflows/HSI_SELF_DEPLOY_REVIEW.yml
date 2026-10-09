@@ -29,7 +29,9 @@ jobs:
       status: ${{ steps.inspect.outputs.status }}
     steps:
       - uses: actions/checkout@v4
-      - name: Test finite HSI core and monitor
+      - name: Validate Python syntax without executing downloaded source
+        run: python3 -m compileall -q hsi_common
+      - name: Test finite HSI core, drift monitor and candidate planner
         run: python3 -m unittest discover -s hsi_common -p "test_*.py" -v
       - name: Audit the three pinned HSI deployment branches
         env:
@@ -43,12 +45,38 @@ jobs:
         id: inspect
         run: |
           echo "status=$(python3 -c 'import json;print(json.load(open("/tmp/hsi-3sys-audit.json"))["status"])')" >> "$GITHUB_OUTPUT"
+      - name: Generate bounded candidate replacements for review (no code writes)
+        if: steps.inspect.outputs.status == 'REVIEW_REQUIRED'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 hsi_common/candidate_plan.py \
+            --audit /tmp/hsi-3sys-audit.json \
+            --json-out /tmp/hsi-3sys-candidates.json \
+            --markdown-out /tmp/hsi-3sys-candidates.md
+      - name: Reject any candidate manifest with deployment authorization
+        if: steps.inspect.outputs.status == 'REVIEW_REQUIRED'
+        run: |
+          python3 - <<'PY'
+          import json
+          report = json.load(open('/tmp/hsi-3sys-candidates.json', encoding='utf-8'))
+          assert report['status'] == 'CANDIDATES_READY_FOR_REVIEW'
+          assert report['may_deploy'] is False
+          assert report['may_trade'] is False
+          assert report['may_modify_source'] is False
+          assert report['requires_human_approval'] is True
+          assert report['private_source_included'] is False
+          assert report['checks']['behavior_tests_passed'] is False
+          print('PASS candidate manifest restrictions')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: hsi-3sys-audit
           path: |
             /tmp/hsi-3sys-audit.json
             /tmp/hsi-3sys-audit.md
+            /tmp/hsi-3sys-candidates.json
+            /tmp/hsi-3sys-candidates.md
           retention-days: 14
       - name: Hold if remote evidence or formal check is incomplete
         run: |
@@ -91,7 +119,9 @@ jobs:
           mkdir -p hsi_reports
           cp /tmp/hsi-audit/hsi-3sys-audit.json hsi_reports/HSI_3SYS_DRIFT.json
           cp /tmp/hsi-audit/hsi-3sys-audit.md hsi_reports/HSI_3SYS_DRIFT.md
-          git add hsi_reports/HSI_3SYS_DRIFT.json hsi_reports/HSI_3SYS_DRIFT.md
+          cp /tmp/hsi-audit/hsi-3sys-candidates.json hsi_reports/HSI_3SYS_CANDIDATES.json
+          cp /tmp/hsi-audit/hsi-3sys-candidates.md hsi_reports/HSI_3SYS_CANDIDATES.md
+          git add hsi_reports/HSI_3SYS_DRIFT.json hsi_reports/HSI_3SYS_DRIFT.md hsi_reports/HSI_3SYS_CANDIDATES.json hsi_reports/HSI_3SYS_CANDIDATES.md
           if ! git diff --cached --quiet; then
             git commit -m "docs(hsi): propose cross-system drift evidence for review"
             git push origin "$REPORT_BRANCH"
