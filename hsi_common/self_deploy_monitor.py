@@ -125,7 +125,7 @@ def markdown_report(report: dict) -> str:
         "",
         f"**Decision:** {report['status']}",
         "",
-        f"**Source branch:** \`{report['branch']}\`",
+        f"**Source branch:** `{report['branch']}`",
         "",
         "| Source file | UTM | Trader-42 | Omega |",
         "|---|---|---|---|",
@@ -133,7 +133,7 @@ def markdown_report(report: dict) -> str:
     for path, by_repo in report["observations_sha256"].items():
         values = [by_repo[repo] for repo in REPOS]
         short = [v[:12] if v != "UNAVAILABLE" else v for v in values]
-        rows.append(f"| \`{path}\` | \`{short[0]}\` | \`{short[1]}\` | \`{short[2]}\` |")
+        rows.append(f"| `{path}` | `{short[0]}` | `{short[1]}` | `{short[2]}` |")
     rows.extend([
         "",
         "This document is an **automatically generated, review-only report**.",
@@ -146,7 +146,7 @@ def markdown_report(report: dict) -> str:
         "Private Trader-42 access requires HSI_AUDIT_READ_TOKEN with read-only",
         "Contents permission for the Trader-42 repository. Missing access is HOLD.",
         "",
-        "GitHub branch protection, platform authorization, independent CI,
+        "GitHub branch protection, platform authorization, independent CI,",
         "rollbacks, and human approval remain separate requirements.",
         "",
     ])
