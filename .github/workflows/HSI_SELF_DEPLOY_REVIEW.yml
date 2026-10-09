@@ -34,6 +34,7 @@ jobs:
       - name: Audit the three pinned HSI deployment branches
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HSI_AUDIT_READ_TOKEN: ${{ secrets.HSI_AUDIT_READ_TOKEN }}
         run: |
           python3 hsi_common/self_deploy_monitor.py \
             --json-out /tmp/hsi-3sys-audit.json \
