@@ -1,72 +1,92 @@
-# HSI guarded self-deployment: stage 1 (review-only)
+# HSI guarded self-deployment: stages 1–2 (review-only)
 
 ## Capability boundary
 
-This PR adds *observation and review preparation*, **not** self-modifying
-production software. All source reads are from the pinned
-\`hsi-three-system-v1\` branches in the three system repositories.
+This review branch adds source observation, bounded candidate **metadata** and
+review preparation. It does **not** autonomously change deployed software.
 
-The monitor compares SHA-256 digests of the HSI \`core.py\`, \`server.py\`,
-and \`test_core.py\` files without running fetched source. It reports:
+- Stage 1: fetch bytes for exactly three files from three pinned
+  `hsi-three-system-v1` branches and compare SHA-256.
+- Stage 2: when the full audit supports a mismatch, propose a human-reviewed
+  source-parity plan against the pinned UTM copy. The planner reads only the
+  proposed UTM source, checks UTF-8/Python syntax and digest continuity, and
+  emits hashes/references. It **never exports private Trader-42 source bytes**.
+- Separate credential-free mock unit tests exercise the planner's fail-closed
+  behavior. Python syntax checks are not behavioral compatibility tests.
+- Stage 3 (not implemented): review the real candidate code/diff privately,
+  perform independent behavioral/security tests in isolation, obtain
+  authorization, deploy via an authenticated adapter, then health-check/rollback.
 
-| Status | Meaning |
+## Stage 1 audit decisions
+
+| Decision | Meaning |
 | --- | --- |
-| \`IN_SYNC\` | All three copies were readable and their scoped bytes match |
-| \`REVIEW_REQUIRED\` | All three copies were readable and scoped source drift exists |
-| \`HOLD_FETCH_ERROR\` | At least one source was inaccessible; no assurance of agreement |
-| \`HOLD_FORMAL_GATE\` | The finite HSI certificate gate failed; no assurance |
+| `IN_SYNC` | All three pinned copies were readable and byte-identical in scope |
+| `REVIEW_REQUIRED` | All three copies were readable and scoped source drift exists |
+| `HOLD_FETCH_ERROR` | At least one copy was inaccessible |
+| `HOLD_FORMAL_GATE` | The HSI finite-state gate did not close |
 
-A formal \`closed=1\` certificate only tests the finite conditions of
-\`HSI-3SYS/1.0\`. It is **not** a security proof, an optimizer, a deployment
-authorization, or a statement about program halting.
+`closed=1` proves neither code correctness nor permission to deploy.
 
-## Required access to private Trader-42 repository
+## Stage 2 candidate decisions
 
-The workflow's built-in \`GITHUB_TOKEN\` is normally scoped to the current
-UTM repository. If \`letsgo0226/Trader_42.sh\` is private, the monitor
-cannot read it merely because the UTM workflow has a token. A 404/403
-must HOLD; it must not be interpreted as agreement.
+| Decision | Meaning |
+| --- | --- |
+| `CANDIDATES_READY_FOR_REVIEW` | Bounded replacement metadata produced for review |
+| `NO_CHANGE` | The scoped audit does not contain a mismatch |
+| `HOLD` | Missing, stale, invalid, oversized or contradictory evidence |
 
-An administrator may configure a **separate, narrowly scoped, read-only**
-credential, named \`HSI_AUDIT_READ_TOKEN\`, as an Actions repository secret
-in UTM.sh. A suitable fine-grained token must be restricted to
-\`Trader_42.sh\` with only **Contents: Read** permission, or use an
-equivalent read-only GitHub App installation credential.
+Every candidate specifies the current target SHA-256, proposed UTM SHA-256,
+file path and source branch. Reviewers must inspect the actual destination
+diff and determine whether using the UTM copy is appropriate. **No code fix is
+automatically applied.**
 
-- Never paste a token into a chat, workflow source, log, issue, or PR.
-- The separate credential is sent **only** to the Trader-42 contents API.
-- Do **not** grant Actions Railway administration or exchange order authority.
-- Without this read permission, the CI audit intentionally fails closed.
+The candidate plan does not include private source bytes, an executable patch,
+an exchange instruction or a platform authorization.
 
-## GitHub's protections remain authoritative
+## Private Trader-42 access
 
-The workflow uses two jobs:
-1. **Audit**: read-only by default; tests and compares sources, then uploads
-   a report artifact. Any incomplete source evidence fails closed.
-2. **Propose**: only on confirmed drift, and only for non-PR triggers;
-   its scoped write permissions may create/update a *draft PR containing
-   only the JSON/Markdown audit report*. It does not push any code fixes.
+The workflow's ordinary `GITHUB_TOKEN` cannot be assumed to read
+`letsgo0226/Trader_42.sh`; private repositories commonly return HTTP
+403/404 to another repo's Actions token. Do not bypass this isolation.
 
-GitHub Actions must be configured to allow workflow-created PRs for stage 1
-report PR creation to work. The \`schedule\` event only runs a workflow
-present on the repository's **default branch**. While this workflow is only
-in a draft PR or feature branch, it is not an active daily scheduled job.
+To allow the **stage-1 audit** to read that repository, an administrator may
+set a fine-grained read-only credential `HSI_AUDIT_READ_TOKEN` in UTM.sh
+Actions secrets with **only Trader_42.sh: Contents Read**, or use equivalent
+read-only GitHub App permissions.
 
-Do not merge this draft merely to bypass an audit failure. First verify
-the private-repo read-only access, source scope, and relevant branch policies.
+- Do not paste secret values into any chat, workflow file, issue or PR.
+- The additional credential is sent only to the allowlisted Trader-42 source.
+- Missing access is a HOLD, not a claim of synchronization.
+- No Railway tokens, GitHub administration scopes, financial exchange API
+  keys or deployment credentials are requested.
 
-## Stage 2+ proposal (not implemented here)
+## GitHub Actions layout
 
-\`\`\`text
-Observe -> Compare -> Candidate Patch -> Isolated Tests
- -> HSI Bounded Invariant Gate -> Security/Resource Review
- -> Human-Authorized GitHub PR -> Authorized Cloud Apply
- -> Health Check -> Evidence Review / Rollback
-\`\`\`
+1. **Audit** runs credential-free unit tests, performs source reads, and (on
+   verified drift only) produces stage-2 candidate records. A missing input or
+   mismatch in supporting evidence fails the job closed.
+2. **Propose** is allowed only on a confirmed drift and non-PR events, and may
+   create a *draft report-only PR* using scoped GitHub permissions. The
+   proposal consists of hashes/review metadata, not private code or a fix.
+3. Nothing in this workflow can merge, launch a trading order, or call a
+   Railway mutation API. Deployment is deliberately out-of-scope.
 
-Possible future automated actions must be explicit allowlisted operations
-with time/resource budgets, protected environments, owner approval,
-and rollback. Production trade arming, adding privileges, and changing
-billing plans are excluded from unattended auto-apply.
+GitHub Actions must explicitly allow workflow-created pull requests for the
+report-only PR job to function. Daily schedules work only after a workflow
+lands on the repository's default branch. **This draft PR is not a live daily
+scheduled monitor until separately reviewed and merged.**
 
-Never equate \`IN_SYNC\` with \`SAFE\`; synchronized bugs are still bugs.
+## Remaining safe-deployment milestones
+
+- Independently test candidate behavior, not merely Python syntax.
+- Review the actual target changes within the destination repository.
+- Require a fresh target revision and explicit owner authorization.
+- Apply only through protected branches/environments with proper GitHub and
+  Railway credentials, keeping trading/live arming and billing excluded from
+  unattended updates.
+- Confirm new deployment health, persistence and rollback evidence.
+
+`IN_SYNC` must not be interpreted as `SAFE`. A shared bug can exist in all
+three source copies. Neither a formal certificate nor a platform SUCCESS
+status establishes correctness of arbitrary future updates.
