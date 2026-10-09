@@ -36,7 +36,11 @@ def fetch_content(repo: str, path: str) -> bytes:
         raise ValueError("repository/path not in the fixed allowlist")
     url = f"{BASE_URL}/repos/{quote(repo, safe='/')}/contents/{quote(path, safe='/')}?ref={BRANCH}"
     headers = {"Accept": "application/vnd.github+json", "User-Agent": "HSI-3SYS-ReadOnly-Audit"}
-    token = os.environ.get("GITHUB_TOKEN", "")
+    # The regular workflow token is scoped to this repository.  The Trader-42
+    # source can be private; use a separate explicit read-only credential only
+    # for that one repository.  Never grant the monitor write/deploy authority.
+    token = (os.environ.get("HSI_AUDIT_READ_TOKEN", "") if repo == REPOS[1]
+             else os.environ.get("GITHUB_TOKEN", ""))
     if token:
         headers["Authorization"] = f"Bearer {token}"
     request = Request(url, headers=headers)
@@ -65,7 +69,7 @@ def make_report() -> dict:
                 observations[path][repo] = _digest(fetch_content(repo, path))
             except Exception as exc:
                 observations[path][repo] = "UNAVAILABLE"
-                errors.append({"repo": repo, "path": path, "reason": type(exc).__name__})
+                errors.append({"repo": repo, "path": path, "reason": f"{type(exc).__name__}:{getattr(exc, 'code', 'unknown')}"})
 
     mismatches = [
         path for path, results in observations.items()
@@ -139,7 +143,10 @@ def markdown_report(report: dict) -> str:
         "A source mismatch is evidence requiring investigation, **not** proof",
         "that one copy is safer or newer than another.",
         "",
-        "GitHub branch protection, platform authorization, independent CI,",
+        "Private Trader-42 access requires HSI_AUDIT_READ_TOKEN with read-only",
+        "Contents permission for the Trader-42 repository. Missing access is HOLD.",
+        "",
+        "GitHub branch protection, platform authorization, independent CI,
         "rollbacks, and human approval remain separate requirements.",
         "",
     ])
