@@ -1,0 +1,106 @@
+name: HSI 3SYS guarded self-deploy audit
+
+on:
+  push:
+    branches:
+      - main
+      - hsi-three-system-v1
+      - hsi-self-deploy-solver-review-v1
+    paths:
+      - "hsi_common/**"
+      - ".github/workflows/HSI_SELF_DEPLOY_REVIEW.yml"
+  pull_request:
+    branches:
+      - main
+      - hsi-three-system-v1
+  workflow_dispatch:
+  schedule:
+    - cron: "37 2 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Audit deployed HSI source copies (no mutation)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      status: ${{ steps.inspect.outputs.status }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test finite HSI core and monitor
+        run: python3 -m unittest discover -s hsi_common -p "test_*.py" -v
+      - name: Audit the three pinned HSI deployment branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 hsi_common/self_deploy_monitor.py \
+            --json-out /tmp/hsi-3sys-audit.json \
+            --markdown-out /tmp/hsi-3sys-audit.md
+      - name: Read audit decision
+        id: inspect
+        run: |
+          echo "status=$(python3 -c 'import json;print(json.load(open("/tmp/hsi-3sys-audit.json"))["status"])')" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hsi-3sys-audit
+          path: |
+            /tmp/hsi-3sys-audit.json
+            /tmp/hsi-3sys-audit.md
+          retention-days: 14
+      - name: Hold if remote evidence or formal check is incomplete
+        run: |
+          if [ "${{ steps.inspect.outputs.status }}" = "HOLD_FETCH_ERROR" ] || \
+             [ "${{ steps.inspect.outputs.status }}" = "HOLD_FORMAL_GATE" ]; then
+            echo "::error::HSI audit held; no automated source or deployment change."
+            exit 1
+          fi
+
+  propose:
+    name: Create review-only drift PR (never deploy)
+    needs: audit
+    if: needs.audit.outputs.status == 'REVIEW_REQUIRED' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: hsi-3sys-audit
+          path: /tmp/hsi-audit
+      - name: Propose report-only review PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          REPORT_BRANCH="hsi-three-system-drift-review"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin "$REPORT_BRANCH" >/dev/null; then
+            git fetch origin "$REPORT_BRANCH"
+            git switch --track -c "$REPORT_BRANCH" "origin/$REPORT_BRANCH"
+          else
+            git switch -c "$REPORT_BRANCH"
+          fi
+          mkdir -p hsi_reports
+          cp /tmp/hsi-audit/hsi-3sys-audit.json hsi_reports/HSI_3SYS_DRIFT.json
+          cp /tmp/hsi-audit/hsi-3sys-audit.md hsi_reports/HSI_3SYS_DRIFT.md
+          git add hsi_reports/HSI_3SYS_DRIFT.json hsi_reports/HSI_3SYS_DRIFT.md
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(hsi): propose cross-system drift evidence for review"
+            git push origin "$REPORT_BRANCH"
+          fi
+          COUNT="$(gh pr list --base "$BASE_BRANCH" --head "$REPORT_BRANCH" --state open --json number --jq 'length')"
+          if [ "$COUNT" = "0" ]; then
+            gh pr create \
+              --draft \
+              --base "$BASE_BRANCH" \
+              --head "$REPORT_BRANCH" \
+              --title "review(hsi): cross-system HSI source drift (no auto-deploy)" \
+              --body "Automatically prepared drift report only. No source synchronization, merging, Railway changes, or trading actions. A human must review the mismatches and independently authorize any corrective change."
+          fi
