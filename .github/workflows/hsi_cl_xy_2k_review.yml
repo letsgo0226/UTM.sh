@@ -1,0 +1,44 @@
+name: HSI CL XY 2K guarded review
+on:
+  pull_request:
+    branches: [hsi-three-system-v1]
+    paths:
+      - 'hsi_xy_analytic_2k/**'
+      - '.github/workflows/hsi_cl_xy_2k_review.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  xy-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check exact launcher byte bound and shell syntax
+        run: |
+          test "$(wc -c < hsi_xy_analytic_2k/hsi_cl_xy_2k.sh)" -lt 2048
+          sh -n hsi_xy_analytic_2k/hsi_cl_xy_2k.sh
+      - name: Test accepted step versus rejected candidate
+        run: |
+          set -eu
+          HSI_STATE="$RUNNER_TEMP/xy-good.state" HSI_PROGRAM=2 HSI_WORD=1 \
+            sh hsi_xy_analytic_2k/hsi_cl_xy_2k.sh > "$RUNNER_TEMP/good.json"
+          HSI_STATE="$RUNNER_TEMP/xy-bad.state" HSI_PROGRAM=2 HSI_WORD=1 \
+            HSI_CAND='[99,0,[]]' sh hsi_xy_analytic_2k/hsi_cl_xy_2k.sh > "$RUNNER_TEMP/bad.json"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])
+          ok=json.loads((p/'good.json').read_text())
+          bad=json.loads((p/'bad.json').read_text())
+          g=json.loads((p/'xy-good.state').read_text())
+          b=json.loads((p/'xy-bad.state').read_text())
+          assert ok['accepted']==1 and ok['D0']==0 and g['n']==1
+          assert bad['accepted']==0 and bad['D0']>0 and b['n']==0
+          assert len(g['H'])==len(b['H'])==1
+          assert ok['x'] and ok['y'] and bad['x'] and bad['y']
+          print('HSI–CL–XY review PASS; no production deployment or trader order')
+          PY
