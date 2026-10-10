@@ -1,0 +1,38 @@
+name: HSI UPOK bounded logic CI
+
+on:
+  push:
+    branches:
+      - hsi-upok-proof-meta-v1
+    paths:
+      - "hsi_common/proof_meta.py"
+      - "hsi_common/test_proof_meta.py"
+      - "hsi_common/UPOK_README.md"
+      - ".github/workflows/HSI_UPOK_REVIEW.yml"
+  pull_request:
+    branches:
+      - hsi-three-system-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile static bounded HSI-UPOK module
+        run: python3 -m py_compile hsi_common/proof_meta.py hsi_common/test_proof_meta.py
+      - name: Test original HSI and new logic kernel together
+        run: python3 -m unittest discover -s hsi_common -p 'test_*.py' -v
+      - name: Assert no platform token or execution path in the new source
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          src=Path('hsi_common/proof_meta.py').read_text()
+          for forbidden in ('import requests','import subprocess','import urllib','RAILWAY_TOKEN','BINANCE_API_KEY','GITHUB_TOKEN'):
+              assert forbidden not in src, forbidden
+          print('PASS: no known cloud/trading access calls')
+          PY
