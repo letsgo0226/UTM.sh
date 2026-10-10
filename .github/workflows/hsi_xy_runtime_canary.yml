@@ -1,0 +1,31 @@
+name: HSI CL XY runtime canary (review only)
+on:
+  pull_request:
+    branches: [hsi-three-system-v1]
+    paths:
+      - 'hsi_common/xy_2k.sh'
+      - 'hsi_common/test_xy_2k.py'
+      - '.github/workflows/hsi_xy_runtime_canary.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Shell and existing guarded service regression
+        run: |
+          set -eu
+          sh -n hsi_common/xy_2k.sh
+          cd hsi_common
+          python3 -m unittest -v test_core test_xy_2k
+      - name: Confirm no service entrypoint modification
+        run: |
+          test -f hsi_common/server.py
+          test "$(wc -c < hsi_common/xy_2k.sh)" -lt 2048
+          echo "Review only; no Railway environment changes or trading"
