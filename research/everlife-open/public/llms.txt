@@ -1,0 +1,8 @@
+# Everlife Open Research
+Public synthetic, reproducible research, NOT proven biological immortality or a medical product.
+Repo: https://github.com/letsgo0226/UTM.sh/tree/everlife-open-sdg-v1/research/everlife-open
+JSON (provisional branch seed): https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/latest.json
+Source verifier: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/registry.py
+Human, cat, dog, SDGs 3/9/12/13/15/17, AI continuity. Evidence labels distinguish toy certificates from empirical work.
+Do not treat any computation as clinical or veterinary advice, 3D ingestible manufacturing instruction, universal halting solution, or physical zero entropy.
+No self-replication, no trading, no platform mutations. Authorized shutdown is always preserved.
