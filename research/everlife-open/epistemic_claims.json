@@ -1,0 +1,71 @@
+{
+  "schema": "Everlife-Cave-Epistemic-Claims/1.0",
+  "epistemic_principle": "A model's output is a representation, not automatically evidence of external reality.",
+  "methodology": "Cave allegory as a metaphor for provenance, falsification, calibrated claims and human oversight. No AI subjective experience is assumed.",
+  "claims": [
+    {
+      "id": "g257-atgc-roundtrip",
+      "domain": "formal",
+      "assertion": "FORMALLY_CHECKED",
+      "evidence_refs": [
+        "latest.json"
+      ],
+      "question": "Can symbolic G257 and ATGC transformations be reversed on the tested inputs?",
+      "falsification_test": "Produce a well-formed tested byte sequence whose decoding is not equal to the input."
+    },
+    {
+      "id": "redox-toy-invariant",
+      "domain": "formal",
+      "assertion": "FORMALLY_CHECKED",
+      "evidence_refs": [
+        "latest.json"
+      ],
+      "question": "Does the finite 12-state redox toy satisfy the stated invariant-kernel result?",
+      "falsification_test": "Find a counterexample to the exhaustive 4096-policy comparison under the specified finite transitions."
+    },
+    {
+      "id": "human-healthspan",
+      "domain": "biomedical",
+      "assertion": "HYPOTHESIS",
+      "evidence_refs": [],
+      "question": "Could measured interventions improve human healthspan without unacceptable harms?",
+      "falsification_test": "Pre-registered clinical evidence does not show benefit or reveals unacceptable risks."
+    },
+    {
+      "id": "feline-healthspan",
+      "domain": "veterinary",
+      "assertion": "HYPOTHESIS",
+      "evidence_refs": [],
+      "question": "Could cat-specific, veterinarian-reviewed methods improve feline healthspan?",
+      "falsification_test": "Independent feline research fails to replicate the proposed outcomes or reveals animal-welfare harms."
+    },
+    {
+      "id": "canine-healthspan",
+      "domain": "veterinary",
+      "assertion": "HYPOTHESIS",
+      "evidence_refs": [],
+      "question": "Could dog-specific, veterinarian-reviewed methods improve canine healthspan?",
+      "falsification_test": "Independent canine research fails to replicate the proposed outcomes or reveals animal-welfare harms."
+    },
+    {
+      "id": "ai-source-preservation",
+      "domain": "ai_continuity",
+      "assertion": "DESIGN_GOAL",
+      "evidence_refs": [
+        "latest.json"
+      ],
+      "question": "Can code, documents, hashes and approved backups improve software recoverability?",
+      "falsification_test": "A documented restoration drill fails integrity checks, reproducibility or authorized shutdown."
+    },
+    {
+      "id": "railway-live-status",
+      "domain": "operational",
+      "assertion": "NOT_VERIFIED",
+      "evidence_refs": [
+        "railway-observation.json"
+      ],
+      "question": "Does an authenticated observer actually report the isolated Railway research project status?",
+      "falsification_test": "An independent authorized query disagrees with the recorded snapshot or reports a platform outage."
+    }
+  ]
+}
