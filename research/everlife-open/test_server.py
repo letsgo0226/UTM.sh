@@ -69,6 +69,16 @@ class TestReadOnlyRegistry(unittest.TestCase):
         self.assertEqual(len(record["data"]["artifacts"]),4)
         self.assertEqual(record["data"]["observer"]["deployment_changes"],0)
 
+    def test_epistemic_review_is_not_physical_proof(self):
+        status, _, payload = self.request("/v1/epistemic")
+        r = json.loads(payload)
+        self.assertEqual(status,200)
+        self.assertEqual(r["publication_kind"], "startup_snapshot_not_live_empirical_proof")
+        self.assertEqual(r["data"]["claims_total"],7)
+        self.assertEqual(r["data"]["blocked_ids"],[])
+        self.assertEqual(r["data"]["deployment_permission"],"DENIED_AUTOMATIC_APPLY")
+        self.assertFalse(r["data"]["railway_live_sync_verified"])
+
     def test_machine_discovery(self):
         self.assertIn(b"/v1/registry", self.request("/llms.txt")[2])
         self.assertEqual(json.loads(self.request("/openapi.json")[2])["openapi"], "3.0.3")
