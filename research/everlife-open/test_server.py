@@ -46,8 +46,8 @@ class TestReadOnlyRegistry(unittest.TestCase):
         data = json.loads(payload)
         self.assertEqual(status, 200)
         self.assertEqual(data["deployments_triggered"], 0)
-        self.assertEqual(len(data["services"]), 6)
-        self.assertEqual(data["total_steps"], 31)
+        self.assertEqual(len(data["services"]), 7)
+        self.assertEqual(data["total_steps"], 37)
         self.assertFalse(data["real_time_synchronization"])
 
     def test_historical_control_plane(self):
@@ -74,10 +74,19 @@ class TestReadOnlyRegistry(unittest.TestCase):
         r = json.loads(payload)
         self.assertEqual(status,200)
         self.assertEqual(r["publication_kind"], "startup_snapshot_not_live_empirical_proof")
-        self.assertEqual(r["data"]["claims_total"],7)
+        self.assertEqual(r["data"]["claims_total"],8)
         self.assertEqual(r["data"]["blocked_ids"],[])
         self.assertEqual(r["data"]["deployment_permission"],"DENIED_AUTOMATIC_APPLY")
         self.assertFalse(r["data"]["railway_live_sync_verified"])
+
+    def test_nutrition_study_is_protocol_not_medical_data(self):
+        status, _, payload = self.request("/v1/nutrition-study")
+        r = json.loads(payload)
+        self.assertEqual(status, 200)
+        self.assertEqual(r["publication_kind"], "public_nonpersonal_protocol_only")
+        self.assertEqual(r["data"]["status"], "RESEARCH_PROTOCOL_VALIDATED_METADATA_ONLY")
+        self.assertFalse(r["data"]["human_data_collected"])
+        self.assertFalse(r["data"]["external_apply"])
 
     def test_machine_discovery(self):
         self.assertIn(b"/v1/registry", self.request("/llms.txt")[2])
