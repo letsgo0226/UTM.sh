@@ -50,6 +50,12 @@
       "domain": "human-cat-dog-one-health-no-treatment",
       "program": "++++.",
       "external_apply_enabled": false
+    },
+    {
+      "id": "ethical-protein-transition",
+      "domain": "public-food-ethics-metadata-only-no-bioprocess",
+      "program": "++++++.",
+      "external_apply_enabled": false
     }
   ]
 }
