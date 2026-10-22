@@ -26,7 +26,7 @@ class CaveEpistemicGateTests(unittest.TestCase):
         self.assertFalse(result["ai_subjective_awareness_assumed"])
         self.assertEqual(result["external_independent_replications"],0)
         self.assertEqual(result["rows"][0]["classification"],"FORMAL_WITHIN_STATED_MODEL")
-        self.assertEqual(result["rows"][-1]["classification"],"RAILWAY_NOT_OBSERVED")
+        self.assertEqual(next(row for row in result["rows"] if row["claim_id"] == "railway-live-status")["classification"],"RAILWAY_NOT_OBSERVED")
         self.assertFalse(any(row["falsification_test_executed"] for row in result["rows"]))
 
     def test_nutrition_study_cannot_be_called_empirical_proof(self):
@@ -36,6 +36,13 @@ class CaveEpistemicGateTests(unittest.TestCase):
         study["assertion"] = "EMPIRICALLY_PROVEN"
         r = review(spec, latest, unified, railway)
         self.assertIn("diet-cognition-odor", r["blocked_ids"])
+
+    def test_ethical_protein_is_hypothesis_not_zero_harm_proof(self):
+        spec, latest, unified, railway = inputs()
+        study = next(c for c in spec["claims"] if c["id"] == "ethical-protein-transition")
+        self.assertEqual(study["assertion"], "HYPOTHESIS")
+        study["assertion"] = "EMPIRICALLY_PROVEN"
+        self.assertIn("ethical-protein-transition", review(spec, latest, unified, railway)["blocked_ids"])
 
     def test_g257_claim_address_roundtrip(self):
         result=review(*inputs())
@@ -57,7 +64,7 @@ class CaveEpistemicGateTests(unittest.TestCase):
 
     def test_cannot_upgrade_source_archive_to_identity(self):
         spec,latest,unified,railway=inputs()
-        spec["claims"][-2]["assertion"]="LIVE_VERIFIED"
+        next(c for c in spec["claims"] if c["id"] == "ai-source-preservation")["assertion"]="LIVE_VERIFIED"
         r=review(spec,latest,unified,railway)
         self.assertIn("ai-source-preservation",r["blocked_ids"])
 
@@ -65,9 +72,9 @@ class CaveEpistemicGateTests(unittest.TestCase):
         spec,latest,unified,railway=inputs()
         railway["observation"]["status"]="OBSERVED"
         r=review(spec,latest,unified,railway)
-        self.assertEqual(r["rows"][-1]["classification"],"ONE_PLATFORM_SNAPSHOT_NOT_LIVE_PROOF")
+        self.assertEqual(next(row for row in r["rows"] if row["claim_id"] == "railway-live-status")["classification"],"ONE_PLATFORM_SNAPSHOT_NOT_LIVE_PROOF")
         self.assertFalse(r["railway_live_sync_verified"])
-        spec["claims"][-1]["assertion"]="LIVE_VERIFIED"
+        next(c for c in spec["claims"] if c["id"] == "railway-live-status")["assertion"]="LIVE_VERIFIED"
         self.assertIn("railway-live-status",review(spec,latest,unified,railway)["blocked_ids"])
 
     def test_missing_counterargument_is_invalid(self):
