@@ -21,7 +21,7 @@ class CaveEpistemicGateTests(unittest.TestCase):
         result=review(*inputs())
         self.assertEqual(result["decision"],"PUBLISH_RESEARCH_WITH_LABELS")
         self.assertEqual(result["deployment_permission"],"DENIED_AUTOMATIC_APPLY")
-        self.assertEqual(result["claims_total"],8)
+        self.assertEqual(result["claims_total"],9)
         self.assertEqual(result["blocked_ids"],[])
         self.assertFalse(result["ai_subjective_awareness_assumed"])
         self.assertEqual(result["external_independent_replications"],0)
