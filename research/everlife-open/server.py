@@ -30,6 +30,18 @@ ROUTES = {
     "/robots.txt": "User-agent: *\nAllow: /\n",
 }
 
+# Deterministic bounded snapshot; no subprocess or external API requests.
+from pathlib import Path
+from unified_machine import simulate
+UNIFIED = simulate(json.loads((Path(__file__).resolve().parent / "unified_registry.json").read_text(encoding="utf-8")))
+ROUTES["/v1/unified"] = UNIFIED
+ROUTES["/"]["routes"].append("/v1/unified")
+ROUTES["/v1/manifest"]["unified"] = "/v1/unified"
+ROUTES["/openapi.json"]["paths"]["/v1/unified"] = {
+    "get": {"summary": "Bounded multi-workload logical scheduler certificate",
+            "responses": {"200": {"description": "Read-only synthetic computation"}}}}
+ROUTES["/llms.txt"] += "Unified virtual workload snapshot: /v1/unified\\n"
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._respond(send_body=True)
