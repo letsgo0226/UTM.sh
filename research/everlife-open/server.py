@@ -93,6 +93,21 @@ ROUTES["/openapi.json"]["paths"]["/v1/epistemic"] = {
             "responses": {"200": {"description": "Read-only research epistemic review"}}}}
 ROUTES["/llms.txt"] += "Evidence review: /v1/epistemic\\n"
 
+# Public protocol, not a patient data store or a clinical recommendation engine.
+from nutrition_study import review as nutrition_study_review
+NUTRITION_SPEC = json.loads((Path(__file__).resolve().parent /
+    "nutrition_cognition_odor_study.json").read_text(encoding="utf-8"))
+ROUTES["/v1/nutrition-study"] = {
+    "publication_kind": "public_nonpersonal_protocol_only",
+    "data": nutrition_study_review(NUTRITION_SPEC)
+}
+ROUTES["/"]["routes"].append("/v1/nutrition-study")
+ROUTES["/v1/manifest"]["nutrition_cognition_odor_protocol"] = "/v1/nutrition-study"
+ROUTES["/openapi.json"]["paths"]["/v1/nutrition-study"] = {
+    "get": {"summary": "Public diet, cognition and odor study protocol (not clinical data)",
+            "responses": {"200": {"description": "Metadata only, no participant results"}}}}
+ROUTES["/llms.txt"] += "Nutrition, brain fog and odor research protocol: /v1/nutrition-study\\n"
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._respond(send_body=True)
