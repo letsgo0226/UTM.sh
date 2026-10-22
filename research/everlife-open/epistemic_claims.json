@@ -74,6 +74,14 @@
       ],
       "question": "Does an authenticated observer actually report the isolated Railway research project status?",
       "falsification_test": "An independent authorized query disagrees with the recorded snapshot or reports a platform outage."
+    },
+    {
+      "id": "ethical-protein-transition",
+      "domain": "biomedical",
+      "assertion": "HYPOTHESIS",
+      "evidence_refs": [],
+      "question": "Can nutritional alternatives to slaughter-derived meat use plant proteins, microbial fermentation, and audited serum-free cultivated tissue to reduce animal suffering without compromising nutrition, food safety and lifecycle impacts?",
+      "falsification_test": "Independent evidence identifies nutrient inadequacy, unacceptable safety risks, continuing animal-derived serum or donor harm, poorly bounded sentient tissue or adverse lifecycle effects; no product may be labeled zero-suffering without auditable supply-chain evidence."
     }
   ]
 }
