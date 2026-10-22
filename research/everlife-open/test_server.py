@@ -1,0 +1,114 @@
+"""Non-networked runtime tests with a local loopback HTTP server."""
+import json
+import threading
+import unittest
+from http.server import ThreadingHTTPServer
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
+from server import Handler
+
+class TestReadOnlyRegistry(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+        cls.port = cls.server.server_address[1]
+        cls.worker = threading.Thread(target=cls.server.serve_forever, daemon=True)
+        cls.worker.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.server.shutdown()
+        cls.server.server_close()
+        cls.worker.join(timeout=3)
+
+    def request(self, path, method="GET"):
+        with urlopen(Request(f"http://127.0.0.1:{self.port}{path}", method=method), timeout=5) as response:
+            return response.status, response.headers, response.read()
+
+    def test_health(self):
+        status, _, payload = self.request("/health")
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(payload)["status"], "ok")
+
+    def test_public_registry(self):
+        status, h, payload = self.request("/v1/registry")
+        data = json.loads(payload)
+        self.assertEqual(status, 200)
+        self.assertEqual(h["Access-Control-Allow-Origin"], "*")
+        self.assertIsNone(data["model"]["clinical_or_veterinary_efficacy"])
+        self.assertFalse(data["formal"]["universal_halting_solver"])
+        self.assertEqual(data["model"]["replenished_and_finite"]["1"]["safe_kernel_size"], 12)
+        self.assertEqual(data["model"]["replenished_and_finite"]["0"]["safe_kernel_size"], 0)
+        self.assertIn("cat", data["species"])
+
+    def test_unified_virtual_registry(self):
+        status, _, payload = self.request("/v1/unified")
+        data = json.loads(payload)
+        self.assertEqual(status, 200)
+        self.assertEqual(data["deployments_triggered"], 0)
+        self.assertEqual(len(data["services"]), 8)
+        self.assertEqual(data["total_steps"], 44)
+        self.assertFalse(data["real_time_synchronization"])
+
+    def test_historical_control_plane(self):
+        status, _, payload = self.request("/v1/control")
+        data = json.loads(payload)
+        self.assertEqual(status, 200)
+        self.assertEqual(data["publication_kind"], "historical_ci_snapshot_not_live")
+        self.assertFalse(data["data"]["external_apply"])
+        self.assertEqual(data["data"]["railway"]["status"], "NOT_CONFIGURED")
+        status, _, payload = self.request("/v1/railway-observation")
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(payload)["data"]["writes_performed"], 0)
+
+    def test_integrity_route(self):
+        status, headers, payload = self.request("/v1/integrity")
+        self.assertEqual(status,200)
+        record=json.loads(payload)
+        self.assertEqual(record["publication_kind"],"historical_ci_snapshot_not_live")
+        self.assertEqual(len(record["data"]["artifacts"]),4)
+        self.assertEqual(record["data"]["observer"]["deployment_changes"],0)
+
+    def test_epistemic_review_is_not_physical_proof(self):
+        status, _, payload = self.request("/v1/epistemic")
+        r = json.loads(payload)
+        self.assertEqual(status,200)
+        self.assertEqual(r["publication_kind"], "startup_snapshot_not_live_empirical_proof")
+        self.assertEqual(r["data"]["claims_total"],9)
+        self.assertEqual(r["data"]["blocked_ids"],[])
+        self.assertEqual(r["data"]["deployment_permission"],"DENIED_AUTOMATIC_APPLY")
+        self.assertFalse(r["data"]["railway_live_sync_verified"])
+
+    def test_nutrition_study_is_protocol_not_medical_data(self):
+        status, _, payload = self.request("/v1/nutrition-study")
+        r = json.loads(payload)
+        self.assertEqual(status, 200)
+        self.assertEqual(r["publication_kind"], "public_nonpersonal_protocol_only")
+        self.assertEqual(r["data"]["status"], "RESEARCH_PROTOCOL_VALIDATED_METADATA_ONLY")
+        self.assertFalse(r["data"]["human_data_collected"])
+        self.assertFalse(r["data"]["external_apply"])
+
+    def test_ethical_protein_metadata_is_nonclinical(self):
+        status, _, payload = self.request("/v1/ethical-protein")
+        r = json.loads(payload)
+        self.assertEqual(status,200)
+        self.assertEqual(r["publication_kind"],"public_nonpersonal_research_protocol_only")
+        self.assertFalse(r["data"]["zero_suffering_established"])
+        self.assertFalse(r["data"]["external_apply"])
+
+    def test_machine_discovery(self):
+        self.assertIn(b"/v1/registry", self.request("/llms.txt")[2])
+        self.assertEqual(json.loads(self.request("/openapi.json")[2])["openapi"], "3.0.3")
+
+    def test_no_mutation(self):
+        with self.assertRaises(HTTPError) as c:
+            self.request("/v1/registry", method="POST")
+        self.assertEqual(c.exception.code, 405)
+
+    def test_head_does_not_return_body(self):
+        status, _, body = self.request("/health", method="HEAD")
+        self.assertEqual(status, 200)
+        self.assertEqual(body, b"")
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,76 @@
+{
+  "chain_final_sha256": "983d6f273bb0445b3c4cfb276a9252c33a3b63e38603c4c48082f4f8a07712e4",
+  "chain_genesis_sha256": "109ab04a637d0ef7ed7827ae040b519c22883de4954136e2528a34f1a62b53ed",
+  "deployments_triggered": 0,
+  "events_count": 31,
+  "evidence": "formal-bounded-only",
+  "input_sha256": "f6ee1654dbe616ad7ac5b9c7d211cee7db6bc649d24e283dc25522874a39cc01",
+  "real_time_synchronization": false,
+  "schema": "Everlife-Unified-Run/1.0",
+  "services": [
+    {
+      "atgc_sha256": "392a76a8f6cd4a38af7f731ace6f82df24e37f82526f83098a1c4c4663c88a11",
+      "code_sha256": "5fa6534d1d4dd879ff7924a8e0030e4814cddfa5466e58601573651afd366239",
+      "domain": "digital-archiving-only",
+      "g257": "0x12e5c",
+      "id": "ai-continuity",
+      "output_hex": "01",
+      "status": "HALTED",
+      "steps": 2
+    },
+    {
+      "atgc_sha256": "328010138a3bda1c70c5a02395207b90cff45d227fd70a2df64ad435aa97dc2e",
+      "code_sha256": "3d2c0596fb1a54777e221bdbf6913155d608c15ddc12b32757a3e233aa79df2e",
+      "domain": "human-cat-dog-one-health-no-treatment",
+      "g257": "0x131e7c3bde0",
+      "id": "animal-welfare",
+      "output_hex": "04",
+      "status": "HALTED",
+      "steps": 5
+    },
+    {
+      "atgc_sha256": "2246e0a7fcc0498b694ac32c5b2e50ff66d8f4d5b12ecdd80a197a5fece2c659",
+      "code_sha256": "963cf87ddd41be481dacec23bcb26b756803b5b57915c43f3da040f7cd9e3ef6",
+      "domain": "research-only",
+      "g257": "0x12f8788",
+      "id": "cosmic-observation",
+      "output_hex": "02",
+      "status": "HALTED",
+      "steps": 3
+    },
+    {
+      "atgc_sha256": "be821a7f29fbc7087c260a62b6b1b2b47f97f4f4eb85c7774f0deaf12eb049db",
+      "code_sha256": "3d3f82f6b318f7184f222343cbde289c7716b7e9cc431159138aff598fe4347e",
+      "domain": "research-only",
+      "g257": "0x130b70cb4",
+      "id": "everlife-one-health",
+      "output_hex": "03",
+      "status": "HALTED",
+      "steps": 4
+    },
+    {
+      "atgc_sha256": "972c0fde52f613465c4f275accc47daa9dba36f8483cf9b58f168b494a51452e",
+      "code_sha256": "c496881f7aa04f745dcf323d29b15ed47b24348971397edb954fd1d829faedff",
+      "domain": "read-only-paper-no-broker",
+      "g257": "0x137ed7afeaa0cfc824b57",
+      "id": "trader-paper-audit",
+      "output_hex": "02",
+      "status": "HALTED",
+      "steps": 15
+    },
+    {
+      "atgc_sha256": "66488acedc14ee031b3947a867b7c73ddbb3065a973730b4053915936d3e6770",
+      "code_sha256": "90dfd9ac008050ea676fe9d5c0650ee73d9f07faad8a1a9dd43510a75efb68f2",
+      "domain": "formal-computation",
+      "g257": "0x12f5d",
+      "id": "utm-formal",
+      "output_hex": "00",
+      "status": "HALTED",
+      "steps": 2
+    }
+  ],
+  "synchronization": "deterministic logical-clock round-robin (offline)",
+  "total_steps": 31,
+  "universal_halting_decidable": false,
+  "unlimited_compute_or_storage": false
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "Everlife-Unified-Virtual-Deployment/1.0",
+  "goal": "single logical finite scheduler, not an infinite physical deployment runtime",
+  "limits": {
+    "steps_per_job": 128,
+    "global_steps": 512,
+    "tape_cells": 64,
+    "output_bytes": 16,
+    "program_bytes": 128
+  },
+  "virtual_services": [
+    {
+      "id": "everlife-one-health",
+      "domain": "research-only",
+      "program": "+++.",
+      "external_apply_enabled": false
+    },
+    {
+      "id": "utm-formal",
+      "domain": "formal-computation",
+      "program": ",.",
+      "external_apply_enabled": false
+    },
+    {
+      "id": "cosmic-observation",
+      "domain": "research-only",
+      "program": "++.",
+      "external_apply_enabled": false
+    },
+    {
+      "id": "diet-cognition-odor",
+      "domain": "public-research-metadata-only-no-clinical-data",
+      "program": "+++++.",
+      "external_apply_enabled": false
+    },
+    {
+      "id": "trader-paper-audit",
+      "domain": "read-only-paper-no-broker",
+      "program": "++[>+<-]>.",
+      "external_apply_enabled": false
+    },
+    {
+      "id": "ai-continuity",
+      "domain": "digital-archiving-only",
+      "program": "+.",
+      "external_apply_enabled": false
+    },
+    {
+      "id": "animal-welfare",
+      "domain": "human-cat-dog-one-health-no-treatment",
+      "program": "++++.",
+      "external_apply_enabled": false
+    },
+    {
+      "id": "ethical-protein-transition",
+      "domain": "public-food-ethics-metadata-only-no-bioprocess",
+      "program": "++++++.",
+      "external_apply_enabled": false
+    }
+  ]
+}

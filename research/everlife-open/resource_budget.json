@@ -1,0 +1,24 @@
+{
+  "schema": "Everlife-Finite-Resource-Budget/1.0",
+  "scope": "everlife-open-sdg-v1 isolated research only",
+  "source": "declarations only; operators must supply real predeploy usage and correct live account limits",
+  "declared_estimate": {
+    "build_context_bytes": null,
+    "runtime_memory_mb": null,
+    "persistent_volume_mb": 0
+  },
+  "declared_ceiling": {
+    "build_context_bytes": null,
+    "runtime_memory_mb": null,
+    "persistent_volume_mb": null
+  },
+  "code_max_bytes": 2048,
+  "virtual_machine": {
+    "max_steps": 10000,
+    "max_tape_cells": 4096,
+    "max_output_bytes": 8192
+  },
+  "admission": "fail-closed; REVIEW_REQUIRED cannot authorize a deployment",
+  "operations": "read-only, no Railway write or trading system changes",
+  "warning": "G257 encodes data reversibly but does not compress arbitrary code or bypass physics"
+}

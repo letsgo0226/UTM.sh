@@ -1,0 +1,118 @@
+name: Everlife Open — bounded research certification
+on:
+  push:
+    branches: [everlife-open-sdg-v1]
+    paths:
+      - 'research/everlife-open/**'
+      - '.github/workflows/everlife-open-sdg.yml'
+  pull_request:
+    paths:
+      - 'research/everlife-open/**'
+      - '.github/workflows/everlife-open-sdg.yml'
+  workflow_dispatch: {}
+  schedule:
+    - cron: '19 * * * *'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify bounded symbolic research
+        run: |
+          cd research/everlife-open
+          python3 registry.py
+          python3 -m unittest -v test_server.py test_resource_guard.py test_unified_machine.py test_control_plane.py test_manifest.py test_epistemic_gate.py test_nutrition_study.py test_ethical_protein.py
+          python3 nutrition_study.py
+          python3 ethical_protein.py
+          python3 unified_machine.py
+          python3 - <<'PY'
+          import json
+          d=json.load(open('public/latest.json'))
+          assert d['model']['replenished_and_finite']['1']['safe_kernel_size']==12
+          assert d['model']['replenished_and_finite']['0']['safe_kernel_size']==0
+          assert d['formal']['universal_halting_solver'] is False
+          assert all(v['validation'] is None for v in d['species'].values())
+          assert d['safety']['no_automated_trades']
+          PY
+      - name: Offline Railway fallback (no credentials in PR)
+        if: ${{ !(github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')) }}
+        run: python3 research/everlife-open/railway_probe.py
+      - name: Optional authenticated Railway observation (approved default branch only)
+        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+        env:
+          RAILWAY_OBSERVER_TOKEN: ${{ secrets.RAILWAY_OBSERVER_TOKEN }}
+          RAILWAY_OBSERVER_PROJECT_ID: ${{ vars.RAILWAY_OBSERVER_PROJECT_ID }}
+          RAILWAY_OBSERVER_TOKEN_KIND: ${{ vars.RAILWAY_OBSERVER_TOKEN_KIND }}
+        run: python3 research/everlife-open/railway_probe.py
+      - name: Produce fail-closed event bridge certificate
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: python3 research/everlife-open/control_plane.py
+      - name: Check Plato Cave Epistemic Gate (no overclaims)
+        run: python3 research/everlife-open/epistemic_gate.py
+      - name: Build content-addressed AI research manifest
+        run: python3 research/everlife-open/make_manifest.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: everlife-verified-registry
+          path: |
+            research/everlife-open/public/latest.json
+            research/everlife-open/public/unified-run.json
+            research/everlife-open/public/control-plane.json
+            research/everlife-open/public/railway-observation.json
+            research/everlife-open/public/manifest.json
+            research/everlife-open/public/epistemic-review.json
+            research/everlife-open/public/nutrition-study-review.json
+            research/everlife-open/public/ethical-protein-review.json
+          retention-days: 30
+  publish:
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retrieve certified artifacts (no code execution)
+        uses: actions/download-artifact@v4
+        with:
+          name: everlife-verified-registry
+          path: /tmp/everlife-release
+      - name: Publish to dedicated data branch only
+        env:
+          TARGET_BRANCH: everlife-open-data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git ls-remote --exit-code --heads origin "$TARGET_BRANCH" >/dev/null; then
+            git fetch origin "$TARGET_BRANCH"
+            git switch -C "$TARGET_BRANCH" FETCH_HEAD
+          else
+            git switch -c "$TARGET_BRANCH"
+          fi
+          mkdir -p research/everlife-open/public
+          for name in latest.json unified-run.json control-plane.json railway-observation.json manifest.json epistemic-review.json nutrition-study-review.json ethical-protein-review.json; do
+            cp "/tmp/everlife-release/$name" "research/everlife-open/public/$name"
+          done
+          git add research/everlife-open/public/latest.json research/everlife-open/public/unified-run.json research/everlife-open/public/control-plane.json research/everlife-open/public/railway-observation.json research/everlife-open/public/manifest.json research/everlife-open/public/epistemic-review.json research/everlife-open/public/nutrition-study-review.json research/everlife-open/public/ethical-protein-review.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: refresh verified Everlife research registry'
+            git push origin HEAD:refs/heads/"$TARGET_BRANCH"
+          fi

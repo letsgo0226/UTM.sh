@@ -1,0 +1,129 @@
+{
+  "schema": "Everlife-Nutrition-Cognition-Odor-Study/1.0",
+  "id": "diet-cognition-odor",
+  "title": "Diet, Cognitive Clarity and Odor: evidence-calibrated One Health research proposal",
+  "status": "PROPOSAL_NO_PARTICIPANT_DATA",
+  "scope": "public_nonpersonal_research_protocol_only",
+  "research_questions": [
+    "Is lower meat intake associated with self-reported brain fog or reading comprehension, after accounting for overall diet and sleep?",
+    "Do energy- and protein-adequate plant-forward meals differ from meat-containing meals in subjective clarity under comparable conditions?",
+    "Do meat type and diet composition correlate with axillary, breath, and bowel odor, analyzed as different endpoints?",
+    "Can observations separate subjective experience, empirical physiology and non-operationalized spiritual interpretations?",
+    "Can withdrawal-like sensations after reducing meat intake be distinguished from food habit and reward expectations, changes in total energy intake, and sleep-related fatigue?"
+  ],
+  "candidate_exposures": [
+    "meat_type_and_amount",
+    "plant_protein_sources",
+    "total_energy_and_protein",
+    "meal_timing",
+    "food_patterns_over_multiple_days",
+    "habit_strength_and_meat_craving_without_inducing_deprivation"
+  ],
+  "candidate_outcomes": [
+    {
+      "id": "brain_fog",
+      "kind": "subjective_rating_0_to_10",
+      "status": "NO_DATA"
+    },
+    {
+      "id": "reading_comprehension",
+      "kind": "matched_text_recall_not_speed_alone",
+      "status": "NO_DATA"
+    },
+    {
+      "id": "reading_speed",
+      "kind": "words_per_minute_with_difficulty_recorded",
+      "status": "NO_DATA"
+    },
+    {
+      "id": "axillary_odor",
+      "kind": "self_rating_or_consent_based_blinded_assessment",
+      "status": "NO_DATA"
+    },
+    {
+      "id": "breath_odor",
+      "kind": "separate_measurement_dental_confounders",
+      "status": "NO_DATA"
+    },
+    {
+      "id": "bowel_odor",
+      "kind": "separate_subjective_measurement_gi_confounders",
+      "status": "NO_DATA"
+    }
+  ],
+  "confounders": [
+    "sleep_duration_and_quality",
+    "hydration",
+    "stress",
+    "caffeine",
+    "total_energy",
+    "meal_timing",
+    "physical_activity",
+    "medications_or_illness",
+    "oral_hygiene_and_dental_health",
+    "gut_conditions",
+    "food_spices_and_sulfur_compounds",
+    "reading_text_difficulty",
+    "expectancy_effect",
+    "habit_reward_expectancy_and_cravings"
+  ],
+  "hypotheses": [
+    {
+      "id": "diet-cognition-association",
+      "status": "UNTESTED_EMPIRICAL_HYPOTHESIS",
+      "test": "prospective observation with adequate diet and matched reading tasks",
+      "possible_refutation": "association vanishes after controlling for sleep, total calories, or expectancy; no replication"
+    },
+    {
+      "id": "diet-odor-association",
+      "status": "UNTESTED_EMPIRICAL_HYPOTHESIS",
+      "test": "evaluate axillary, breath, and bowel odor separately while logging meat category and confounders",
+      "possible_refutation": "no repeatable relation in independent masked or controlled comparisons"
+    },
+    {
+      "id": "nutrition-replacement",
+      "status": "UNTESTED_EMPIRICAL_HYPOTHESIS",
+      "test": "compare nutritionally adequate plant protein replacement without restricting calories or essential nutrients",
+      "possible_refutation": "no difference in cognition when diet composition and other factors are matched"
+    },
+    {
+      "id": "withdrawal-like-diet-transition",
+      "status": "UNTESTED_EMPIRICAL_HYPOTHESIS",
+      "test": "Observe the timeline of cravings, mood, fog and satiety during voluntary nutritionally adequate dietary changes, while checking sleep, caloric intake, protein and pre-existing habits; avoid enforced abstinence.",
+      "possible_refutation": "No repeatable short-term symptoms after adequate substitution or symptoms are explained by energy intake, sleep, expectancy, meal timing, and unrelated illness; absence of evidence for a meat-specific withdrawal syndrome."
+    }
+  ],
+  "symbolic_interpretation": {
+    "id": "high-frequency-vibration",
+    "status": "UNOPERATIONALIZED_NO_VALIDATED_PHYSIOLOGICAL_MECHANISM",
+    "note": "May describe personal spiritual experience; not an established physiological frequency, mechanism for brain fog, or equivalent competing empirical explanation. Alien vegetarian or supplement-use anecdotes are not verified evidence."
+  },
+  "literature": [
+    {
+      "id": "havlicek-lenochova-2006",
+      "uri": "https://pubmed.ncbi.nlm.nih.gov/16891352/",
+      "limits": "Small human red-meat axillary-odor study; not a universal finding or evidence about breath, bowel odor, cognition."
+    },
+    {
+      "id": "nih-b12-consumer",
+      "uri": "https://ods.od.nih.gov/factsheets/VitaminB12-Consumer/",
+      "limits": "B12 deficiency may affect neurological function but cannot be inferred from a single low-meat day."
+    },
+    {
+      "id": "processed-food-withdrawal-review-2022",
+      "uri": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9786266/",
+      "limits": "Evidence concerns highly processed foods, largely retrospective in humans, and does not establish a specific meat withdrawal syndrome or explain individual brain fog."
+    }
+  ],
+  "consent_required_before_human_data_collection": true,
+  "human_data_collection_enabled": false,
+  "publish_individual_health_records": false,
+  "individual_data_in_git": false,
+  "clinical_diagnosis_enabled": false,
+  "automated_nutrition_or_supplement_dosing": false,
+  "high_dose_supplements_recommended": false,
+  "animal_or_alien_experiments_enabled": false,
+  "external_apply_enabled": false,
+  "evidence_level": "RESEARCH_QUESTION_WITH_LIMITED_BACKGROUND_LITERATURE_NOT_INDIVIDUAL_CAUSATION",
+  "safety_notes": "No induced fasting, no coercive dietary changes, no invasive testing. Seek qualified medical evaluation for repeated cognitive complaints; obtain informed consent, privacy assessment and clinical oversight before any participant study. No personally identifying health information belongs in the public repository."
+}

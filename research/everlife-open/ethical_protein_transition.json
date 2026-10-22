@@ -1,0 +1,156 @@
+{
+  "schema": "Everlife-Ethical-Protein-Transition/1.0",
+  "id": "ethical-protein-transition",
+  "status": "PUBLIC_RESEARCH_PROPOSAL_NOT_EMPIRICAL_CERTIFICATION",
+  "mission": "Study how to reduce reliance on animal slaughter while preserving nutritional adequacy, food safety, affordability, sustainability, and avoidance of potentially sentient suffering.",
+  "research_tracks": [
+    {
+      "id": "plant-based",
+      "type": "foods",
+      "description": "Balanced plant-forward diets and plant-based meat alternatives with adequate essential amino acids and nutrients",
+      "depends_on_animal_cells": false
+    },
+    {
+      "id": "fermentation",
+      "type": "microbial_biomass_and_precision_fermentation",
+      "description": "Fungal/microbial proteins and fermented ingredients; verify microorganism, feedstock and any animal-derived inputs",
+      "depends_on_animal_cells": false
+    },
+    {
+      "id": "cultivated-meat",
+      "type": "animal_cell_culture",
+      "description": "Grow animal muscle/fat cells from a documented cell bank without necessarily raising/slaughtering animals for each batch",
+      "depends_on_animal_cells": true
+    }
+  ],
+  "mandatory_study_endpoints": [
+    "complete_nutrient_adequacy",
+    "measured_cognition_or_brain_fog_not_assumed",
+    "taste_acceptance",
+    "food_safety_regulatory_status",
+    "cost_per_nutritious_serving",
+    "scalability",
+    "energy_and_lifecycle_emissions",
+    "animal_welfare_upstream_and_downstream",
+    "non-animal_inputs_audit",
+    "traceable_claim_provenance"
+  ],
+  "ethical_audit_criteria": [
+    {
+      "id": "donor-animal",
+      "question": "Was initial cell sourcing nonlethal, veterinary-reviewed, with donor welfare and any embryonic origin documented?",
+      "unknown_policy": "DO_NOT_LABEL_SLAUGHTER_FREE_WITHOUT_PROVENANCE"
+    },
+    {
+      "id": "fetal-bovine-serum",
+      "question": "Were fetal bovine serum and other serum sources excluded or replaced with documented animal-component-free media?",
+      "unknown_policy": "NO_ZERO_HARM_CLAIM"
+    },
+    {
+      "id": "other-animal-derived-components",
+      "question": "Audit growth factors, scaffolds, enzymes, antibodies, processing aids, and their upstream supply chains.",
+      "unknown_policy": "NO_ZERO_HARM_CLAIM"
+    },
+    {
+      "id": "sentience",
+      "question": "Is production limited to appropriate muscle/fat cell culture without creating integrated neural tissue or animal subjects with potential pain perception?",
+      "unknown_policy": "NO_ASSERTION_OF_ABSOLUTE_ZERO_SENTIENCE"
+    },
+    {
+      "id": "safety",
+      "question": "Have the particular product's microbial, allergenic, toxicological and nutritional risks been independently reviewed by the applicable regulator?",
+      "unknown_policy": "NOT_APPROVED_FOR_SALE"
+    },
+    {
+      "id": "life-cycle",
+      "question": "Do verified energy mix, culture medium and process inventories demonstrate environmental performance at relevant scale?",
+      "unknown_policy": "DO_NOT_CLAIM_CLIMATE_SUPERIORITY"
+    }
+  ],
+  "nutrition_guard": {
+    "evidence_status": "ADULT_WELL_PLANNED_VEGETARIAN_VEGAN_CAN_BE_ADEQUATE_NOT_PERSONAL_MEDICAL_FINDING",
+    "scrutinize": [
+      "B12_source",
+      "iron_and_bioavailability",
+      "iodine",
+      "zinc",
+      "calcium",
+      "vitamin_D",
+      "omega3",
+      "total_energy",
+      "essential_amino_acids"
+    ],
+    "no_high_dose_supplement_instruction": true,
+    "no_dietary_deprivation": true,
+    "clinician_review_for_recurrent_brain_fog": true,
+    "no_individual_health_data_published": true
+  },
+  "empirical_hypotheses": [
+    {
+      "id": "no-meat-nutrition",
+      "assertion": "HYPOTHESIS_NOT_SPECIFICALLY_TESTED_HERE",
+      "question": "Can selected affordable diets without slaughtered-animal meat meet complete nutrient requirements across studied population groups?",
+      "falsification": "Demonstrable nutrient gaps, unacceptable health outcomes or food access gaps in the defined design."
+    },
+    {
+      "id": "cultivated-welfare",
+      "assertion": "HYPOTHESIS_NOT_SPECIFICALLY_TESTED_HERE",
+      "question": "Can audited serum-free cultivated meat materially reduce animal suffering and slaughter against a justified baseline?",
+      "falsification": "Documented fetal serum dependence, lethal donor sourcing, induced sentient suffering, or worse welfare outcomes under measured conditions."
+    },
+    {
+      "id": "cultivated-env",
+      "assertion": "HYPOTHESIS_NOT_SPECIFICALLY_TESTED_HERE",
+      "question": "Under what production energy and culture-media systems is cultivated meat environmentally favorable?",
+      "falsification": "Independently audited lifecycle inputs demonstrate comparable or higher harm than the comparator."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "academy-vegetarian-2025",
+      "uri": "https://pubmed.ncbi.nlm.nih.gov/41474402/",
+      "scope": "Position paper; adequately planned adult vegetarian and vegan patterns can be nutritionally adequate; individualized planning still required."
+    },
+    {
+      "id": "fda-cultured-cells",
+      "uri": "https://www.fda.gov/food/food-ingredients-packaging/human-food-made-cultured-animal-cells",
+      "scope": "US FDA regulatory framework and cell-bank/production review; not universal authorization."
+    },
+    {
+      "id": "gfi-serum-free-2025",
+      "uri": "https://gfi.org/resource/serum-free-media-for-cultivated-meat/",
+      "scope": "Documents serum-free media research and uptake; industry advocacy source; independently verify company-specific claims."
+    },
+    {
+      "id": "fsanz-cultured-quail-2025",
+      "uri": "https://www.foodstandards.gov.au/food-standards-code/applications/A1269-Cultured-Quail-as-a-Novel-Food",
+      "scope": "Specific cell-cultured quail regulatory approval in Australia/New Zealand, not blanket all-products approval."
+    },
+    {
+      "id": "peer-review-animal-inputs-2025",
+      "uri": "https://pubmed.ncbi.nlm.nih.gov/41392297/",
+      "scope": "Review of animal-derived media/scaffold/process materials and alternatives."
+    },
+    {
+      "id": "lca-methods-2025",
+      "uri": "https://doi.org/10.1007/s11367-025-02562-4",
+      "scope": "Assessment methodology and limitations; not proof of universally lower emissions."
+    }
+  ],
+  "exclusions": [
+    "NO_ALIEN_DIET_ASSERTIONS_AS_EMPIRICAL_FACT",
+    "NO_HIGH_FREQUENCY_VIBRATION_AS_ESTABLISHED_CAUSAL_MECHANISM",
+    "NO_AUTOMATED_CELL_CULTURE_WET_LAB",
+    "NO_LIVE_ANIMAL_EXPERIMENTS",
+    "NO_AUTOMATED_FOOD_APPROVAL",
+    "NO_ZERO_HARM_CERTIFICATION_WITHOUT_AUDIT"
+  ],
+  "human_participant_intervention_enabled": false,
+  "live_animal_experiments_enabled": false,
+  "automatic_food_approval_enabled": false,
+  "individualized_diet_or_supplement_dosing_enabled": false,
+  "deployment_enabled": false,
+  "health_data_collection_enabled": false,
+  "automatically_claims_zero_harm": false,
+  "privacy": "No participant-level health data or other identifiable records are included or published; future studies require informed consent and formal oversight."
+}

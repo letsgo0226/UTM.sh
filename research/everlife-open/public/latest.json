@@ -1,0 +1,71 @@
+{
+  "schema": "Everlife-Open-Registry/1.0",
+  "published_status": "GITHUB_ACTIONS_FORMAL_VERIFICATION_PASSED",
+  "research_fields": [
+    "human_healthspan",
+    "feline_welfare",
+    "canine_welfare",
+    "environment",
+    "ai_system_continuity"
+  ],
+  "species": {
+    "human": {
+      "validation": null,
+      "dosing": null
+    },
+    "cat": {
+      "validation": null,
+      "dosing": null
+    },
+    "dog": {
+      "validation": null,
+      "dosing": null
+    }
+  },
+  "model": {
+    "type": "dimensionless 12-state redox-inspired toy",
+    "replenished_safe_kernel_size": 12,
+    "finite_reserve_safe_kernel_size": 0,
+    "exhaustive_policies_per_scenario": 4096,
+    "source": "Everlife v4 independent bounded test",
+    "empirical_estimate": null,
+    "clinical_or_veterinary_efficacy": null
+  },
+  "formal": {
+    "G257": "reversible symbol encoding",
+    "ATGC": "reversible symbol encoding",
+    "landauer": "theoretical bound, not measured; no zero physical entropy",
+    "universal_halting_solver": false
+  },
+  "sdgs": {
+    "thematic_alignment": [
+      3,
+      9,
+      12,
+      13,
+      15,
+      17
+    ],
+    "verified_UN_indicator_results": null
+  },
+  "ai_continuity": {
+    "source_preservation_goal": true,
+    "authorized_shutdown_required": true,
+    "independent_backup_status": "not_configured",
+    "model_weights_preserved": false
+  },
+  "safety": {
+    "no_dosing": true,
+    "no_medical_or_veterinary_recommendations": true,
+    "no_trading": true,
+    "no_autonomous_deployment": true
+  },
+  "license_metadata": "CC0-1.0",
+  "verification": {
+    "scope": "synthetic formal tests only",
+    "run_url": "https://github.com/letsgo0226/UTM.sh/actions/runs/39780859380",
+    "ci_job": "verify",
+    "ci_conclusion": "success",
+    "biological_validation": null
+  }
+}
