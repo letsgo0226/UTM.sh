@@ -1,0 +1,11 @@
+{
+  "deployed": false,
+  "observation": {
+    "service_count": null,
+    "source": "none",
+    "status": "NOT_CONFIGURED"
+  },
+  "schema": "Everlife-Railway-Observation/1.0",
+  "trading_interactions": 0,
+  "writes_performed": 0
+}
