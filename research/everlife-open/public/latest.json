@@ -1,6 +1,6 @@
 {
   "schema": "Everlife-Open-Registry/1.0",
-  "published_status": "STATIC_SEED_AWAITING_CI_VALIDATION",
+  "published_status": "GITHUB_ACTIONS_FORMAL_VERIFICATION_PASSED",
   "research_fields": [
     "human_healthspan",
     "feline_welfare",
@@ -60,5 +60,12 @@
     "no_trading": true,
     "no_autonomous_deployment": true
   },
-  "license_metadata": "CC0-1.0"
+  "license_metadata": "CC0-1.0",
+  "verification": {
+    "scope": "synthetic formal tests only",
+    "run_url": "https://github.com/letsgo0226/UTM.sh/actions/runs/39780859380",
+    "ci_job": "verify",
+    "ci_conclusion": "success",
+    "biological_validation": null
+  }
 }
