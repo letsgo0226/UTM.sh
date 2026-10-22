@@ -27,8 +27,9 @@ jobs:
         run: |
           cd research/everlife-open
           python3 registry.py
-          python3 -m unittest -v test_server.py test_resource_guard.py test_unified_machine.py test_control_plane.py test_manifest.py test_epistemic_gate.py test_nutrition_study.py
+          python3 -m unittest -v test_server.py test_resource_guard.py test_unified_machine.py test_control_plane.py test_manifest.py test_epistemic_gate.py test_nutrition_study.py test_ethical_protein.py
           python3 nutrition_study.py
+          python3 ethical_protein.py
           python3 unified_machine.py
           python3 - <<'PY'
           import json
@@ -73,6 +74,7 @@ jobs:
             research/everlife-open/public/manifest.json
             research/everlife-open/public/epistemic-review.json
             research/everlife-open/public/nutrition-study-review.json
+            research/everlife-open/public/ethical-protein-review.json
           retention-days: 30
   publish:
     if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -106,10 +108,10 @@ jobs:
             git switch -c "$TARGET_BRANCH"
           fi
           mkdir -p research/everlife-open/public
-          for name in latest.json unified-run.json control-plane.json railway-observation.json manifest.json epistemic-review.json nutrition-study-review.json; do
+          for name in latest.json unified-run.json control-plane.json railway-observation.json manifest.json epistemic-review.json nutrition-study-review.json ethical-protein-review.json; do
             cp "/tmp/everlife-release/$name" "research/everlife-open/public/$name"
           done
-          git add research/everlife-open/public/latest.json research/everlife-open/public/unified-run.json research/everlife-open/public/control-plane.json research/everlife-open/public/railway-observation.json research/everlife-open/public/manifest.json research/everlife-open/public/epistemic-review.json research/everlife-open/public/nutrition-study-review.json
+          git add research/everlife-open/public/latest.json research/everlife-open/public/unified-run.json research/everlife-open/public/control-plane.json research/everlife-open/public/railway-observation.json research/everlife-open/public/manifest.json research/everlife-open/public/epistemic-review.json research/everlife-open/public/nutrition-study-review.json research/everlife-open/public/ethical-protein-review.json
           if ! git diff --cached --quiet; then
             git commit -m 'data: refresh verified Everlife research registry'
             git push origin HEAD:refs/heads/"$TARGET_BRANCH"
