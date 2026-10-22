@@ -28,6 +28,12 @@
       "external_apply_enabled": false
     },
     {
+      "id": "diet-cognition-odor",
+      "domain": "public-research-metadata-only-no-clinical-data",
+      "program": "+++++.",
+      "external_apply_enabled": false
+    },
+    {
       "id": "trader-paper-audit",
       "domain": "read-only-paper-no-broker",
       "program": "++[>+<-]>.",
