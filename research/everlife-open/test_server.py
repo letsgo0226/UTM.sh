@@ -41,6 +41,15 @@ class TestReadOnlyRegistry(unittest.TestCase):
         self.assertEqual(data["model"]["replenished_and_finite"]["0"]["safe_kernel_size"], 0)
         self.assertIn("cat", data["species"])
 
+    def test_unified_virtual_registry(self):
+        status, _, payload = self.request("/v1/unified")
+        data = json.loads(payload)
+        self.assertEqual(status, 200)
+        self.assertEqual(data["deployments_triggered"], 0)
+        self.assertEqual(len(data["services"]), 6)
+        self.assertEqual(data["total_steps"], 31)
+        self.assertFalse(data["real_time_synchronization"])
+
     def test_machine_discovery(self):
         self.assertIn(b"/v1/registry", self.request("/llms.txt")[2])
         self.assertEqual(json.loads(self.request("/openapi.json")[2])["openapi"], "3.0.3")
