@@ -27,7 +27,7 @@ jobs:
         run: |
           cd research/everlife-open
           python3 registry.py
-          python3 -m unittest -v test_server.py test_resource_guard.py test_unified_machine.py
+          python3 -m unittest -v test_server.py test_resource_guard.py test_unified_machine.py test_control_plane.py
           python3 unified_machine.py
           python3 - <<'PY'
           import json
@@ -38,12 +38,33 @@ jobs:
           assert all(v['validation'] is None for v in d['species'].values())
           assert d['safety']['no_automated_trades']
           PY
+      - name: Offline Railway fallback (no credentials in PR)
+        if: ${{ !(github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')) }}
+        run: python3 research/everlife-open/railway_probe.py
+      - name: Optional authenticated Railway observation (approved default branch only)
+        if: ${{ github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+        env:
+          RAILWAY_OBSERVER_TOKEN: ${{ secrets.RAILWAY_OBSERVER_TOKEN }}
+          RAILWAY_OBSERVER_PROJECT_ID: ${{ vars.RAILWAY_OBSERVER_PROJECT_ID }}
+          RAILWAY_OBSERVER_TOKEN_KIND: ${{ vars.RAILWAY_OBSERVER_TOKEN_KIND }}
+        run: python3 research/everlife-open/railway_probe.py
+      - name: Produce fail-closed event bridge certificate
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: python3 research/everlife-open/control_plane.py
       - uses: actions/upload-artifact@v4
         with:
           name: everlife-verified-registry
           path: |
             research/everlife-open/public/latest.json
             research/everlife-open/public/unified-run.json
+            research/everlife-open/public/control-plane.json
+            research/everlife-open/public/railway-observation.json
           retention-days: 30
   publish:
     if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
@@ -59,10 +80,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Regenerate bounded registry
-        run: |
-          python3 research/everlife-open/registry.py
-          cp research/everlife-open/public/latest.json /tmp/everlife-public.json
+      - name: Retrieve certified artifacts (no code execution)
+        uses: actions/download-artifact@v4
+        with:
+          name: everlife-verified-registry
+          path: /tmp/everlife-release
       - name: Publish to dedicated data branch only
         env:
           TARGET_BRANCH: everlife-open-data
@@ -76,8 +98,10 @@ jobs:
             git switch -c "$TARGET_BRANCH"
           fi
           mkdir -p research/everlife-open/public
-          cp /tmp/everlife-public.json research/everlife-open/public/latest.json
-          git add research/everlife-open/public/latest.json
+          for name in latest.json unified-run.json control-plane.json railway-observation.json; do
+            cp "/tmp/everlife-release/$name" "research/everlife-open/public/$name"
+          done
+          git add research/everlife-open/public/latest.json research/everlife-open/public/unified-run.json research/everlife-open/public/control-plane.json research/everlife-open/public/railway-observation.json
           if ! git diff --cached --quiet; then
             git commit -m 'data: refresh verified Everlife research registry'
             git push origin HEAD:refs/heads/"$TARGET_BRANCH"
