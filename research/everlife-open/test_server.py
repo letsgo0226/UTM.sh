@@ -50,6 +50,17 @@ class TestReadOnlyRegistry(unittest.TestCase):
         self.assertEqual(data["total_steps"], 31)
         self.assertFalse(data["real_time_synchronization"])
 
+    def test_historical_control_plane(self):
+        status, _, payload = self.request("/v1/control")
+        data = json.loads(payload)
+        self.assertEqual(status, 200)
+        self.assertEqual(data["publication_kind"], "historical_ci_snapshot_not_live")
+        self.assertFalse(data["data"]["external_apply"])
+        self.assertEqual(data["data"]["railway"]["status"], "NOT_CONFIGURED")
+        status, _, payload = self.request("/v1/railway-observation")
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(payload)["data"]["writes_performed"], 0)
+
     def test_machine_discovery(self):
         self.assertIn(b"/v1/registry", self.request("/llms.txt")[2])
         self.assertEqual(json.loads(self.request("/openapi.json")[2])["openapi"], "3.0.3")
