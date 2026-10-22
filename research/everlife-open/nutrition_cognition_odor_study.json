@@ -8,14 +8,16 @@
     "Is lower meat intake associated with self-reported brain fog or reading comprehension, after accounting for overall diet and sleep?",
     "Do energy- and protein-adequate plant-forward meals differ from meat-containing meals in subjective clarity under comparable conditions?",
     "Do meat type and diet composition correlate with axillary, breath, and bowel odor, analyzed as different endpoints?",
-    "Can observations separate subjective experience, empirical physiology and non-operationalized spiritual interpretations?"
+    "Can observations separate subjective experience, empirical physiology and non-operationalized spiritual interpretations?",
+    "Can withdrawal-like sensations after reducing meat intake be distinguished from food habit and reward expectations, changes in total energy intake, and sleep-related fatigue?"
   ],
   "candidate_exposures": [
     "meat_type_and_amount",
     "plant_protein_sources",
     "total_energy_and_protein",
     "meal_timing",
-    "food_patterns_over_multiple_days"
+    "food_patterns_over_multiple_days",
+    "habit_strength_and_meat_craving_without_inducing_deprivation"
   ],
   "candidate_outcomes": [
     {
@@ -62,7 +64,8 @@
     "gut_conditions",
     "food_spices_and_sulfur_compounds",
     "reading_text_difficulty",
-    "expectancy_effect"
+    "expectancy_effect",
+    "habit_reward_expectancy_and_cravings"
   ],
   "hypotheses": [
     {
@@ -82,6 +85,12 @@
       "status": "UNTESTED_EMPIRICAL_HYPOTHESIS",
       "test": "compare nutritionally adequate plant protein replacement without restricting calories or essential nutrients",
       "possible_refutation": "no difference in cognition when diet composition and other factors are matched"
+    },
+    {
+      "id": "withdrawal-like-diet-transition",
+      "status": "UNTESTED_EMPIRICAL_HYPOTHESIS",
+      "test": "Observe the timeline of cravings, mood, fog and satiety during voluntary nutritionally adequate dietary changes, while checking sleep, caloric intake, protein and pre-existing habits; avoid enforced abstinence.",
+      "possible_refutation": "No repeatable short-term symptoms after adequate substitution or symptoms are explained by energy intake, sleep, expectancy, meal timing, and unrelated illness; absence of evidence for a meat-specific withdrawal syndrome."
     }
   ],
   "symbolic_interpretation": {
@@ -99,6 +108,11 @@
       "id": "nih-b12-consumer",
       "uri": "https://ods.od.nih.gov/factsheets/VitaminB12-Consumer/",
       "limits": "B12 deficiency may affect neurological function but cannot be inferred from a single low-meat day."
+    },
+    {
+      "id": "processed-food-withdrawal-review-2022",
+      "uri": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9786266/",
+      "limits": "Evidence concerns highly processed foods, largely retrospective in humans, and does not establish a specific meat withdrawal syndrome or explain individual brain fog."
     }
   ],
   "consent_required_before_human_data_collection": true,
