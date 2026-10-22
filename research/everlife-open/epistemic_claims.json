@@ -48,6 +48,14 @@
       "falsification_test": "Independent canine research fails to replicate the proposed outcomes or reveals animal-welfare harms."
     },
     {
+      "id": "diet-cognition-odor",
+      "domain": "biomedical",
+      "assertion": "HYPOTHESIS",
+      "evidence_refs": [],
+      "question": "Can a nutritionally adequate reduction in meat intake be evaluated separately for brain fog, reading comprehension, axillary odor, breath odor and bowel odor, with confounders measured?",
+      "falsification_test": "Prospective matched or independently replicated comparisons fail to find a relationship after accounting for total energy, protein, sleep, expectancy, text difficulty and other confounders; symbolic spiritual vibration has no established clinical measurement."
+    },
+    {
       "id": "ai-source-preservation",
       "domain": "ai_continuity",
       "assertion": "DESIGN_GOAL",
