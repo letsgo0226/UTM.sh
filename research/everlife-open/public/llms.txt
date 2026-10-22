@@ -20,3 +20,10 @@ Evidence and release gate: https://github.com/letsgo0226/UTM.sh/blob/everlife-op
 Explanation: https://github.com/letsgo0226/UTM.sh/blob/everlife-open-sdg-v1/research/everlife-open/CAVE_GATE.md
 Future Railway-only path: /v1/epistemic (NOT LIVE YET)
 Formal consistency does not establish AI experience, human/cat/dog immortality, health efficacy, or Railway real-time deployment status.
+
+# Nutrition, cognition and odor: public protocol only
+Research protocol: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/nutrition_cognition_odor_study.json
+Fail-closed metadata evaluator: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/nutrition_study.py
+Prospective studies not performed, no personal health details collected, and no evidence that eating less meat creates a meat-withdrawal syndrome or alters an objective spiritual frequency.
+No automatic nutrition or supplement dosing, diagnosis, or clinical conclusions.
+Provisional read-only route /v1/nutrition-study is not live until deployment independently authorized.
