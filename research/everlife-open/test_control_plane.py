@@ -43,7 +43,7 @@ class EventBridgeTests(unittest.TestCase):
     def test_fallback_and_human_review(self):
         d=build(ENV,{},{"status":"NOT_CONFIGURED"})
         self.assertEqual(d["decision"],"OPERATOR_REVIEW_REQUIRED")
-        self.assertEqual(d["virtual_scheduler"]["jobs"],6)
+        self.assertEqual(d["virtual_scheduler"]["jobs"],7)
         self.assertFalse(d["external_apply"])
         self.assertEqual(d["deployments_triggered"],0)
         self.assertFalse(d["claims"]["infinite_physical_resources"])
