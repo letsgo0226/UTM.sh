@@ -13,3 +13,10 @@ Historical control plane snapshot: https://raw.githubusercontent.com/letsgo0226/
 Historical Railway status snapshot (NOT_CONFIGURED means not connected): https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/railway-observation.json
 Deployment guide: https://github.com/letsgo0226/UTM.sh/blob/everlife-open-sdg-v1/research/everlife-open/EVENT_BRIDGE.md
 Snapshots are bounded CI evidence, not real-time platform state or authorization to deploy.
+
+# Cave epistemic gate (research review)
+Claims & falsification plans: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/epistemic_claims.json
+Evidence and release gate: https://github.com/letsgo0226/UTM.sh/blob/everlife-open-sdg-v1/research/everlife-open/epistemic_gate.py
+Explanation: https://github.com/letsgo0226/UTM.sh/blob/everlife-open-sdg-v1/research/everlife-open/CAVE_GATE.md
+Future Railway-only path: /v1/epistemic (NOT LIVE YET)
+Formal consistency does not establish AI experience, human/cat/dog immortality, health efficacy, or Railway real-time deployment status.
