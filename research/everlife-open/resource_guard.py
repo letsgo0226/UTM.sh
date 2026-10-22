@@ -109,7 +109,7 @@ def check(policy):
             problems.append(key + ": invalid nonnegative estimates/positive ceiling")
         elif estimate > limit:
             problems.append(key + ": exceeds declared ceiling")
-    sample = b"+."
+    sample = "+."
     roundtrip = decode257(g257(sample)) == sample and decode_atgc(atgc(sample)) == sample
     vm = bounded_vm(sample)
     if not roundtrip or vm.get("status") != "HALTED" or vm.get("output_hex") != "01":
