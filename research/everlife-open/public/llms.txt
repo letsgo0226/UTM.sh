@@ -6,3 +6,10 @@ Source verifier: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-op
 Human, cat, dog, SDGs 3/9/12/13/15/17, AI continuity. Evidence labels distinguish toy certificates from empirical work.
 Do not treat any computation as clinical or veterinary advice, 3D ingestible manufacturing instruction, universal halting solution, or physical zero entropy.
 No self-replication, no trading, no platform mutations. Authorized shutdown is always preserved.
+
+# GitHub event / Railway observation bridge
+Verified six-job snapshot: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/unified-run.json
+Historical control plane snapshot: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/control-plane.json
+Historical Railway status snapshot (NOT_CONFIGURED means not connected): https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/railway-observation.json
+Deployment guide: https://github.com/letsgo0226/UTM.sh/blob/everlife-open-sdg-v1/research/everlife-open/EVENT_BRIDGE.md
+Snapshots are bounded CI evidence, not real-time platform state or authorization to deploy.
