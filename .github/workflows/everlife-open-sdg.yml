@@ -11,7 +11,7 @@ on:
       - '.github/workflows/everlife-open-sdg.yml'
   workflow_dispatch: {}
   schedule:
-    - cron: '19 4 * * *'
+    - cron: '19 * * * *'
 permissions:
   contents: read
 jobs:
