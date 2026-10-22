@@ -108,6 +108,21 @@ ROUTES["/openapi.json"]["paths"]["/v1/nutrition-study"] = {
             "responses": {"200": {"description": "Metadata only, no participant results"}}}}
 ROUTES["/llms.txt"] += "Nutrition, brain fog and odor research protocol: /v1/nutrition-study\\n"
 
+# Cultivated meat, fermentation and plant-based ethics: proposals, not proof.
+from ethical_protein import review as ethical_protein_review
+ETHICAL_PROTEIN_SPEC = json.loads((Path(__file__).resolve().parent /
+    "ethical_protein_transition.json").read_text(encoding="utf-8"))
+ROUTES["/v1/ethical-protein"] = {
+    "publication_kind": "public_nonpersonal_research_protocol_only",
+    "data": ethical_protein_review(ETHICAL_PROTEIN_SPEC)
+}
+ROUTES["/"]["routes"].append("/v1/ethical-protein")
+ROUTES["/v1/manifest"]["ethical_protein_protocol"] = "/v1/ethical-protein"
+ROUTES["/openapi.json"]["paths"]["/v1/ethical-protein"] = {
+    "get": {"summary": "Nonclinical, sentience-aware protein alternatives research protocol",
+            "responses": {"200": {"description": "Public research metadata only"}}}}
+ROUTES["/llms.txt"] += "Ethical alternative protein research protocol: /v1/ethical-protein\\n"
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._respond(send_body=True)
