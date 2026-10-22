@@ -1,0 +1,42 @@
+{
+  "budget": {
+    "hard_failures": [],
+    "requires_review": [
+      "build_context_bytes: missing measured estimate or applicable plan ceiling",
+      "runtime_memory_mb: missing measured estimate or applicable plan ceiling",
+      "persistent_volume_mb: missing measured estimate or applicable plan ceiling"
+    ],
+    "result": "REVIEW_REQUIRED"
+  },
+  "claims": {
+    "general_halting_solution": false,
+    "github_event_triggered": true,
+    "infinite_physical_resources": false,
+    "real_time_railway_events": false
+  },
+  "decision": "OPERATOR_REVIEW_REQUIRED",
+  "deployments_triggered": 0,
+  "external_apply": false,
+  "github": {
+    "commit": "e6de488a05fb8d1be59d33899e8644a4c4deabfd",
+    "event_id": "6f4e40805712c7e922336b3e38cc67e20e1c67f32971186ab41491453e5eaea4",
+    "kind": "pull_request",
+    "ref": "refs/pull/45/merge",
+    "repo": "letsgo0226/UTM.sh",
+    "run_id": "39787130586",
+    "status": "OBSERVED_GITHUB_EVENT"
+  },
+  "on_platform_outage": "retain GitHub verified artifacts; no external apply",
+  "railway": {
+    "service_count": null,
+    "source": "none",
+    "status": "NOT_CONFIGURED"
+  },
+  "schema": "Everlife-Event-Bridge/1.0",
+  "virtual_scheduler": {
+    "all_halted": true,
+    "chain_final_sha256": "983d6f273bb0445b3c4cfb276a9252c33a3b63e38603c4c48082f4f8a07712e4",
+    "jobs": 6,
+    "steps": 31
+  }
+}
