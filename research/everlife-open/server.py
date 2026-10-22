@@ -61,6 +61,18 @@ ROUTES["/llms.txt"] += ("Historical event bridge: /v1/control\\n"
                         "Historical Railway observer: /v1/railway-observation\\n")
 
 
+from make_manifest import create as build_integrity_manifest
+ROUTES["/v1/integrity"] = {
+    "publication_kind": "historical_ci_snapshot_not_live",
+    "data": build_integrity_manifest()
+}
+ROUTES["/"]["routes"].append("/v1/integrity")
+ROUTES["/v1/manifest"]["content_integrity"] = "/v1/integrity"
+ROUTES["/openapi.json"]["paths"]["/v1/integrity"] = {
+    "get": {"summary": "SHA256 integrity manifest for historical local research artifacts",
+            "responses": {"200": {"description": "Read-only content integrity metadata"}}}}
+ROUTES["/llms.txt"] += "Historical SHA256 integrity: /v1/integrity\\n"
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._respond(send_body=True)
