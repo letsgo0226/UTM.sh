@@ -8,7 +8,7 @@ Do not treat any computation as clinical or veterinary advice, 3D ingestible man
 No self-replication, no trading, no platform mutations. Authorized shutdown is always preserved.
 
 # GitHub event / Railway observation bridge
-Verified six-job snapshot: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/unified-run.json
+Historical six-job snapshot from before the nutrition research addition (branch source updates seven jobs, new CI output not necessarily committed here): https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/unified-run.json
 Historical control plane snapshot: https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/control-plane.json
 Historical Railway status snapshot (NOT_CONFIGURED means not connected): https://raw.githubusercontent.com/letsgo0226/UTM.sh/everlife-open-sdg-v1/research/everlife-open/public/railway-observation.json
 Deployment guide: https://github.com/letsgo0226/UTM.sh/blob/everlife-open-sdg-v1/research/everlife-open/EVENT_BRIDGE.md
