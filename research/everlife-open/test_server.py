@@ -61,6 +61,14 @@ class TestReadOnlyRegistry(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(json.loads(payload)["data"]["writes_performed"], 0)
 
+    def test_integrity_route(self):
+        status, headers, payload = self.request("/v1/integrity")
+        self.assertEqual(status,200)
+        record=json.loads(payload)
+        self.assertEqual(record["publication_kind"],"historical_ci_snapshot_not_live")
+        self.assertEqual(len(record["data"]["artifacts"]),4)
+        self.assertEqual(record["data"]["observer"]["deployment_changes"],0)
+
     def test_machine_discovery(self):
         self.assertIn(b"/v1/registry", self.request("/llms.txt")[2])
         self.assertEqual(json.loads(self.request("/openapi.json")[2])["openapi"], "3.0.3")
