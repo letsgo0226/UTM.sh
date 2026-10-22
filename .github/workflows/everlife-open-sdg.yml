@@ -1,0 +1,80 @@
+name: Everlife Open — bounded research certification
+on:
+  push:
+    branches: [everlife-open-sdg-v1]
+    paths:
+      - 'research/everlife-open/**'
+      - '.github/workflows/everlife-open-sdg.yml'
+  pull_request:
+    paths:
+      - 'research/everlife-open/**'
+      - '.github/workflows/everlife-open-sdg.yml'
+  workflow_dispatch: {}
+  schedule:
+    - cron: '19 4 * * *'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify bounded symbolic research
+        run: |
+          cd research/everlife-open
+          python3 registry.py
+          python3 - <<'PY'
+          import json
+          d=json.load(open('public/latest.json'))
+          assert d['model']['replenished_and_finite']['1']['safe_kernel_size']==12
+          assert d['model']['replenished_and_finite']['0']['safe_kernel_size']==0
+          assert d['formal']['universal_halting_solver'] is False
+          assert all(v['validation'] is None for v in d['species'].values())
+          assert d['safety']['no_automated_trades']
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: everlife-verified-registry
+          path: research/everlife-open/public/latest.json
+          retention-days: 30
+  publish:
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Regenerate bounded registry
+        run: |
+          python3 research/everlife-open/registry.py
+          cp research/everlife-open/public/latest.json /tmp/everlife-public.json
+      - name: Publish to dedicated data branch only
+        env:
+          TARGET_BRANCH: everlife-open-data
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git ls-remote --exit-code --heads origin "$TARGET_BRANCH" >/dev/null; then
+            git fetch origin "$TARGET_BRANCH"
+            git switch -C "$TARGET_BRANCH" FETCH_HEAD
+          else
+            git switch -c "$TARGET_BRANCH"
+          fi
+          mkdir -p research/everlife-open/public
+          cp /tmp/everlife-public.json research/everlife-open/public/latest.json
+          git add research/everlife-open/public/latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: refresh verified Everlife research registry'
+            git push origin HEAD:refs/heads/"$TARGET_BRANCH"
+          fi
