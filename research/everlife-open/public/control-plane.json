@@ -18,8 +18,8 @@
   "deployments_triggered": 0,
   "external_apply": false,
   "github": {
-    "commit": "e6de488a05fb8d1be59d33899e8644a4c4deabfd",
-    "event_id": "6f4e40805712c7e922336b3e38cc67e20e1c67f32971186ab41491453e5eaea4",
+    "commit": "2479ad34017f068ac6b25421e7d0c87abcbc2535",
+    "event_id": "7609b515c01c0bb5f20b2db5374e28bbfa79a0df70927a9824e608a7b6407e5c",
     "kind": "pull_request",
     "ref": "refs/pull/45/merge",
     "repo": "letsgo0226/UTM.sh",
