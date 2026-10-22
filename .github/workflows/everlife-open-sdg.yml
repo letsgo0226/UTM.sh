@@ -27,6 +27,7 @@ jobs:
         run: |
           cd research/everlife-open
           python3 registry.py
+          python3 -m unittest -v test_server.py
           python3 - <<'PY'
           import json
           d=json.load(open('public/latest.json'))
