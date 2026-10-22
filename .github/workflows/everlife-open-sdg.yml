@@ -27,7 +27,8 @@ jobs:
         run: |
           cd research/everlife-open
           python3 registry.py
-          python3 -m unittest -v test_server.py
+          python3 -m unittest -v test_server.py test_resource_guard.py test_unified_machine.py
+          python3 unified_machine.py
           python3 - <<'PY'
           import json
           d=json.load(open('public/latest.json'))
@@ -40,7 +41,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: everlife-verified-registry
-          path: research/everlife-open/public/latest.json
+          path: |
+            research/everlife-open/public/latest.json
+            research/everlife-open/public/unified-run.json
           retention-days: 30
   publish:
     if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
