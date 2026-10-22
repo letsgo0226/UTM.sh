@@ -73,6 +73,26 @@ ROUTES["/openapi.json"]["paths"]["/v1/integrity"] = {
             "responses": {"200": {"description": "Read-only content integrity metadata"}}}}
 ROUTES["/llms.txt"] += "Historical SHA256 integrity: /v1/integrity\\n"
 
+# Plato Cave Gate: compute a bounded evidence review on server startup.
+# This is a snapshot of checked research metadata, NOT AI introspection.
+from epistemic_gate import review as epistemic_review
+CAVE = epistemic_review(
+    json.loads((Path(__file__).resolve().parent / "epistemic_claims.json").read_text(encoding="utf-8")),
+    DATA,
+    UNIFIED,
+    ROUTES["/v1/railway-observation"]["data"],
+)
+ROUTES["/v1/epistemic"] = {
+    "publication_kind": "startup_snapshot_not_live_empirical_proof",
+    "data": CAVE
+}
+ROUTES["/"]["routes"].append("/v1/epistemic")
+ROUTES["/v1/manifest"]["epistemic_evidence_gate"] = "/v1/epistemic"
+ROUTES["/openapi.json"]["paths"]["/v1/epistemic"] = {
+    "get": {"summary": "Evidence-calibrated Cave Gate report (not empirical proof)",
+            "responses": {"200": {"description": "Read-only research epistemic review"}}}}
+ROUTES["/llms.txt"] += "Evidence review: /v1/epistemic\\n"
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._respond(send_body=True)
