@@ -41,6 +41,25 @@ ROUTES["/openapi.json"]["paths"]["/v1/unified"] = {
     "get": {"summary": "Bounded multi-workload logical scheduler certificate",
             "responses": {"200": {"description": "Read-only synthetic computation"}}}}
 ROUTES["/llms.txt"] += "Unified virtual workload snapshot: /v1/unified\\n"
+ROUTES["/v1/control"] = {
+    "publication_kind": "historical_ci_snapshot_not_live",
+    "data": json.loads((Path(__file__).resolve().parent / "public" / "control-plane.json").read_text(encoding="utf-8"))
+}
+ROUTES["/v1/railway-observation"] = {
+    "publication_kind": "historical_ci_snapshot_not_live",
+    "data": json.loads((Path(__file__).resolve().parent / "public" / "railway-observation.json").read_text(encoding="utf-8"))
+}
+ROUTES["/"]["routes"].extend(["/v1/control", "/v1/railway-observation"])
+ROUTES["/v1/manifest"].update({"control": "/v1/control",
+    "railway_observation": "/v1/railway-observation",
+    "snapshot_notice": "Snapshots are historical CI evidence and not continuously synchronized."})
+for route in ("/v1/control", "/v1/railway-observation"):
+    ROUTES["/openapi.json"]["paths"][route] = {
+        "get": {"summary": "Historical CI snapshot, not live state",
+                "responses": {"200": {"description": "Read-only machine-readable snapshot"}}}}
+ROUTES["/llms.txt"] += ("Historical event bridge: /v1/control\\n"
+                        "Historical Railway observer: /v1/railway-observation\\n")
+
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
