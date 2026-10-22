@@ -21,13 +21,21 @@ class CaveEpistemicGateTests(unittest.TestCase):
         result=review(*inputs())
         self.assertEqual(result["decision"],"PUBLISH_RESEARCH_WITH_LABELS")
         self.assertEqual(result["deployment_permission"],"DENIED_AUTOMATIC_APPLY")
-        self.assertEqual(result["claims_total"],7)
+        self.assertEqual(result["claims_total"],8)
         self.assertEqual(result["blocked_ids"],[])
         self.assertFalse(result["ai_subjective_awareness_assumed"])
         self.assertEqual(result["external_independent_replications"],0)
         self.assertEqual(result["rows"][0]["classification"],"FORMAL_WITHIN_STATED_MODEL")
         self.assertEqual(result["rows"][-1]["classification"],"RAILWAY_NOT_OBSERVED")
         self.assertFalse(any(row["falsification_test_executed"] for row in result["rows"]))
+
+    def test_nutrition_study_cannot_be_called_empirical_proof(self):
+        spec, latest, unified, railway = inputs()
+        study = next(c for c in spec["claims"] if c["id"] == "diet-cognition-odor")
+        self.assertEqual(study["assertion"], "HYPOTHESIS")
+        study["assertion"] = "EMPIRICALLY_PROVEN"
+        r = review(spec, latest, unified, railway)
+        self.assertIn("diet-cognition-odor", r["blocked_ids"])
 
     def test_g257_claim_address_roundtrip(self):
         result=review(*inputs())
