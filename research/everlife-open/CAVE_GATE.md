@@ -20,6 +20,7 @@ NIST AI RMF supports continuous GOVERN / MAP / MEASURE / MANAGE risk management 
 | G257/ATGC symbolic round trips | `FORMAL_WITHIN_STATED_MODEL` | "universal halting solved" |
 | 12-state redox toy | `FORMAL_WITHIN_STATED_MODEL` | "human immortality proved" |
 | Human healthspan | `HYPOTHESIS_NOT_VALIDATED` | "clinical efficacy" |
+| Nutrition, brain fog, body odor, withdrawal-like adjustment | `HYPOTHESIS_NOT_VALIDATED` | "diagnosed meat withdrawal, nutritional deficiency or measurable spiritual vibration" |
 | Cat/dog healthspan | `HYPOTHESIS_NOT_VALIDATED` | "species treatment or dosage" |
 | AI continuity | `DESIGN_ONLY_NOT_RESTORATION_VERIFIED` | "identity or consciousness preserved" |
 | Railway service | `RAILWAY_NOT_OBSERVED` or `ONE_PLATFORM_SNAPSHOT_NOT_LIVE_PROOF` | "continuous cross-host synchronization verified" |
